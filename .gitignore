@@ -1,0 +1,24 @@
+# Ignore compiled Java files
+*.class
+*.jar
+
+
+# Ignore temporary and backup LaTeX files
+*.aux
+*.log
+*.toc
+*.lof
+*.lot
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.bbl
+*.blg
+*.nav
+*.snm
+*.vrb
+*.dvi
+
+# Ignore IDE and editor-specific files
+*.iml
+*.idea/
