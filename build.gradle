@@ -40,6 +40,7 @@ dependencies {
     This is another example - it imports the javafx-controls dependency
      */
     implementation 'org.openjfx:javafx-controls:19.0.2.1'
+    implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
 
     // JUNIT
     /*
