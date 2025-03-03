@@ -4,6 +4,7 @@ import java.util.List;
 
 public class themeGetter {
     private static final String PATH = "jdbc:sqlite:resources/Thema.db";
+
     public static List<String> getRandomWords(int amount) {
         String query = "SELECT thema FROM Thema ORDER BY RANDOM() LIMIT " + amount;
         List<String> themaList = new ArrayList<>();
@@ -27,11 +28,11 @@ public class themeGetter {
         System.out.println("List cleared");
     }
 
-    /*public static void main(String[] args) {
+    public static void main(String[] args) {
         List<String> selectedTopics = getRandomWords(30);
         System.out.println("Selected Topics: " + selectedTopics);
         clearList(selectedTopics);
         System.out.println("Selected Topics cleared: " + selectedTopics);
 
-    }*/
+    }
 }
