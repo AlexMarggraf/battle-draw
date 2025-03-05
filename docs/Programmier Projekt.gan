@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="UTF-8"?><project name="ProgrammierProjektgr23" company="" webLink="http://" view-date="2025-02-10" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3316" locale="en_GB">
+<?xml version="1.0" encoding="UTF-8"?><project name="ProgrammierProjektgr23" company="" webLink="http://" view-date="2025-02-24" view-index="0" gantt-divider-location="351" resource-divider-location="300" version="3.3.3316" locale="en_GB">
     <description/>
-    <view zooming-state="default:5" id="gantt-chart">
-        <field id="tpd15" name="Notes" width="20" order="-1"/>
+    <view zooming-state="default:4" id="gantt-chart">
         <field id="tpd3" name="Name" width="200" order="0"/>
         <field id="tpd4" name="Begin date" width="75" order="1"/>
         <field id="tpd5" name="End date" width="75" order="2"/>
+        <field id="tpd15" name="Notes" width="20" order="3"/>
         <option id="filter.completedTasks" value="false"/>
         <option id="filter.dueTodayTasks" value="false"/>
         <option id="filter.overdueTasks" value="false"/>
@@ -57,11 +57,11 @@ Software requirements]]></notes>
 - Das Projekttagebuch ist auf dem neuesten Stand und gefüllt mit aussagekräftigen Einträgen
 - Sinnvolles Software-Qualitätskonzept in schriftlicher Form (siehe Folien)]]></notes>
         </task>
-        <task id="14" uid="c4fc94aa75944e048cfb8f63ccd90d0d" name="Server-Funktion" meeting="false" start="2025-03-05" duration="19" complete="0" expand="true">
+        <task id="14" uid="c4fc94aa75944e048cfb8f63ccd90d0d" name="Server-Funktion" meeting="false" start="2025-03-08" duration="16" complete="0" expand="true">
             <notes><![CDATA[- Der Server verarbeitet eine Client-Abmeldung auf sinnvolle Weise
 - Eine Ping-Nachricht wird regelmäßig vom Server zum Client gesendet und sinnvoll verarbeitet (Verbindungsverluste werden erkannt und behandelt)]]></notes>
         </task>
-        <task id="15" uid="f323f432e2244a36bf20c4b0737d8398" name="Client-Funktion" meeting="false" start="2025-03-05" duration="19" complete="0" expand="true">
+        <task id="15" uid="f323f432e2244a36bf20c4b0737d8398" name="Client-Funktion" meeting="false" start="2025-03-08" duration="16" complete="0" expand="true">
             <notes><![CDATA[- Der Server stellt sicher, dass die Spitznamen der Spieler eindeutig sind und ändert Duplikate auf konsistente Weise, indem er entsprechende Namen zuweist
 - Der Client schlägt einen Spitznamen vor, der auf dem Systembenutzernamen basiert
 - Eine Ping-Nachricht wird regelmäßig vom Client zum Server gesendet und sinnvoll verarbeitet (Verbindungsverluste werden erkannt und behandelt)
@@ -71,7 +71,7 @@ Software requirements]]></notes>
         <task id="16" uid="755b4b34a22e4d9dbb3542fbd486c413" name="gitignore" meeting="false" start="2025-03-20" duration="1" complete="0" expand="true">
             <notes><![CDATA[- Es gibt eine Gitignore-Datei, die Einträge enthält, die für die wichtigsten Betriebssysteme und die verwendeten Tools relevant sind]]></notes>
         </task>
-        <task id="12" uid="3fb56a110171495da71abaefa2862cf9" name="Network protocol" meeting="false" start="2025-03-15" duration="4" complete="0" expand="true">
+        <task id="12" uid="3fb56a110171495da71abaefa2862cf9" name="Network protocol" meeting="false" start="2025-03-05" duration="4" complete="0" expand="true">
             <notes><![CDATA[- Das menschenlesbare Netzwerkprotokoll wird in einem speziellen Dokument definiert. Alle Befehle werden zusammen mit einem Beispiel erklärt
 - Das Netzwerkprotokoll wird korrekt verwendet]]></notes>
         </task>
@@ -143,6 +143,7 @@ Wie werden der gamestate und die Spiellogik im Code dargestellt?
         <allocation task-id="23" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="14" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="10" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="28" resource-id="0" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="9" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="7" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="15" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
@@ -152,6 +153,7 @@ Wie werden der gamestate und die Spiellogik im Code dargestellt?
         <allocation task-id="24" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="22" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="12" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="28" resource-id="1" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="9" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="13" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="18" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
@@ -162,6 +164,7 @@ Wie werden der gamestate und die Spiellogik im Code dargestellt?
         <allocation task-id="14" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="32" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="11" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
+        <allocation task-id="28" resource-id="2" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="8" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="9" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
         <allocation task-id="15" resource-id="3" function="Default:0" responsible="false" load="100.0"/>
