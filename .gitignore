@@ -22,3 +22,9 @@
 # Ignore IDE and editor-specific files
 *.iml
 *.idea/
+
+# Ignore gradle files
+*.bin
+*.lock
+*.properties
+*.probe
