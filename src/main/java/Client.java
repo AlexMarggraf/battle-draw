@@ -1,0 +1,137 @@
+/**
+ * This class is the client which connects to the server and serves
+ * as the communication point between users. Furthermore all game updates
+ * are sent via this class.
+ *
+ * @author Alexander Marggraf
+ * @author Frederic Weyssow
+ */
+
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+public class Client implements Runnable {
+
+    private String serverAddress;
+    private int port;
+    private volatile Queue<String> clientMessageQueue;
+    private volatile Queue<String> serverMessageQueue;
+    public volatile Boolean disconnect;
+
+    /**
+     * This method is the constructor and sets serverAdress, port number,
+     * queues for messages and the disconnect flag.
+     *
+     * @param serverAddress The ip address of the server
+     * @param port The port number of the server
+     */
+    public Client(String serverAddress, int port){
+        this.serverAddress = serverAddress;
+        this.port = port;
+        clientMessageQueue = new LinkedList<>();
+        serverMessageQueue = new LinkedList<>();
+        this.disconnect = false;
+    }
+
+    /**
+     * This method causes the client to disconnect.
+     */
+    public void disconnect() {
+        this.disconnect = true;
+    }
+
+    /**
+     * This method adds a message into the clientMessageQueue which will
+     * be sent to the server later.
+     *
+     * @param message The message that is supposed to be sent
+     */
+    public void queueClientMessage(String message) {
+        clientMessageQueue.add(message);
+    }
+
+    /**
+     * This method adds a message into the serverMessageQueue which will
+     * be handled by the client later.
+     *
+     * @param message The message that is supposed to be handled
+     */
+    public void queueServerMessage(String message) {
+        serverMessageQueue.add(message);
+    }
+
+    /**
+     * This method sends any message in the clientMessageQueue to the server.
+     *
+     * @param oStream The output stream to the server
+     */
+    public void sendMessage(OutputStream oStream) {
+        while(clientMessageQueue.peek() != null) {
+            try {
+                String clientMessage = clientMessageQueue.remove();
+                oStream.write(clientMessage.getBytes());
+                oStream.write('\n');
+            } catch(IOException ioException) {
+                ioException.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * This method checks whether any messages have been received and puts
+     * them in the serverMessageQueue if they have.
+     *
+     * @param msgListener The object that catches any incomming messages
+     */
+    public void receiveMessage(MessageListener msgListener) {
+        String message;
+        message = msgListener.getMessage();
+
+        while(message != null) {
+            serverMessageQueue.add(message);
+            message = msgListener.getMessage();
+        }
+    }
+
+    /**
+     * This method properly handles any message in the serverMessageQueue.
+     */
+    public void handleMessage() {
+        while(serverMessageQueue.peek() != null) {
+            System.out.println(serverMessageQueue.remove());
+        }
+    }
+
+    /**
+     * This method is invoked if the thread is started. It creates a new socket,
+     * input/output-stream and MessageListener. Afterward it continuously handles
+     * any incomming or outgoing messages.
+     */
+    public void run() {
+        try{
+            Socket socket = new Socket(serverAddress, port);
+            InputStream iStream = socket.getInputStream();
+            OutputStream oStream = socket.getOutputStream();
+
+            MessageListener msgListener = new MessageListener(iStream);
+            Thread msgListenerThread = new Thread(msgListener);
+            msgListenerThread.start();
+
+            while(!disconnect) {
+
+                receiveMessage(msgListener);
+                sendMessage(oStream);
+                handleMessage();
+
+            }
+
+            socket.close();
+            iStream.close();
+            oStream.close();
+
+        } catch(IOException ioException) {
+            ioException.printStackTrace();
+        }
+    }
+}
