@@ -103,6 +103,8 @@ public class ServerThread implements Runnable {
             if(msg.getType().equals("whatID")) {
                 Message response = new Message("id", new String[]{id + ""});
                 serverMessageQueue.add(response.getMsgString());
+            } else if(msg.getType().equals("disconnect")) {
+                disconnect = true;
             }
 
             message = msgListener.getMessage();

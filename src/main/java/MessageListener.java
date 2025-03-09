@@ -34,17 +34,18 @@ public class MessageListener implements Runnable {
      * messages to the queue.
      */
     public void run() {
-        try {
-            BufferedReader MessageReader = new BufferedReader(new InputStreamReader(iStream));
-            String message = " ";
+        BufferedReader MessageReader = new BufferedReader(new InputStreamReader(iStream));
+        String message = " ";
 
+        try {
             while (true) {
                 message = MessageReader.readLine();
                 messageQueue.add(message);
             }
         } catch (
                 IOException ioException) {
-            ioException.printStackTrace();
+            Message msg = new Message("disconnect");
+            messageQueue.add(msg.getMsgString());
         }
     }
 }

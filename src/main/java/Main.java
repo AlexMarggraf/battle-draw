@@ -48,7 +48,7 @@ public class Main {
     }
 
     /**
-     * this method retreives all unreceived messages from the client.
+     * this method retrieves all unreceived messages from the client.
      */
     public void receiveMessage() {
         String serverMessage = client.getServerMessage();
@@ -101,15 +101,13 @@ public class Main {
      * @param args Nothing yet
      */
     public static void main(String[] args) {
-        Client client = new Client("localhost", 1234);
-        Thread clientThread = new Thread(client);
-        clientThread.start();
 
         Main main = new Main();
         main.startClient("localhost", 1234);
 
         main.clientMessageQueue.add((new Message("whatID")).getMsgString());
         main.sendMessage();
+
         while(main.serverID == -1) {
             main.receiveMessage();
             main.handleServerMessage();
@@ -128,8 +126,8 @@ public class Main {
             }
 
             main.handleClientMessage(msgListener);
-            main.sendMessage();
             main.receiveMessage();
+            main.sendMessage();
             main.handleServerMessage();
         }
     }

@@ -47,7 +47,7 @@ public class Server {
      * identified by the id provided.
      *
      * @param message The message that is supposed to be queued
-     * @param id      The id of the server that the message is suposed to be queued in
+     * @param id      The id of the server that the message is supposed to be queued in
      */
     public void sendMessage(String message, int id) {
         for (ServerThread st : serverThreadList) {
@@ -100,7 +100,7 @@ public class Server {
     }
 
     /**
-     * This method starts a connection listener and handles any incomming and outgoing messages.
+     * This method starts a connection listener and handles any incoming and outgoing messages.
      *
      * @param args Nothing yet
      */
