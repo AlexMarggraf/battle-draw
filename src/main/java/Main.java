@@ -17,7 +17,7 @@ public class Main {
      * @param args Nothing yet
      */
     public static void main(String[] args) {
-        Client client = new Client("10.192.5.242", 1234);
+        Client client = new Client("localhost", 1234);
         Thread clientThread = new Thread(client);
         clientThread.start();
 
