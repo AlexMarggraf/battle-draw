@@ -24,9 +24,9 @@ public class Client implements Runnable {
      * queues for messages and the disconnect flag.
      *
      * @param serverAddress The ip address of the server
-     * @param port The port number of the server
+     * @param port          The port number of the server
      */
-    public Client(String serverAddress, int port){
+    public Client(String serverAddress, int port) {
         this.serverAddress = serverAddress;
         this.port = port;
         clientMessageQueue = new LinkedList<>();
@@ -62,17 +62,27 @@ public class Client implements Runnable {
     }
 
     /**
+     * This method gives access to all incomming messages.
+     *
+     * @return Returns all undealt messages from the server
+     */
+    public String getServerMessage() {
+        return serverMessageQueue.poll();
+    }
+
+    /**
      * This method sends any message in the clientMessageQueue to the server.
      *
      * @param oStream The output stream to the server
      */
     public void sendMessage(OutputStream oStream) {
-        while(clientMessageQueue.peek() != null) {
+        while (clientMessageQueue.peek() != null) {
             try {
                 String clientMessage = clientMessageQueue.remove();
                 oStream.write(clientMessage.getBytes());
                 oStream.write('\n');
-            } catch(IOException ioException) {
+            } catch (
+                    IOException ioException) {
                 ioException.printStackTrace();
             }
         }
@@ -88,18 +98,9 @@ public class Client implements Runnable {
         String message;
         message = msgListener.getMessage();
 
-        while(message != null) {
+        while (message != null) {
             serverMessageQueue.add(message);
             message = msgListener.getMessage();
-        }
-    }
-
-    /**
-     * This method properly handles any message in the serverMessageQueue.
-     */
-    public void handleMessage() {
-        while(serverMessageQueue.peek() != null) {
-            System.out.println(serverMessageQueue.remove());
         }
     }
 
@@ -109,7 +110,7 @@ public class Client implements Runnable {
      * any incomming or outgoing messages.
      */
     public void run() {
-        try{
+        try {
             Socket socket = new Socket(serverAddress, port);
             InputStream iStream = socket.getInputStream();
             OutputStream oStream = socket.getOutputStream();
@@ -118,19 +119,17 @@ public class Client implements Runnable {
             Thread msgListenerThread = new Thread(msgListener);
             msgListenerThread.start();
 
-            while(!disconnect) {
+            while (!disconnect) {
 
                 receiveMessage(msgListener);
                 sendMessage(oStream);
-                handleMessage();
-
             }
 
             socket.close();
             iStream.close();
             oStream.close();
-
-        } catch(IOException ioException) {
+        } catch (
+                IOException ioException) {
             ioException.printStackTrace();
         }
     }

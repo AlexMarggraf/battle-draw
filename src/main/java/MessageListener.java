@@ -2,7 +2,6 @@
  * This class listen continuously for any incoming messages.
  */
 
-
 import java.io.*;
 import java.util.*;
 
@@ -35,16 +34,16 @@ public class MessageListener implements Runnable {
      * messages to the queue.
      */
     public void run() {
-        try{
+        try {
             BufferedReader MessageReader = new BufferedReader(new InputStreamReader(iStream));
             String message = " ";
 
-            while(true) {
+            while (true) {
                 message = MessageReader.readLine();
                 messageQueue.add(message);
             }
-
-        } catch(IOException ioException) {
+        } catch (
+                IOException ioException) {
             ioException.printStackTrace();
         }
     }

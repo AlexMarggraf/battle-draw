@@ -13,15 +13,16 @@ public class ServerThread implements Runnable {
 
     private int id;
     private Socket socket;
-    private volatile Queue<String> serverMessageQueue;
-    private volatile Queue<String> clientMessageQueue;
+    protected volatile Queue<String> serverMessageQueue;
+    protected volatile Queue<String> clientMessageQueue;
     public Boolean disconnect;
+    public long lastPing;
 
     /**
      * This method is the constructor and sets the id of the client, the socket, queues for messages
      * and the disconnect flag.
      *
-     * @param id The identification number for any clients
+     * @param id     The identification number for any clients
      * @param socket The socket used for ipc.
      */
     public ServerThread(int id, Socket socket) {
@@ -30,6 +31,15 @@ public class ServerThread implements Runnable {
         this.serverMessageQueue = new LinkedList<>();
         this.clientMessageQueue = new LinkedList<>();
         this.disconnect = false;
+    }
+
+    /**
+     * This method provides identification to other objects.
+     *
+     * @return Returns the id of the client
+     */
+    public int getId() {
+        return id;
     }
 
     /**
@@ -50,19 +60,28 @@ public class ServerThread implements Runnable {
         serverMessageQueue.add(message);
     }
 
+    /**
+     * This method gives access to the messages sent to the server.
+     *
+     * @return Returns any incomming message that hasn't been dealt with
+     */
+    public String getClientMessage() {
+        return clientMessageQueue.poll();
+    }
 
     /**
-     *  This method sends any message in the serverMessageQueue to the client.
+     * This method sends any message in the serverMessageQueue to the client.
      *
      * @param oStream The output stream to the client
      */
     public void sendMessage(OutputStream oStream) {
-        while(serverMessageQueue.peek() != null) {
+        while (serverMessageQueue.peek() != null) {
             try {
                 String serverMessage = serverMessageQueue.remove();
                 oStream.write(serverMessage.getBytes());
                 oStream.write('\n');
-            } catch(IOException ioException) {
+            } catch (
+                    IOException ioException) {
                 ioException.printStackTrace();
             }
         }
@@ -76,19 +95,17 @@ public class ServerThread implements Runnable {
     public void receiveMessage(MessageListener msgListener) {
         String message = msgListener.getMessage();
 
-        while(message != null) {
+        while (message != null) {
             clientMessageQueue.add(message);
-            queueServerMessage("Ich habe deine Nachricht erhalten.");
-            message = msgListener.getMessage();
-        }
-    }
 
-    /**
-     * This method properly handles any message in the clientMessageQueue
-     */
-    public void handleMessage() {
-        while(clientMessageQueue.peek() != null) {
-            System.out.println(clientMessageQueue.remove());
+            Message msg = new Message(message);
+
+            if(msg.getType().equals("whatID")) {
+                Message response = new Message("id", new String[]{id + ""});
+                serverMessageQueue.add(response.getMsgString());
+            }
+
+            message = msgListener.getMessage();
         }
     }
 
@@ -98,7 +115,7 @@ public class ServerThread implements Runnable {
      */
     public void run() {
 
-        try{
+        try {
             InputStream iStream = socket.getInputStream();
             OutputStream oStream = socket.getOutputStream();
 
@@ -106,21 +123,24 @@ public class ServerThread implements Runnable {
             Thread msgListenerThread = new Thread(msgListener);
             msgListenerThread.start();
 
-            while(!disconnect) {
+            while (!disconnect) {
+
+                if(System.currentTimeMillis() - lastPing > 1000) {
+                    Message ping = new Message("ping", new String[]{id + ""});
+                    serverMessageQueue.add(ping.getMsgString());
+                    lastPing = System.currentTimeMillis();
+                }
 
                 receiveMessage(msgListener);
                 sendMessage(oStream);
-                handleMessage();
-
             }
 
             socket.close();
             iStream.close();
             oStream.close();
-
-        } catch(IOException ioException){
+        } catch (
+                IOException ioException) {
             ioException.printStackTrace();
         }
     }
-
 }
