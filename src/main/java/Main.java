@@ -101,15 +101,9 @@ public class Main {
      * @param args Nothing yet
      */
     public static void main(String[] args) {
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> 515700404a57e8be2841cf4cc58f506bbecc17a5
         Client client = new Client("localhost", 1234);
         Thread clientThread = new Thread(client);
         clientThread.start();
->>>>>>> 515700404a57e8be2841cf4cc58f506bbecc17a5
 
         Main main = new Main();
         main.startClient("localhost", 1234);

@@ -125,7 +125,7 @@ public class ServerThread implements Runnable {
 
             while (!disconnect) {
 
-                if(System.currentTimeMillis() - lastPing > 1000) {
+                if(System.currentTimeMillis() - lastPing > 10000) {
                     Message ping = new Message("ping", new String[]{id + ""});
                     serverMessageQueue.add(ping.getMsgString());
                     lastPing = System.currentTimeMillis();
