@@ -9,9 +9,9 @@ public class Message {
 
     public Message (String message) {
         String[] content = message.split("\\s+");
-        this.type = content[0];
         String[] params = new String[content.length - 1];
         System.arraycopy(content, 1, params, 0, content.length - 1);
+        this.type = content[0];
         this.params = params;
     }
 
@@ -31,7 +31,7 @@ public class Message {
         String message = type;
 
         for(String param : params) {
-            message = message  + " " + param;
+            message = message + " " + param;
         }
 
         return message;

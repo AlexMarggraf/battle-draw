@@ -6,8 +6,6 @@
  * @author Alexander Maggraf
  */
 
-import java.io.*;
-import java.net.*;
 import java.util.*;
 
 public class Server {
@@ -36,9 +34,10 @@ public class Server {
     public void startServerThread(ConnectionListener conListener) {
         while (conListener.socketQueue.peek() != null) {
             ServerThread server = new ServerThread(connection, conListener.socketQueue.remove());
-            serverThreadList.add(server);
             Thread serverThread = new Thread(server);
             serverThread.start();
+
+            serverThreadList.add(server);
             connection++;
         }
     }
@@ -63,11 +62,11 @@ public class Server {
      */
     public void fillReceiveMessageQueue() {
         for (ServerThread st : serverThreadList) {
-            String message = st.getClientMessage();
+            String clientMessage = st.getClientMessage();
 
-            while (message != null) {
-                receiveMessageQueue.add(message);
-                message = st.getClientMessage();
+            while (clientMessage != null) {
+                receiveMessageQueue.add(clientMessage);
+                clientMessage = st.getClientMessage();
             }
         }
     }
@@ -77,14 +76,17 @@ public class Server {
      */
     public void handleReceiveMessage() {
         while (receiveMessageQueue.peek() != null) {
-            String msgString = receiveMessageQueue.remove();
-            System.out.println(msgString);
+            String clientMessage = receiveMessageQueue.remove();
+            System.out.println(clientMessage);
 
-            Message msg = new Message(msgString);
+            Message message = new Message(clientMessage);
 
-            if(msg.getType().equals("ping")) {
-                Message response = new Message("pong", new String[]{msg.getID() + ""});
+            if (message.getType().equals("ping")) {
+                Message response = new Message("pong", new String[]{message.getID() + ""});
                 sendMessageQueue.add(response.getMsgString());
+            } else if (message.getType().equals("disconnect")) {
+                int id = message.getID();
+                serverThreadList.removeIf(st -> st.getId() == id);
             }
         }
     }
@@ -94,9 +96,9 @@ public class Server {
      */
     public void handleSendMessage() {
         while (sendMessageQueue.peek() != null) {
-            String message = sendMessageQueue.remove();
-            Message msg = new Message(message);
-            sendMessage(msg.getMsgString(), msg.getID());
+            String ServerMessage = sendMessageQueue.remove();
+            Message message = new Message(ServerMessage);
+            sendMessage(message.getMsgString(), message.getID());
         }
     }
 
@@ -112,7 +114,6 @@ public class Server {
         Thread.startVirtualThread(conListener);
 
         while (true) {
-
             server.startServerThread(conListener);
             server.fillReceiveMessageQueue();
             server.handleReceiveMessage();

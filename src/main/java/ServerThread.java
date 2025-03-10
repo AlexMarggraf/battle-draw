@@ -43,15 +43,6 @@ public class ServerThread implements Runnable {
     }
 
     /**
-     * This method adds a message into the clientMessageQueue which will be handled by the server later.
-     *
-     * @param message The message that is supposed to handled
-     */
-    public void queueClientMessage(String message) {
-        clientMessageQueue.add(message);
-    }
-
-    /**
      * This method adds a message into the ServerMessageQueue which will be sent to the client later.
      *
      * @param message the message that supposed to send
@@ -82,7 +73,7 @@ public class ServerThread implements Runnable {
                 oStream.write('\n');
             } catch (
                     IOException ioException) {
-                ioException.printStackTrace();
+                System.out.println("IOException in ServerThread in method sendMessage");
             }
         }
     }
@@ -93,21 +84,24 @@ public class ServerThread implements Runnable {
      * @param msgListener The object that catches any incoming messages
      */
     public void receiveMessage(MessageListener msgListener) {
-        String message = msgListener.getMessage();
+        String clientMessage = msgListener.getMessage();
 
-        while (message != null) {
-            clientMessageQueue.add(message);
+        while (clientMessage != null) {
 
-            Message msg = new Message(message);
+            Message message = new Message(clientMessage);
 
-            if(msg.getType().equals("whatID")) {
+            if(message.getType().equals("whatID")) {
                 Message response = new Message("id", new String[]{id + ""});
                 serverMessageQueue.add(response.getMsgString());
-            } else if(msg.getType().equals("disconnect")) {
+            } else if(message.getType().equals("disconnect")) {
                 disconnect = true;
+                Message response = new Message("disconnect", new String[]{id + ""});
+                clientMessageQueue.add(response.getMsgString());
+            } else {
+                clientMessageQueue.add(clientMessage);
             }
 
-            message = msgListener.getMessage();
+            clientMessage = msgListener.getMessage();
         }
     }
 
@@ -124,9 +118,7 @@ public class ServerThread implements Runnable {
             MessageListener msgListener = new MessageListener(iStream);
             Thread.startVirtualThread(msgListener);
 
-
             while (!disconnect) {
-
                 if(System.currentTimeMillis() - lastPing > 10000) {
                     Message ping = new Message("ping", new String[]{id + ""});
                     serverMessageQueue.add(ping.getMsgString());
@@ -142,7 +134,7 @@ public class ServerThread implements Runnable {
             oStream.close();
         } catch (
                 IOException ioException) {
-            ioException.printStackTrace();
+            System.out.println("IOException in ServerThread in method run");
         }
     }
 }

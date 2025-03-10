@@ -33,16 +33,18 @@ public class Main {
      */
     public void handleServerMessage() {
         while (serverMessageQueue.peek() != null) {
-            String msgString = serverMessageQueue.remove();
-            System.out.println(msgString);
+            String serverMessage = serverMessageQueue.remove();
+            System.out.println(serverMessage);
 
-            Message msg = new Message(msgString);
+            Message message = new Message(serverMessage);
 
-            if(msg.getType().equals("id")) {
-                this.serverID = Integer.parseInt(msg.getID() + "");
-            } else if(msg.getType().equals("ping")) {
-                Message response = new Message("pong", new String[]{msg.getID() + ""});
+            if(message.getType().equals("id")) {
+                this.serverID = Integer.parseInt(message.getID() + "");
+            } else if(message.getType().equals("ping")) {
+                Message response = new Message("pong", new String[]{message.getID() + ""});
                 clientMessageQueue.add(response.getMsgString());
+            } else if(message.getType().equals("disconnect")) {
+               client.disconnect();
             }
         }
     }
@@ -60,16 +62,16 @@ public class Main {
     }
 
     /**
-     * This method retreives all unhandled user input and adds it to the client message queue.
+     * This method retrieves all unhandled user input and adds it to the client message queue.
      *
      * @param msgListener The object that listens to the users inputs
      */
     public void handleClientMessage(MessageListener msgListener) {
-        String clientMsg = msgListener.getMessage();
+        String clientMessage = msgListener.getMessage();
 
-        while (clientMsg != null) {
-            clientMessageQueue.add(clientMsg);
-            clientMsg = msgListener.getMessage();
+        while (clientMessage != null) {
+            clientMessageQueue.add(clientMessage);
+            clientMessage = msgListener.getMessage();
         }
     }
 
@@ -101,10 +103,8 @@ public class Main {
      * @param args Nothing yet
      */
     public static void main(String[] args) {
-
         Main main = new Main();
         main.startClient("localhost", 1234);
-
         main.clientMessageQueue.add((new Message("whatID")).getMsgString());
         main.sendMessage();
 
@@ -115,7 +115,6 @@ public class Main {
 
         MessageListener msgListener = new MessageListener(System.in);
         Thread.startVirtualThread(msgListener);
-
 
         while (true) {
 

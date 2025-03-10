@@ -13,8 +13,8 @@ import java.util.*;
 
 public class Client implements Runnable {
 
-    private String serverAddress;
-    private int port;
+    private final String serverAddress;
+    private final int port;
     private volatile Queue<String> clientMessageQueue;
     private volatile Queue<String> serverMessageQueue;
     public volatile Boolean disconnect;
@@ -52,16 +52,6 @@ public class Client implements Runnable {
     }
 
     /**
-     * This method adds a message into the serverMessageQueue which will
-     * be handled by the client later.
-     *
-     * @param message The message that is supposed to be handled
-     */
-    public void queueServerMessage(String message) {
-        serverMessageQueue.add(message);
-    }
-
-    /**
      * This method gives access to all incoming messages.
      *
      * @return Returns all undealt messages from the server
@@ -83,7 +73,7 @@ public class Client implements Runnable {
                 oStream.write('\n');
             } catch (
                     IOException ioException) {
-                ioException.printStackTrace();
+                System.out.println("IOException in class Client in method sendMessage");
             }
         }
     }
@@ -95,8 +85,7 @@ public class Client implements Runnable {
      * @param msgListener The object that catches any incoming messages
      */
     public void receiveMessage(MessageListener msgListener) {
-        String message;
-        message = msgListener.getMessage();
+        String message = msgListener.getMessage();
 
         while (message != null) {
             serverMessageQueue.add(message);
@@ -107,7 +96,7 @@ public class Client implements Runnable {
     /**
      * This method is invoked if the thread is started. It creates a new socket,
      * input/output-stream and MessageListener. Afterward it continuously handles
-     * any incomming or outgoing messages.
+     * any incoming or outgoing messages.
      */
     public void run() {
         try {
@@ -118,9 +107,7 @@ public class Client implements Runnable {
             MessageListener msgListener = new MessageListener(iStream);
             Thread.startVirtualThread(msgListener);
 
-
             while (!disconnect) {
-
                 receiveMessage(msgListener);
                 sendMessage(oStream);
             }
@@ -130,7 +117,7 @@ public class Client implements Runnable {
             oStream.close();
         } catch (
                 IOException ioException) {
-            ioException.printStackTrace();
+            System.out.println("IOException in class Client in method run");
         }
     }
 }

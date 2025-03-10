@@ -11,7 +11,7 @@ import java.util.*;
 
 public class ConnectionListener implements Runnable {
 
-    private int port;
+    private final int port;
     public volatile Queue<Socket> socketQueue;
 
     /**
@@ -41,7 +41,7 @@ public class ConnectionListener implements Runnable {
             }
         } catch (
                 IOException ioException) {
-            ioException.printStackTrace();
+            System.out.println("IOException in class ConnectionListener in method run");
         }
     }
 }
