@@ -114,8 +114,8 @@ public class Main {
         }
 
         MessageListener msgListener = new MessageListener(System.in);
-        Thread msgListenerThread = new Thread(msgListener);
-        msgListenerThread.start();
+        Thread.startVirtualThread(msgListener);
+
 
         while (true) {
 

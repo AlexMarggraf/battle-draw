@@ -122,8 +122,8 @@ public class ServerThread implements Runnable {
             OutputStream oStream = socket.getOutputStream();
 
             MessageListener msgListener = new MessageListener(iStream);
-            Thread msgListenerThread = new Thread(msgListener);
-            msgListenerThread.start();
+            Thread.startVirtualThread(msgListener);
+
 
             while (!disconnect) {
 

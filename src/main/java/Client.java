@@ -20,7 +20,7 @@ public class Client implements Runnable {
     public volatile Boolean disconnect;
 
     /**
-     * This method is the constructor and sets serverAdress, port number,
+     * This method is the constructor and sets serverAddress, port number,
      * queues for messages and the disconnect flag.
      *
      * @param serverAddress The ip address of the server
@@ -62,7 +62,7 @@ public class Client implements Runnable {
     }
 
     /**
-     * This method gives access to all incomming messages.
+     * This method gives access to all incoming messages.
      *
      * @return Returns all undealt messages from the server
      */
@@ -92,7 +92,7 @@ public class Client implements Runnable {
      * This method checks whether any messages have been received and puts
      * them in the serverMessageQueue if they have.
      *
-     * @param msgListener The object that catches any incomming messages
+     * @param msgListener The object that catches any incoming messages
      */
     public void receiveMessage(MessageListener msgListener) {
         String message;
@@ -116,8 +116,8 @@ public class Client implements Runnable {
             OutputStream oStream = socket.getOutputStream();
 
             MessageListener msgListener = new MessageListener(iStream);
-            Thread msgListenerThread = new Thread(msgListener);
-            msgListenerThread.start();
+            Thread.startVirtualThread(msgListener);
+
 
             while (!disconnect) {
 

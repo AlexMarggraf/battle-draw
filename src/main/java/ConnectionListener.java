@@ -36,6 +36,7 @@ public class ConnectionListener implements Runnable {
 
             while (true) {
                 Socket socket = listen.accept();
+                System.out.println("New connection from " + socket.getInetAddress().getHostAddress());
                 socketQueue.add(socket);
             }
         } catch (

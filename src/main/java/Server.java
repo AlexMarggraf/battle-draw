@@ -19,26 +19,27 @@ public class Server {
 
     /**
      * This method is the constructor and initializes the message queues and the server list and
-     * it sets the id to -1.
+     * it sets the id to 0.
      */
     public Server() {
         this.receiveMessageQueue = new LinkedList<>();
         this.sendMessageQueue = new LinkedList<>();
         this.serverThreadList = new ArrayList<>();
-        this.connection = -1;
+        this.connection = 0;
     }
 
     /**
      * This method starts a new server thread.
      *
-     * @param conListener The object that listens to any incomming connections
+     * @param conListener The object that listens to any incoming connections
      */
     public void startServerThread(ConnectionListener conListener) {
         while (conListener.socketQueue.peek() != null) {
-            ServerThread server = new ServerThread(++connection, conListener.socketQueue.remove());
+            ServerThread server = new ServerThread(connection, conListener.socketQueue.remove());
             serverThreadList.add(server);
             Thread serverThread = new Thread(server);
             serverThread.start();
+            connection++;
         }
     }
 
@@ -108,8 +109,7 @@ public class Server {
         Server server = new Server();
 
         ConnectionListener conListener = new ConnectionListener(1234);
-        Thread conListenerThread = new Thread(conListener);
-        conListenerThread.start();
+        Thread.startVirtualThread(conListener);
 
         while (true) {
 
