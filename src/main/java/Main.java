@@ -7,7 +7,6 @@
  * @author Frederic Weyssow
  */
 
-import java.io.*;
 import java.util.*;
 
 public class Main {
@@ -17,6 +16,8 @@ public class Main {
     private Client client;
     public long lastPing;
     private int serverID;
+    private Boolean receivedPong;
+    private Boolean sendPing;
 
     /**
      * This method is the constructor and initializes the queues.
@@ -26,6 +27,8 @@ public class Main {
         this.clientMessageQueue = new LinkedList<>();
         this.lastPing = 0;
         this.serverID = -1;
+        this.receivedPong = true;
+        this.sendPing = true;
     }
 
     /**
@@ -38,13 +41,14 @@ public class Main {
 
             Message message = new Message(serverMessage);
 
-            if(message.getType().equals("id")) {
-                this.serverID = Integer.parseInt(message.getID() + "");
-            } else if(message.getType().equals("ping")) {
-                Message response = new Message("pong", new String[]{message.getID() + ""});
-                clientMessageQueue.add(response.getMsgString());
-            } else if(message.getType().equals("disconnect")) {
-               client.disconnect();
+            switch (message.getType()) {
+                case "id" -> this.serverID = Integer.parseInt(message.getID() + "");
+                case "ping" -> {
+                    Message response = new Message("pong", new String[]{message.getID() + ""});
+                    clientMessageQueue.add(response.getMsgString());
+                }
+                case "pong" -> receivedPong = true;
+                case "disconnect" -> client.disconnect();
             }
         }
     }
@@ -96,6 +100,32 @@ public class Main {
         clientThread.start();
     }
 
+    public void handlePingPong(){
+        if((System.currentTimeMillis() - lastPing > 10000) && sendPing) {
+            if(receivedPong) {
+                Message ping = new Message("ping", new String[]{serverID + ""});
+                clientMessageQueue.add(ping.getMsgString());
+                lastPing = System.currentTimeMillis();
+                receivedPong = false;
+            } else {
+                System.out.println("Server not reachable");
+                sendPing = false;
+                client.disconnect();
+            }
+        }
+    }
+
+    public void initClient() {
+        startClient("localhost", 1234);
+        clientMessageQueue.add((new Message("whatID")).getMsgString());
+        sendMessage();
+
+        while(serverID == -1) {
+            receiveMessage();
+            handleServerMessage();
+        }
+    }
+
     /**
      * This method connects the client to the server and parses the user
      * input.
@@ -104,26 +134,13 @@ public class Main {
      */
     public static void main(String[] args) {
         Main main = new Main();
-        main.startClient("localhost", 1234);
-        main.clientMessageQueue.add((new Message("whatID")).getMsgString());
-        main.sendMessage();
-
-        while(main.serverID == -1) {
-            main.receiveMessage();
-            main.handleServerMessage();
-        }
+        main.initClient();
 
         MessageListener msgListener = new MessageListener(System.in);
         Thread.startVirtualThread(msgListener);
 
         while (true) {
-
-            if(System.currentTimeMillis() - main.lastPing > 10000) {
-                Message ping = new Message("ping", new String[]{main.serverID + ""});
-                main.clientMessageQueue.add(ping.getMsgString());
-                main.lastPing = System.currentTimeMillis();
-            }
-
+            main.handlePingPong();
             main.handleClientMessage(msgListener);
             main.receiveMessage();
             main.sendMessage();

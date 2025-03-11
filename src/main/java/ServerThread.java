@@ -17,6 +17,7 @@ public class ServerThread implements Runnable {
     protected volatile Queue<String> clientMessageQueue;
     public Boolean disconnect;
     public long lastPing;
+    public Boolean receivedPong;
 
     /**
      * This method is the constructor and sets the id of the client, the socket, queues for messages
@@ -31,6 +32,8 @@ public class ServerThread implements Runnable {
         this.serverMessageQueue = new LinkedList<>();
         this.clientMessageQueue = new LinkedList<>();
         this.disconnect = false;
+        this.receivedPong = true;
+        this.lastPing = 0;
     }
 
     /**
@@ -54,7 +57,7 @@ public class ServerThread implements Runnable {
     /**
      * This method gives access to the messages sent to the server.
      *
-     * @return Returns any incomming message that hasn't been dealt with
+     * @return Returns any incoming message that hasn't been dealt with
      */
     public String getClientMessage() {
         return clientMessageQueue.poll();
@@ -90,18 +93,39 @@ public class ServerThread implements Runnable {
 
             Message message = new Message(clientMessage);
 
-            if(message.getType().equals("whatID")) {
-                Message response = new Message("id", new String[]{id + ""});
-                serverMessageQueue.add(response.getMsgString());
-            } else if(message.getType().equals("disconnect")) {
-                disconnect = true;
-                Message response = new Message("disconnect", new String[]{id + ""});
-                clientMessageQueue.add(response.getMsgString());
-            } else {
-                clientMessageQueue.add(clientMessage);
+            switch (message.getType()) {
+                case "whatID" -> {
+                    Message response = new Message("id", new String[]{id + ""});
+                    serverMessageQueue.add(response.getMsgString());
+                }
+                case "disconnect" -> {
+                    disconnect = true;
+                    Message response = new Message("disconnect", new String[]{id + ""});
+                    clientMessageQueue.add(response.getMsgString());
+                }
+                case "ping" -> {
+                    Message response = new Message("pong", new String[]{id + ""});
+                    serverMessageQueue.add(response.getMsgString());
+                }
+                case "pong" -> receivedPong = true;
+                default -> clientMessageQueue.add(clientMessage);
             }
 
             clientMessage = msgListener.getMessage();
+        }
+    }
+
+    public void handlePingPong(){
+        if((System.currentTimeMillis() - lastPing > 10000)) {
+            if(receivedPong) {
+                Message ping = new Message("ping", new String[]{id + ""});
+                serverMessageQueue.add(ping.getMsgString());
+                lastPing = System.currentTimeMillis();
+                receivedPong = false;
+            } else {
+                System.out.println("Client not reachable");
+                disconnect = true;
+            }
         }
     }
 
@@ -119,12 +143,7 @@ public class ServerThread implements Runnable {
             Thread.startVirtualThread(msgListener);
 
             while (!disconnect) {
-                if(System.currentTimeMillis() - lastPing > 10000) {
-                    Message ping = new Message("ping", new String[]{id + ""});
-                    serverMessageQueue.add(ping.getMsgString());
-                    lastPing = System.currentTimeMillis();
-                }
-
+                handlePingPong();
                 receiveMessage(msgListener);
                 sendMessage(oStream);
             }

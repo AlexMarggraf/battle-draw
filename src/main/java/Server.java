@@ -81,13 +81,11 @@ public class Server {
 
             Message message = new Message(clientMessage);
 
-            if (message.getType().equals("ping")) {
-                Message response = new Message("pong", new String[]{message.getID() + ""});
-                sendMessageQueue.add(response.getMsgString());
-            } else if (message.getType().equals("disconnect")) {
-                int id = message.getID();
-                serverThreadList.removeIf(st -> st.getId() == id);
-                connection--;
+            switch(message.getMsgString()) {
+                case "disconnect" -> {
+                    int id = message.getID();
+                    serverThreadList.removeIf(st -> st.getId() == id);
+                }
             }
         }
     }
