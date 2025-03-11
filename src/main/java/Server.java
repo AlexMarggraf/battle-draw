@@ -85,6 +85,7 @@ public class Server {
                 case "disconnect" -> {
                     int id = message.getID();
                     serverThreadList.removeIf(st -> st.getId() == id);
+                    connection--;
                 }
                 case "chatAll" -> {
                     sendMessageQueue.add(message.toString());
