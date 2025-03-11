@@ -87,6 +87,7 @@ public class Server {
             } else if (message.getType().equals("disconnect")) {
                 int id = message.getID();
                 serverThreadList.removeIf(st -> st.getId() == id);
+                connection--;
             }
         }
     }
