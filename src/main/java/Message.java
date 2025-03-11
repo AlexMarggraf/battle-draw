@@ -25,12 +25,44 @@ public class Message {
      *
      * @param message The string literal of the message
      */
-    public Message (String message) {
+    public Message(String message) {
         String[] content = message.split("\\s+");
-        String[] params = new String[content.length - 1];
-        System.arraycopy(content, 1, params, 0, content.length - 1);
-        this.type = content[0];
-        this.params = params;
+        String type = content[0];
+
+        switch (type) {
+            case "chatAll" -> {
+                this.type = type;
+                this.params = new String[2];
+                params[0] = content[1];
+
+                StringBuilder msgBuilder = new StringBuilder(content[2]);
+                for (int i = 3; i < content.length; i++) {
+                    msgBuilder.append(" ").append(content[i]);
+                }
+
+                params[1] = msgBuilder.toString();
+            }
+            case "ping", "pong", "disconnect", "id" -> {
+                if (content.length == 2) {
+                    try {
+                        Integer.parseInt(content[1]);
+                        this.type = type;
+                        this.params = new String[]{content[1]};
+                    } catch (NumberFormatException e) {
+                        throw new IllegalArgumentException("Invalid number format for type: " + type);
+                    }
+                } else {
+                    throw new IllegalArgumentException(type + " must have exactly one parameter.");
+                }
+            }
+            case "whatID" -> {
+                this.type = "whatID";
+                this.params = new String[0];
+            }
+            default -> {
+                throw new IllegalArgumentException("Not a valid message type: " + type);
+            }
+        }
     }
 
     /**
@@ -65,7 +97,7 @@ public class Message {
      *
      * @return Returns the message in string format
      */
-    public String getMsgString() {
+    public String toString() {
         String message = type;
 
         for(String param : params) {

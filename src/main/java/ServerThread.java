@@ -76,7 +76,7 @@ public class ServerThread implements Runnable {
                 oStream.write('\n');
             } catch (
                     IOException ioException) {
-                System.out.println("IOException in ServerThread in method sendMessage");
+                System.out.println("IOException in class ServerThread in method sendMessage");
             }
         }
     }
@@ -91,26 +91,32 @@ public class ServerThread implements Runnable {
 
         while (clientMessage != null) {
 
-            Message message = new Message(clientMessage);
+            if (clientMessage.equals("disconnect")) {
+                disconnect = true;
+                Message response = new Message("disconnect", new String[]{id + ""});
+                clientMessageQueue.add(response.toString());
+            } else {
+                Message message = new Message(clientMessage);
 
-            switch (message.getType()) {
-                case "whatID" -> {
-                    Message response = new Message("id", new String[]{id + ""});
-                    serverMessageQueue.add(response.getMsgString());
+                switch (message.getType()) {
+                    case "whatID" -> {
+                        System.out.println(clientMessage);
+                        Message response = new Message("id", new String[] {id + ""});
+                        serverMessageQueue.add(response.toString());
+                    }
+                    case "ping" -> {
+                        System.out.println(clientMessage);
+                        Message response = new Message("pong", new String[] {id + ""});
+                        serverMessageQueue.add(response.toString());
+                    }
+                    case "pong" -> {
+                        System.out.println(clientMessage);
+                        receivedPong = true;
+                    }
+                    default ->
+                            clientMessageQueue.add(clientMessage);
                 }
-                case "disconnect" -> {
-                    disconnect = true;
-                    Message response = new Message("disconnect", new String[]{id + ""});
-                    clientMessageQueue.add(response.getMsgString());
-                }
-                case "ping" -> {
-                    Message response = new Message("pong", new String[]{id + ""});
-                    serverMessageQueue.add(response.getMsgString());
-                }
-                case "pong" -> receivedPong = true;
-                default -> clientMessageQueue.add(clientMessage);
             }
-
             clientMessage = msgListener.getMessage();
         }
     }
@@ -119,7 +125,7 @@ public class ServerThread implements Runnable {
         if((System.currentTimeMillis() - lastPing > 10000)) {
             if(receivedPong) {
                 Message ping = new Message("ping", new String[]{id + ""});
-                serverMessageQueue.add(ping.getMsgString());
+                serverMessageQueue.add(ping.toString());
                 lastPing = System.currentTimeMillis();
                 receivedPong = false;
             } else {

@@ -81,10 +81,13 @@ public class Server {
 
             Message message = new Message(clientMessage);
 
-            switch(message.getMsgString()) {
+            switch(message.getType()) {
                 case "disconnect" -> {
                     int id = message.getID();
                     serverThreadList.removeIf(st -> st.getId() == id);
+                }
+                case "chatAll" -> {
+                    sendMessageQueue.add(message.toString());
                 }
             }
         }
@@ -95,9 +98,19 @@ public class Server {
      */
     public void handleSendMessage() {
         while (sendMessageQueue.peek() != null) {
-            String ServerMessage = sendMessageQueue.remove();
-            Message message = new Message(ServerMessage);
-            sendMessage(message.getMsgString(), message.getID());
+            String serverMessage = sendMessageQueue.remove();
+            Message message = new Message(serverMessage);
+
+            switch (message.getType()) {
+                case "chatAll" -> {
+                    for (ServerThread st : serverThreadList) {
+                        if(st.getId() != message.getID()){
+                            sendMessage(message.toString(), st.getId());
+                        }
+                    }
+                }
+                default -> {sendMessage(message.toString(), message.getID());}
+            }
         }
     }
 

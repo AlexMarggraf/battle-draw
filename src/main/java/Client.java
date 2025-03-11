@@ -18,6 +18,7 @@ public class Client implements Runnable {
     private volatile Queue<String> clientMessageQueue;
     private volatile Queue<String> serverMessageQueue;
     public volatile Boolean disconnect;
+    private volatile int serverID;
 
     /**
      * This method is the constructor and sets serverAddress, port number,
@@ -31,7 +32,8 @@ public class Client implements Runnable {
         this.port = port;
         clientMessageQueue = new LinkedList<>();
         serverMessageQueue = new LinkedList<>();
-        this.disconnect = false;
+        disconnect = false;
+        serverID = -1;
     }
 
     /**
@@ -39,6 +41,10 @@ public class Client implements Runnable {
      */
     public void disconnect() {
         this.disconnect = true;
+    }
+
+    public void setServerID(int id) {
+        this.serverID = id;
     }
 
     /**
@@ -88,7 +94,11 @@ public class Client implements Runnable {
         String message = msgListener.getMessage();
 
         while (message != null) {
-            serverMessageQueue.add(message);
+            if (message.equals("disconnect")){
+                serverMessageQueue.add("disconnect " + serverID);
+            } else {
+                serverMessageQueue.add(message);
+            }
             message = msgListener.getMessage();
         }
     }

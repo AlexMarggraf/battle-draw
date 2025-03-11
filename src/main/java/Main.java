@@ -37,18 +37,21 @@ public class Main {
     public void handleServerMessage() {
         while (serverMessageQueue.peek() != null) {
             String serverMessage = serverMessageQueue.remove();
-            System.out.println(serverMessage);
-
             Message message = new Message(serverMessage);
 
             switch (message.getType()) {
-                case "id" -> this.serverID = Integer.parseInt(message.getID() + "");
+                case "id" -> {
+                    this.serverID = Integer.parseInt(message.getID() + "");
+                    client.setServerID(message.getID());
+                }
                 case "ping" -> {
                     Message response = new Message("pong", new String[]{message.getID() + ""});
-                    clientMessageQueue.add(response.getMsgString());
+                    clientMessageQueue.add(response.toString());
                 }
                 case "pong" -> receivedPong = true;
                 case "disconnect" -> client.disconnect();
+                case "chatAll" -> System.out.println(message.getID() + ": " + message.getParams()[1]);
+                default -> {System.out.println(message.getID() + ": " + message.getParams()[1]);}
             }
         }
     }
@@ -74,7 +77,15 @@ public class Main {
         String clientMessage = msgListener.getMessage();
 
         while (clientMessage != null) {
-            clientMessageQueue.add(clientMessage);
+            Message response;
+
+            try {
+                response = new Message(clientMessage);
+            } catch (IllegalArgumentException e){
+                response = new Message("chatAll", new String[]{serverID + "", clientMessage});
+            }
+
+            clientMessageQueue.add(response.toString());
             clientMessage = msgListener.getMessage();
         }
     }
@@ -104,7 +115,7 @@ public class Main {
         if((System.currentTimeMillis() - lastPing > 10000) && sendPing) {
             if(receivedPong) {
                 Message ping = new Message("ping", new String[]{serverID + ""});
-                clientMessageQueue.add(ping.getMsgString());
+                clientMessageQueue.add(ping.toString());
                 lastPing = System.currentTimeMillis();
                 receivedPong = false;
             } else {
@@ -117,7 +128,7 @@ public class Main {
 
     public void initClient() {
         startClient("localhost", 1234);
-        clientMessageQueue.add((new Message("whatID")).getMsgString());
+        clientMessageQueue.add("whatID");
         sendMessage();
 
         while(serverID == -1) {

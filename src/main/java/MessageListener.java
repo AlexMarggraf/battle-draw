@@ -40,12 +40,13 @@ public class MessageListener implements Runnable {
         try {
             while (true) {
                 message = MessageReader.readLine();
-                messageQueue.add(message);
+                if (!message.equals("")) {
+                    messageQueue.add(message);
+                }
             }
         } catch (
                 IOException ioException) {
-            Message msg = new Message("disconnect");
-            messageQueue.add(msg.getMsgString());
+            messageQueue.add("disconnect");
         }
     }
 }
