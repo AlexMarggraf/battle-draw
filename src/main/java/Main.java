@@ -77,15 +77,18 @@ public class Main {
         String clientMessage = msgListener.getMessage();
 
         while (clientMessage != null) {
-            Message response;
+            Message message;
 
+            /* If you want to be able to use commands from the client chat, use this
             try {
-                response = new Message(clientMessage);
+                message = new Message(clientMessage);
             } catch (IllegalArgumentException e){
-                response = new Message("chatAll", new String[]{serverID + "", clientMessage});
-            }
+                message = new Message("chatAll", new String[]{serverID + "", clientMessage});
+            } */
 
-            clientMessageQueue.add(response.toString());
+            message = new Message("chatAll", new String[]{serverID + "", clientMessage});
+
+            clientMessageQueue.add(message.toString());
             clientMessage = msgListener.getMessage();
         }
     }

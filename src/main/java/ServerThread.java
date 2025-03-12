@@ -15,7 +15,7 @@ public class ServerThread implements Runnable {
     private Socket socket;
     protected volatile Queue<String> serverMessageQueue;
     protected volatile Queue<String> clientMessageQueue;
-    public Boolean disconnect;
+    public volatile Boolean disconnect;
     public long lastPing;
     public Boolean receivedPong;
 
@@ -91,7 +91,7 @@ public class ServerThread implements Runnable {
 
         while (clientMessage != null) {
 
-            if (clientMessage.equals("disconnect")) {
+            if (clientMessage.equals("disconnect -1")) {
                 disconnect = true;
                 Message response = new Message("disconnect", new String[]{id + ""});
                 clientMessageQueue.add(response.toString());

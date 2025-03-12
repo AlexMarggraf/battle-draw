@@ -46,7 +46,7 @@ public class MessageListener implements Runnable {
             }
         } catch (
                 IOException ioException) {
-            messageQueue.add("disconnect");
+            messageQueue.add("disconnect -1");
         }
     }
 }

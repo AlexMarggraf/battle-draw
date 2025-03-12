@@ -94,7 +94,7 @@ public class Client implements Runnable {
         String message = msgListener.getMessage();
 
         while (message != null) {
-            if (message.equals("disconnect")){
+            if (message.equals("disconnect -1")){
                 serverMessageQueue.add("disconnect " + serverID);
             } else {
                 serverMessageQueue.add(message);
