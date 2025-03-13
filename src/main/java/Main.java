@@ -129,8 +129,9 @@ public class Main {
         }
     }
 
-    public void initClient() {
+    public void initClient(String userName) {
         startClient("localhost", 1234);
+        client.setUserName(userName);
         clientMessageQueue.add("whatID");
         sendMessage();
 
@@ -148,7 +149,11 @@ public class Main {
      */
     public static void main(String[] args) {
         Main main = new Main();
-        main.initClient();
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter username");
+        String userName = scanner.nextLine();
+        System.out.println("Your username is: " + userName);
+        main.initClient(userName);
 
         MessageListener msgListener = new MessageListener(System.in);
         Thread.startVirtualThread(msgListener);
