@@ -32,15 +32,23 @@ public class Message {
         switch (type) {
             case "chatAll" -> {
                 this.type = type;
-                this.params = new String[2];
-                params[0] = content[1];
+                this.params = new String[3];
 
-                StringBuilder msgBuilder = new StringBuilder(content[2]);
-                for (int i = 3; i < content.length; i++) {
+                try {
+                    Integer.parseInt(content[1]);
+                    params[0] = content[1];
+                } catch (NumberFormatException NFException) {
+                    throw new IllegalArgumentException("Invalid number format for type: " + type);
+                }
+
+                params[1] = content[2];
+
+                StringBuilder msgBuilder = new StringBuilder(content[3]);
+                for (int i = 4; i < content.length; i++) {
                     msgBuilder.append(" ").append(content[i]);
                 }
 
-                params[1] = msgBuilder.toString();
+                params[2] = msgBuilder.toString();
             }
             case "ping", "pong", "disconnect", "id" -> {
                 if (content.length == 2) {
@@ -48,7 +56,7 @@ public class Message {
                         Integer.parseInt(content[1]);
                         this.type = type;
                         this.params = new String[]{content[1]};
-                    } catch (NumberFormatException e) {
+                    } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("Invalid number format for type: " + type);
                     }
                 } else {

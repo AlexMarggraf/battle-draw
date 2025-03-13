@@ -50,7 +50,7 @@ public class Main {
                 }
                 case "pong" -> receivedPong = true;
                 case "disconnect" -> client.disconnect();
-                case "chatAll" -> System.out.println(message.getID() + ": " + message.getParams()[1]);
+                case "chatAll" -> System.out.println(message.getID() + ": " + message.getParams()[2]);
                 default -> {System.out.println(message.getID() + ": " + message.getParams()[1]);}
             }
         }
@@ -86,7 +86,7 @@ public class Main {
                 message = new Message("chatAll", new String[]{serverID + "", clientMessage});
             } */
 
-            message = new Message("chatAll", new String[]{serverID + "", clientMessage});
+            message = new Message("chatAll", new String[]{serverID + "", "TestName", clientMessage});
 
             clientMessageQueue.add(message.toString());
             clientMessage = msgListener.getMessage();
