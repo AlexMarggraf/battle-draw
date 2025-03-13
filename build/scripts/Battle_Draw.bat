@@ -17,7 +17,7 @@
 @if "%DEBUG%"=="" @echo off
 @rem ##########################################################################
 @rem
-@rem  example-project startup script for Windows
+@rem  Battle_Draw startup script for Windows
 @rem
 @rem ##########################################################################
 
@@ -33,7 +33,7 @@ set APP_HOME=%DIRNAME%..
 @rem Resolve any "." and ".." in APP_HOME to make it shorter.
 for %%i in ("%APP_HOME%") do set APP_HOME=%%~fi
 
-@rem Add default JVM options here. You can also use JAVA_OPTS and EXAMPLE_PROJECT_OPTS to pass JVM options to this script.
+@rem Add default JVM options here. You can also use JAVA_OPTS and BATTLE_DRAW_OPTS to pass JVM options to this script.
 set DEFAULT_JVM_OPTS=
 
 @rem Find java.exe
@@ -68,22 +68,22 @@ goto fail
 :execute
 @rem Setup the command line
 
-set CLASSPATH=%APP_HOME%\lib\example-project-0.0.1-ALPHA.jar;%APP_HOME%\lib\javafx-fxml-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-controls-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-controls-19.0.2.1.jar;%APP_HOME%\lib\javafx-graphics-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-graphics-19.0.2.1.jar;%APP_HOME%\lib\javafx-base-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-base-19.0.2.1.jar;%APP_HOME%\lib\sqlite-jdbc-3.49.1.0.jar
+set CLASSPATH=%APP_HOME%\lib\Battle_Draw-0.0.1-ALPHA.jar;%APP_HOME%\lib\javafx-fxml-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-controls-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-controls-19.0.2.1.jar;%APP_HOME%\lib\javafx-graphics-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-graphics-19.0.2.1.jar;%APP_HOME%\lib\javafx-base-19.0.2.1-win.jar;%APP_HOME%\lib\javafx-base-19.0.2.1.jar;%APP_HOME%\lib\sqlite-jdbc-3.49.1.0.jar
 
 
-@rem Execute example-project
-"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %EXAMPLE_PROJECT_OPTS%  -classpath "%CLASSPATH%" ch.unibas.dmi.dbis.cs108.example.HelloWorld %*
+@rem Execute Battle_Draw
+"%JAVA_EXE%" %DEFAULT_JVM_OPTS% %JAVA_OPTS% %BATTLE_DRAW_OPTS%  -classpath "%CLASSPATH%" ch.unibas.dmi.dbis.cs108.example.HelloWorld %*
 
 :end
 @rem End local scope for the variables with windows NT shell
 if %ERRORLEVEL% equ 0 goto mainEnd
 
 :fail
-rem Set variable EXAMPLE_PROJECT_EXIT_CONSOLE if you need the _script_ return code instead of
+rem Set variable BATTLE_DRAW_EXIT_CONSOLE if you need the _script_ return code instead of
 rem the _cmd.exe /c_ return code!
 set EXIT_CODE=%ERRORLEVEL%
 if %EXIT_CODE% equ 0 set EXIT_CODE=1
-if not ""=="%EXAMPLE_PROJECT_EXIT_CONSOLE%" exit %EXIT_CODE%
+if not ""=="%BATTLE_DRAW_EXIT_CONSOLE%" exit %EXIT_CODE%
 exit /b %EXIT_CODE%
 
 :mainEnd
