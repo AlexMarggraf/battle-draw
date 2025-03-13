@@ -24,6 +24,7 @@
 *.idea/
 
 # Ignore gradle files
+.gradle/
 *.bin
 *.lock
 *.properties
