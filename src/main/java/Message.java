@@ -38,7 +38,7 @@ public class Message {
                     Integer.parseInt(content[1]);
                     params[0] = content[1];
                 } catch (NumberFormatException NFException) {
-                    throw new IllegalArgumentException("Invalid number format for type: " + type);
+                    throw new IllegalArgumentException("Invalid number format for the id");
                 }
 
                 params[1] = content[2];
@@ -50,6 +50,17 @@ public class Message {
 
                 params[2] = msgBuilder.toString();
             }
+            case "username" -> {
+                if (content.length == 3) {
+                    try {
+                        Integer.parseInt(content[1]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("Invalid number format for the id");
+                    }
+                }
+            }
             case "ping", "pong", "disconnect", "id" -> {
                 if (content.length == 2) {
                     try {
@@ -57,14 +68,14 @@ public class Message {
                         this.type = type;
                         this.params = new String[]{content[1]};
                     } catch (NumberFormatException NFException) {
-                        throw new IllegalArgumentException("Invalid number format for type: " + type);
+                        throw new IllegalArgumentException("Invalid number format for the id");
                     }
                 } else {
                     throw new IllegalArgumentException(type + " must have exactly one parameter.");
                 }
             }
-            case "whatID" -> {
-                this.type = "whatID";
+            case "whatID", "whatUsername" -> {
+                this.type = type;
                 this.params = new String[0];
             }
             default -> {

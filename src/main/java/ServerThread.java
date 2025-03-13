@@ -18,6 +18,7 @@ public class ServerThread implements Runnable {
     public volatile Boolean disconnect;
     public long lastPing;
     public Boolean receivedPong;
+    private String clientUsername;
 
     /**
      * This method is the constructor and sets the id of the client, the socket, queues for messages
@@ -113,6 +114,10 @@ public class ServerThread implements Runnable {
                         System.out.println(clientMessage);
                         receivedPong = true;
                     }
+                    case "username" -> {
+                        clientUsername = message.getParams()[1];
+                        System.out.println(clientMessage);
+                    }
                     default ->
                             clientMessageQueue.add(clientMessage);
                 }
@@ -147,6 +152,9 @@ public class ServerThread implements Runnable {
 
             MessageListener msgListener = new MessageListener(iStream);
             Thread.startVirtualThread(msgListener);
+
+            serverMessageQueue.add("whatUsername");
+            sendMessage(oStream);
 
             while (!disconnect) {
                 handlePingPong();

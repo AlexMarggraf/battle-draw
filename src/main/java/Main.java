@@ -18,6 +18,7 @@ public class Main {
     private int serverID;
     private Boolean receivedPong;
     private Boolean sendPing;
+    private String username;
 
     /**
      * This method is the constructor and initializes the queues.
@@ -50,7 +51,11 @@ public class Main {
                 }
                 case "pong" -> receivedPong = true;
                 case "disconnect" -> client.disconnect();
-                case "chatAll" -> System.out.println(message.getID() + ": " + message.getParams()[2]);
+                case "chatAll" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
+                case "whatUsername" -> {
+                    Message response = new Message("username", new String[]{serverID + "", username});
+                    clientMessageQueue.add(response.toString());
+                }
                 default -> {System.out.println(message.getID() + ": " + message.getParams()[1]);}
             }
         }
@@ -77,18 +82,18 @@ public class Main {
         String clientMessage = msgListener.getMessage();
 
         while (clientMessage != null) {
-            Message message;
+            String[] splitClientMessage = clientMessage.split("\\s+");
 
-            /* If you want to be able to use commands from the client chat, use this
-            try {
-                message = new Message(clientMessage);
-            } catch (IllegalArgumentException e){
-                message = new Message("chatAll", new String[]{serverID + "", clientMessage});
-            } */
+            if (splitClientMessage.length == 2 && splitClientMessage[0].equals("/nick")) {
+                username = splitClientMessage[1];
+                System.out.println("Changed username to: " + username);
+                Message message = new Message("username", new String[]{serverID + "", username});
+                clientMessageQueue.add(message.toString());
+            } else {
+                Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                clientMessageQueue.add(message.toString());
+            }
 
-            message = new Message("chatAll", new String[]{serverID + "", "TestName", clientMessage});
-
-            clientMessageQueue.add(message.toString());
             clientMessage = msgListener.getMessage();
         }
     }
@@ -129,9 +134,8 @@ public class Main {
         }
     }
 
-    public void initClient(String userName) {
+    public void initClient() {
         startClient("localhost", 1234);
-        client.setUserName(userName);
         clientMessageQueue.add("whatID");
         sendMessage();
 
@@ -149,11 +153,14 @@ public class Main {
      */
     public static void main(String[] args) {
         Main main = new Main();
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter username");
         String userName = scanner.nextLine();
+        main.username = userName;
         System.out.println("Your username is: " + userName);
-        main.initClient(userName);
+
+        main.initClient();
 
         MessageListener msgListener = new MessageListener(System.in);
         Thread.startVirtualThread(msgListener);

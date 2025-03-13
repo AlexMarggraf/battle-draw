@@ -19,7 +19,6 @@ public class Client implements Runnable {
     private volatile Queue<String> serverMessageQueue;
     public volatile Boolean disconnect;
     private volatile int serverID;
-    private String userName;
 
     /**
      * This method is the constructor and sets serverAddress, port number,
@@ -35,10 +34,6 @@ public class Client implements Runnable {
         serverMessageQueue = new LinkedList<>();
         disconnect = false;
         serverID = -1;
-    }
-
-    public void setUserName(String userName) {
-        this.userName = userName;
     }
 
     /**
