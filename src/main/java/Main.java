@@ -114,7 +114,7 @@ public class Main {
      * @param port The port it should connect to
      */
     public void startClient(String ip, int port) {
-        this.client = new Client("10.192.5.203", 1234);
+        this.client = new Client("localhost", 1234);
         Thread clientThread = new Thread(client);
         clientThread.start();
     }
@@ -153,19 +153,34 @@ public class Main {
      */
     public static void main(String[] args) {
         Main main = new Main();
-        
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter username:");
-        String[] usernameArray = scanner.nextLine().split("\\s+");
 
-        while (usernameArray.length != 1 || usernameArray[0] == "") {
-            System.out.println("Whitespaces or an empty Username are not allowed!");
-            System.out.println("Enter new username:");
-            usernameArray = scanner.nextLine().split("\\s+");
+        Scanner scanner = new Scanner(System.in);
+
+        String suggestedUsername = System.getProperty("user.name") + (int) (Math.random() * 100);
+        System.out.println("Do you want to use: " + suggestedUsername + "? (y/n)");
+        String answer = scanner.nextLine();
+
+        while (!(answer.equals("y") || answer.equals("n"))) {
+            System.out.println("Answer with 'y' or 'n'!");
+            answer = scanner.nextLine();
         }
 
-        main.username = usernameArray[0].trim();
-        System.out.println("Your username is: " + usernameArray[0]);
+        if (answer.equals("y")) {
+            main.username = suggestedUsername;
+            System.out.println("Your username is: " + suggestedUsername);
+        } else {
+            System.out.println("Enter username:");
+            String[] usernameArray = scanner.nextLine().split("\s+");
+
+            while (usernameArray.length != 1 ||  usernameArray[0] == "") {
+                System.out.println("Whitespaces or an empty Username are not allowed!");
+                System.out.println("Enter new username:");
+                usernameArray = scanner.nextLine().split("\s+");
+            }
+
+            main.username = usernameArray[0].trim();
+            System.out.println("Your username is: " + usernameArray[0]);
+        }
 
         main.initClient();
 
