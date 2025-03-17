@@ -104,6 +104,7 @@ public class ServerThread implements Runnable {
                 disconnect = true;
                 Message response = new Message("disconnect", new String[] {id + ""});
                 clientMessageQueue.add(response.toString());
+                break;
             } else {
                 Message message = new Message(clientMessage);
 

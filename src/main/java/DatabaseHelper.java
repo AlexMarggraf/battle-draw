@@ -65,10 +65,11 @@ public class DatabaseHelper {
     }
 
     public static void setStatus (int id, int status) {
-        String query = "Update Players set online = " + status + " where id = " + id;
+        String update = "Update Players set online = " + status + " where id = " + id;
 
         try (Connection conn = DriverManager.getConnection(PATH)) {
-            conn.prepareStatement(query).executeQuery();
+            PreparedStatement pstmt = conn.prepareStatement(update);
+            int affectedRows = pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("SQL Error: " + e.getMessage());
         }
@@ -78,13 +79,16 @@ public class DatabaseHelper {
         String query = "Select online from Players where id = " + id;
 
         try (Connection con = DriverManager.getConnection(PATH)) {
-            ResultSet rs = con.prepareStatement(query).executeQuery();
+            PreparedStatement pstmt = con.prepareStatement(query);
+            ResultSet rs = pstmt.executeQuery();
             return rs.getInt("online") == 1;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
         return false;
     }
+
     public static boolean checkCredentials(String username, String password) {
         // SQL query to check if the username and password match
         String query = "SELECT id FROM Players WHERE username = ? AND password = ?";

@@ -85,6 +85,7 @@ public class Server {
                 case "disconnect" -> {
                     int id = message.getID();
                     serverThreadList.removeIf(st -> st.getId() == id);
+                    DatabaseHelper.setStatus(id, 0);
                     connection++;
                 }
                 case "chatAll" -> {
@@ -93,7 +94,7 @@ public class Server {
                 case "logIn" -> {
                     String username = message.getParams()[1];
 
-                    if (!DatabaseHelper.checkCredentials(username, message.getParams()[2]) || DatabaseHelper.getStatus(message.getID())) {
+                    if (!DatabaseHelper.checkCredentials(username, message.getParams()[2]) || DatabaseHelper.getStatus(DatabaseHelper.getPlayerId(username))) {
                         Message response = new Message("rejectLogin", new String[]{message.getID() + "", username});
                         sendMessageQueue.add(response.toString());
                     } else {
