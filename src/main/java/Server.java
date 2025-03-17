@@ -23,7 +23,7 @@ public class Server {
         this.receiveMessageQueue = new LinkedList<>();
         this.sendMessageQueue = new LinkedList<>();
         this.serverThreadList = new ArrayList<>();
-        this.connection = 0;
+        this.connection = -2;
     }
 
     /**
@@ -38,7 +38,7 @@ public class Server {
             serverThread.start();
 
             serverThreadList.add(server);
-            connection++;
+            connection--;
         }
     }
 
@@ -85,7 +85,7 @@ public class Server {
                 case "disconnect" -> {
                     int id = message.getID();
                     serverThreadList.removeIf(st -> st.getId() == id);
-                    connection--;
+                    connection++;
                 }
                 case "chatAll" -> {
                     sendMessageQueue.add(message.toString());

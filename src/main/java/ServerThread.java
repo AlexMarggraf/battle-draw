@@ -153,9 +153,6 @@ public class ServerThread implements Runnable {
             MessageListener msgListener = new MessageListener(iStream);
             Thread.startVirtualThread(msgListener);
 
-            serverMessageQueue.add("whatUsername");
-            sendMessage(oStream);
-
             while (!disconnect) {
                 handlePingPong();
                 receiveMessage(msgListener);

@@ -19,6 +19,7 @@ public class Main {
     private Boolean receivedPong;
     private Boolean sendPing;
     private String username;
+    private Boolean loggedIn;
 
     /**
      * This method is the constructor and initializes the queues.
@@ -30,6 +31,7 @@ public class Main {
         this.serverID = -1;
         this.receivedPong = true;
         this.sendPing = true;
+        this.loggedIn = false
     }
 
     /**
@@ -145,6 +147,90 @@ public class Main {
         }
     }
 
+    public void signInLogIn() {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Do you want to sign up or log in? (su/li)");
+        String answer = scanner.nextLine();
+
+        while (!(answer.equals("su") || answer.equals("li"))) {
+            System.out.println("Do you want to sign in or log in? (su/li)");
+        }
+
+        if (answer.equals("su")) {
+            String suggestedUsername = System.getProperty("user.name") + (int) (Math.random() * 100);
+            System.out.println("Do you want to use: " + suggestedUsername + "? (y/n)");
+            answer = scanner.nextLine().replaceAll("\\s+", "");
+
+            while (!(answer.equals("y") || answer.equals("n"))) {
+                System.out.println("Answer with 'y' or 'n'!");
+                answer = scanner.nextLine();
+            }
+
+            if (answer.equals("y")) {
+                username = suggestedUsername;
+            } else {
+                System.out.println("Enter username:");
+                String[] usernameArray = scanner.nextLine().split("\\s+");
+
+                while (usernameArray.length != 1 || usernameArray[0] == "") {
+                    System.out.println("Whitespaces or an empty Username are not allowed!");
+                    System.out.println("Enter new username:");
+                    usernameArray = scanner.nextLine().split("\\s+");
+                }
+
+                username = usernameArray[0].trim();
+            }
+
+            System.out.println("Choose a password:"):
+            String[] passwordArray = scanner.nextLine().split("\\s+");
+            password = passwordArray[0]
+
+            while (passwordArray.length != 1 || passwordArray[0] == "" || password.length() < 6) {
+                System.out.println("Choose a different password!");
+                passwordArray = scanner.nextLine().split("\\s+");
+            }
+
+            clientMessageQueue.add("signUp " + serverId + " " + username + " " + password);
+            sendMessage();
+
+            while(!loggedIn) {
+                receiveMessage();
+                handleServerMessage();
+            }
+        } else {
+            System.out.println("Enter your username:");
+            String[] usernameArray = scanner.nextLine().split("\\s+");
+
+            while (usernameArray.length != 1 || usernameArray[0] == "") {
+                System.out.println("Whitespaces or an empty username are not allowed!");
+                System.out.println("Enter your username:");
+                usernameArray = scanner.nextLine().split("\\s+");
+            }
+
+            username = usernameArray[0];
+
+            System.out.println("Enter your password:");
+            String[] passwordArray = scanner.nextLine().split("\\s+");
+
+            while (usernameArray.length != 1 || usernameArray[0] == "") {
+                System.out.println("Whitespaces or an empty password are not allowed!");
+                System.out.println("Enter your password:");
+                usernameArray = scanner.nextLine().split("\\s+");
+            }
+
+            String password = passwordArray[0];
+
+            clientMessageQueue.add("logIn " + serverId + " " + username + " " + password);
+            sendMessage();
+
+            while(!loggedIn) {
+                receiveMessage();
+                handleServerMessage();
+            }
+        }
+    }
+
     /**
      * This method connects the client to the server and parses the user
      * input.
@@ -153,36 +239,8 @@ public class Main {
      */
     public static void main(String[] args) {
         Main main = new Main();
-
-        Scanner scanner = new Scanner(System.in);
-
-        String suggestedUsername = System.getProperty("user.name") + (int) (Math.random() * 100);
-        System.out.println("Do you want to use: " + suggestedUsername + "? (y/n)");
-        String answer = scanner.nextLine();
-
-        while (!(answer.equals("y") || answer.equals("n"))) {
-            System.out.println("Answer with 'y' or 'n'!");
-            answer = scanner.nextLine();
-        }
-
-        if (answer.equals("y")) {
-            main.username = suggestedUsername;
-            System.out.println("Your username is: " + suggestedUsername);
-        } else {
-            System.out.println("Enter username:");
-            String[] usernameArray = scanner.nextLine().split("\s+");
-
-            while (usernameArray.length != 1 ||  usernameArray[0] == "") {
-                System.out.println("Whitespaces or an empty Username are not allowed!");
-                System.out.println("Enter new username:");
-                usernameArray = scanner.nextLine().split("\s+");
-            }
-
-            main.username = usernameArray[0].trim();
-            System.out.println("Your username is: " + usernameArray[0]);
-        }
-
         main.initClient();
+        main.signInLogIn();
 
         MessageListener msgListener = new MessageListener(System.in);
         Thread.startVirtualThread(msgListener);

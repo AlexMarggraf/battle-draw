@@ -31,29 +31,58 @@ public class Message {
 
         switch (type) {
             case "chatAll" -> {
-                this.type = type;
-                this.params = new String[3];
-
-                try {
-                    Integer.parseInt(content[1]);
-                    params[0] = content[1];
-                } catch (NumberFormatException NFException) {
-                    throw new IllegalArgumentException("Invalid number format for the id");
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " need exactly 3 parameters.");
                 }
+                else if (!(content[2] instanceof String)) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
 
-                params[1] = content[2];
+                        this.type = type;
+                        this.params = new String[3];
+                        params[0] = content[1];
 
-                StringBuilder msgBuilder = new StringBuilder(content[3]);
-                for (int i = 4; i < content.length; i++) {
-                    msgBuilder.append(" ").append(content[i]);
+                        StringBuilder msgBuilder = new StringBuilder(content[3]);
+                        for (int i = 4; i < content.length; i++) {
+                            msgBuilder.append(" ").append(content[i]);
+                        }
+
+                        params[1] = content[2];
+                        params[2] = msgBuilder.toString();
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
                 }
+            }
+            case "signUp", "logIn", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " need exactly 3 parameters.");
+                } else if (!(content[2] instanceof String)) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else if (!(content[3] instanceof String)) {
+                    throw new IllegalArgumentException("The password has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
 
-                params[2] = msgBuilder.toString();
+                        params[0] = content[1];
+                        this.type = type;
+                        this.params = new String[2];
+
+                        params[1] = content[2];
+                        params[2] = content[3];
+                    } catch (NumberFormatException  NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
             }
             case "username" -> {
                 if (content.length == 3) {
                     try {
                         Integer.parseInt(content[1]);
+
                         this.type = type;
                         this.params = new String[]{content[1], content[2]};
                     } catch (NumberFormatException NFException) {
@@ -62,21 +91,24 @@ public class Message {
                 }
             }
             case "ping", "pong", "disconnect", "id" -> {
-                if (content.length == 2) {
+                if (content.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " need exactly 1 parameters.");
+                } else {
                     try {
                         Integer.parseInt(content[1]);
+
                         this.type = type;
                         this.params = new String[]{content[1]};
                     } catch (NumberFormatException NFException) {
-                        throw new IllegalArgumentException("Invalid number format for the id");
+                        throw new IllegalArgumentException("The id has to be an integer");
                     }
-                } else {
-                    throw new IllegalArgumentException(type + " must have exactly one parameter.");
                 }
             }
             case "whatID", "whatUsername" -> {
-                this.type = type;
-                this.params = new String[0];
+                if (content.length == 1) {
+                    this.type = type;
+                    this.params = new String[0];
+                }
             }
             default -> {
                 throw new IllegalArgumentException("Not a valid message type: " + type);
