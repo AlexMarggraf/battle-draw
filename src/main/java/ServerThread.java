@@ -94,7 +94,7 @@ public class ServerThread implements Runnable {
 
             if (clientMessage.equals("disconnect -1")) {
                 disconnect = true;
-                Message response = new Message("disconnect", new String[]{id + ""});
+                Message response = new Message("disconnect", new String[] {id + ""});
                 clientMessageQueue.add(response.toString());
             } else {
                 Message message = new Message(clientMessage);
@@ -118,11 +118,12 @@ public class ServerThread implements Runnable {
                         clientUsername = message.getParams()[1];
                         System.out.println(clientMessage);
                     }
-                    default ->
-                            clientMessageQueue.add(clientMessage);
+                    default -> {
+                        clientMessageQueue.add(clientMessage);
+                    }
                 }
+                clientMessage = msgListener.getMessage();
             }
-            clientMessage = msgListener.getMessage();
         }
     }
 

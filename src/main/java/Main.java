@@ -58,6 +58,22 @@ public class Main {
                     Message response = new Message("username", new String[]{serverID + "", username});
                     clientMessageQueue.add(response.toString());
                 }
+                case "acceptLogin" -> {
+                    serverId = message.getID();
+                    loggedIn = true;
+                }
+                case "rejectLogin" -> {
+                    System.out.println("Username or password is wrong")
+                    signInLogIn();
+                }
+                case "acceptSignup" -> {
+                    serverId = message.getID();
+                    loggedIn = true;
+                }
+                case "rejectSignup" -> {
+                    System.out.println("Username is already being used")
+                    signInLogIn();
+                }
                 default -> {System.out.println(message.getID() + ": " + message.getParams()[1]);}
             }
         }
