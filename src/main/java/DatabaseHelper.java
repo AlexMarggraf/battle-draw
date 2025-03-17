@@ -2,7 +2,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class themeGetter {
+public class DatabaseHelper {
     private static final String PATH = "jdbc:sqlite:resources/Thema.db";
 
     public static List<String> getRandomWords(int amount) {
@@ -63,20 +63,104 @@ public class themeGetter {
 
         return username;
     }
+
+    public static void setStatus (int id, int status) {
+        String query = "Update Players set online = " + status + " where id = " + id;
+
+        try (Connection conn = DriverManager.getConnection(PATH)) {
+            conn.prepareStatement(query).executeQuery();
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+
+    public static Boolean getStatus (int id) {
+        String query = "Select online from Players where id = " + id;
+
+        try (Connection con = DriverManager.getConnection(PATH)) {
+            ResultSet rs = con.prepareStatement(query).executeQuery();
+            return rs.getInt("online") == 1;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return false;
+    }
+    public static boolean checkCredentials(String username, String password) {
+        // SQL query to check if the username and password match
+        String query = "SELECT id FROM Players WHERE username = ? AND password = ?";
+        int userId = -1;  // Default to -1 if credentials are invalid
+
+        try (Connection conn = DriverManager.getConnection(PATH);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            // Set the values for username and password
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            // Execute the query
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // If credentials are correct, retrieve the user ID
+                    userId = rs.getInt("id");
+                }
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+        return userId != -1;
+    }
+    public static void insertPlayer(String username, String password) {
+        // SQL query to insert a new user (assuming 'users' table has 'username' and 'password' columns)
+        String query = "INSERT INTO Players (username, password) VALUES (?, ?)";
+
+        try (Connection conn = DriverManager.getConnection(PATH);
+             PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
+
+            // Set the values for username and password
+            pstmt.setString(1, username);
+            pstmt.setString(2, password);
+
+            // Execute the query
+            int affectedRows = pstmt.executeUpdate(); // Returns number of affected rows (should be 1 if insert is successful)
+
+            if (affectedRows > 0) {
+                // Get the generated user ID if the insert was successful
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        int userId = generatedKeys.getInt(1); // Get the generated ID (first column)
+                        System.out.println("Inserted user with ID: " + userId);
+                    }
+                }
+            } else {
+                System.out.println("No rows affected. Insert failed.");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+
+
+
     public static void clearList(List<String> list){
         list.clear();
         System.out.println("List cleared");
     }
 
     public static void main(String[] args) {
-        List<String> selectedTopics = getRandomWords(30);
+        List<String> selectedTopics = getRandomWords(3);
         System.out.println("Selected Topics: " + selectedTopics);
-        clearList(selectedTopics);
-        System.out.println("Selected Topics cleared: " + selectedTopics);
+        //clearList(selectedTopics);
+        //System.out.println("Selected Topics:" selectedTopics);
         int id = getPlayerId("dave");
         System.out.println("" + id);
         String username = getPlayerName(4);
         System.out.println(username);
+        boolean userid = checkCredentials("dave", "letmein");
+        System.out.println(userid);
+        insertPlayer("globi", "sfhufhs");
+
 
     }
 }

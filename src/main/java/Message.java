@@ -56,7 +56,7 @@ public class Message {
                     }
                 }
             }
-            case "signUp", "logIn", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
+            case "signUp", "logIn" -> {
                 if (content.length != 4) {
                     throw new IllegalArgumentException("Message of type " + type + " need exactly 3 parameters.");
                 } else if (!(content[2] instanceof String)) {
@@ -67,9 +67,9 @@ public class Message {
                     try {
                         Integer.parseInt(content[1]);
 
+                        this.params = new String[3];
                         params[0] = content[1];
                         this.type = type;
-                        this.params = new String[2];
 
                         params[1] = content[2];
                         params[2] = content[3];
@@ -78,7 +78,7 @@ public class Message {
                     }
                 }
             }
-            case "username" -> {
+            case "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
                 if (content.length == 3) {
                     try {
                         Integer.parseInt(content[1]);

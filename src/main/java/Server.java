@@ -90,6 +90,46 @@ public class Server {
                 case "chatAll" -> {
                     sendMessageQueue.add(message.toString());
                 }
+                case "logIn" -> {
+                    String username = message.getParams()[1];
+
+                    if (!DatabaseHelper.checkCredentials(username, message.getParams()[2]) || DatabaseHelper.getStatus(message.getID())) {
+                        Message response = new Message("rejectLogin", new String[]{message.getID() + "", username});
+                        sendMessageQueue.add(response.toString());
+                    } else {
+                        DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
+                        Message response = new Message("acceptLogin", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
+                        sendMessageQueue.add(response.toString());
+
+                        for (ServerThread st : serverThreadList) {
+                            if (st.getId() == message.getID()) {
+                                st.setId(DatabaseHelper.getPlayerId(username));
+                                st.setClientUsername(username);
+                            }
+                        }
+                    }
+                }
+                case "signUp" -> {
+                    String username = message.getParams()[1];
+
+                    if (DatabaseHelper.getPlayerId(username) == -1) {
+                        DatabaseHelper.insertPlayer(message.getParams()[1], message.getParams()[2]);
+                        DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
+
+                        for (ServerThread st : serverThreadList) {
+                            if (st.getId() == message.getID()) {
+                                st.setId(DatabaseHelper.getPlayerId(username));
+                                st.setClientUsername(username);
+                            }
+                        }
+
+                        Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
+                        sendMessageQueue.add(response.toString());
+                    } else {
+                        Message response = new Message("rejectSignup", new String[]{message.getID() + "", username});
+                        sendMessageQueue.add(response.toString());
+                    }
+                }
             }
         }
     }

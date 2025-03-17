@@ -58,20 +58,17 @@ public class Main {
                     Message response = new Message("username", new String[]{serverID + "", username});
                     clientMessageQueue.add(response.toString());
                 }
-                case "acceptLogin" -> {
-                    serverId = message.getID();
+                case "acceptLogin", "acceptSignup" -> {
+                    serverID = message.getID();
                     loggedIn = true;
+                    System.out.println("You're logged in");
                 }
                 case "rejectLogin" -> {
-                    System.out.println("Username or password is wrong")
+                    System.out.println("Username or password is wrong");
                     signInLogIn();
                 }
-                case "acceptSignup" -> {
-                    serverId = message.getID();
-                    loggedIn = true;
-                }
                 case "rejectSignup" -> {
-                    System.out.println("Username is already being used")
+                    System.out.println("Username is already being used");
                     signInLogIn();
                 }
                 default -> {System.out.println(message.getID() + ": " + message.getParams()[1]);}
@@ -170,7 +167,8 @@ public class Main {
         String answer = scanner.nextLine();
 
         while (!(answer.equals("su") || answer.equals("li"))) {
-            System.out.println("Do you want to sign in or log in? (su/li)");
+            System.out.println("Answer with 'su ' or 'li'");
+            answer = scanner.nextLine();
         }
 
         if (answer.equals("su")) {
@@ -200,11 +198,12 @@ public class Main {
 
             System.out.println("Choose a password:");
             String[] passwordArray = scanner.nextLine().split("\\s+");
-            String password = passwordArray[0];
+            String password = passwordArray[0] + "";
 
             while (passwordArray.length != 1 || passwordArray[0] == "" || password.length() < 6) {
                 System.out.println("Choose a different password!");
                 passwordArray = scanner.nextLine().split("\\s+");
+                password = passwordArray[0] + "";
             }
 
             clientMessageQueue.add("signUp " + serverID + " " + username + " " + password);
@@ -228,6 +227,8 @@ public class Main {
 
             System.out.println("Enter your password:");
             String[] passwordArray = scanner.nextLine().split("\\s+");
+            String password = passwordArray[0] + "";
+
 
             while (usernameArray.length != 1 || usernameArray[0] == "") {
                 System.out.println("Whitespaces or an empty password are not allowed!");
@@ -235,7 +236,7 @@ public class Main {
                 usernameArray = scanner.nextLine().split("\\s+");
             }
 
-            String password = passwordArray[0];
+            password = passwordArray[0] +"";
 
             clientMessageQueue.add("logIn " + serverID + " " + username + " " + password);
             sendMessage();

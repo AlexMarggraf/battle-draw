@@ -46,6 +46,14 @@ public class ServerThread implements Runnable {
         return id;
     }
 
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setClientUsername(String username) {
+        this.clientUsername = username;
+    }
+
     /**
      * This method adds a message into the ServerMessageQueue which will be sent to the client later.
      *
@@ -153,6 +161,11 @@ public class ServerThread implements Runnable {
 
             MessageListener msgListener = new MessageListener(iStream);
             Thread.startVirtualThread(msgListener);
+
+            while (clientUsername == null) {
+                receiveMessage(msgListener);
+                sendMessage(oStream);
+            }
 
             while (!disconnect) {
                 handlePingPong();
