@@ -31,7 +31,7 @@ public class Main {
         this.serverID = -1;
         this.receivedPong = true;
         this.sendPing = true;
-        this.loggedIn = false
+        this.loggedIn = false;
     }
 
     /**
@@ -198,16 +198,16 @@ public class Main {
                 username = usernameArray[0].trim();
             }
 
-            System.out.println("Choose a password:"):
+            System.out.println("Choose a password:");
             String[] passwordArray = scanner.nextLine().split("\\s+");
-            password = passwordArray[0]
+            String password = passwordArray[0];
 
             while (passwordArray.length != 1 || passwordArray[0] == "" || password.length() < 6) {
                 System.out.println("Choose a different password!");
                 passwordArray = scanner.nextLine().split("\\s+");
             }
 
-            clientMessageQueue.add("signUp " + serverId + " " + username + " " + password);
+            clientMessageQueue.add("signUp " + serverID + " " + username + " " + password);
             sendMessage();
 
             while(!loggedIn) {
@@ -237,7 +237,7 @@ public class Main {
 
             String password = passwordArray[0];
 
-            clientMessageQueue.add("logIn " + serverId + " " + username + " " + password);
+            clientMessageQueue.add("logIn " + serverID + " " + username + " " + password);
             sendMessage();
 
             while(!loggedIn) {
