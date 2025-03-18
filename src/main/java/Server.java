@@ -86,10 +86,19 @@ public class Server {
                     int id = message.getID();
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
-                    connection++;
                 }
-                case "chatAll" -> {
+                case "chatAll", "chatTo" -> {
                     sendMessageQueue.add(message.toString());
+                }
+                case "changeUsername" -> {
+                    if(DatabaseHelper.checkUsername(message.getParams()[1])) {
+                        DatabaseHelper.changeUsername(message.getParams()[1], Integer.parseInt(message.getParams()[0]));
+                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Changed username to " + message.getParams()[1]});
+                        sendMessageQueue.add(response.toString());
+                    } else {
+                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Username is already in use"});
+                        sendMessageQueue.add(response.toString());
+                    }
                 }
                 case "logIn" -> {
                     String username = message.getParams()[1];
@@ -101,6 +110,7 @@ public class Server {
                         DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
                         Message response = new Message("acceptLogin", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
                         sendMessageQueue.add(response.toString());
+                        connection++;
 
                         for (ServerThread st : serverThreadList) {
                             if (st.getId() == message.getID()) {
@@ -126,6 +136,7 @@ public class Server {
 
                         Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
                         sendMessageQueue.add(response.toString());
+                        connection++;
                     } else {
                         Message response = new Message("rejectSignup", new String[]{message.getID() + "", username});
                         sendMessageQueue.add(response.toString());
@@ -143,15 +154,14 @@ public class Server {
             String serverMessage = sendMessageQueue.remove();
             Message message = new Message(serverMessage);
 
-            switch (message.getType()) {
-                case "chatAll" -> {
-                    for (ServerThread st : serverThreadList) {
-                        if(st.getId() != message.getID()){
-                            sendMessage(message.toString(), st.getId());
-                        }
+            if (message.getType().equals("chatAll")) {
+                for (ServerThread st : serverThreadList) {
+                    if (st.getId() != message.getID()) {
+                        sendMessage(message.toString(), st.getId());
                     }
                 }
-                default -> {sendMessage(message.toString(), message.getID());}
+            } else {
+                sendMessage(message.toString(), message.getID());
             }
         }
     }
@@ -163,6 +173,7 @@ public class Server {
      */
     public static void main(String[] args) {
         Server server = new Server();
+        DatabaseHelper.setOffline();
 
         ConnectionListener conListener = new ConnectionListener(1234);
         Thread.startVirtualThread(conListener);

@@ -69,7 +69,7 @@ public class DatabaseHelper {
 
         try (Connection conn = DriverManager.getConnection(PATH)) {
             PreparedStatement pstmt = conn.prepareStatement(update);
-            int affectedRows = pstmt.executeUpdate();
+            pstmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("SQL Error: " + e.getMessage());
         }
@@ -83,28 +83,24 @@ public class DatabaseHelper {
             ResultSet rs = pstmt.executeQuery();
             return rs.getInt("online") == 1;
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("SQL Error: " + e.getMessage());
         }
 
         return false;
     }
 
-    public static boolean checkCredentials(String username, String password) {
-        // SQL query to check if the username and password match
+    public static Boolean checkCredentials(String username, String password) {
         String query = "SELECT id FROM Players WHERE username = ? AND password = ?";
-        int userId = -1;  // Default to -1 if credentials are invalid
+        int userId = -1;
 
         try (Connection conn = DriverManager.getConnection(PATH);
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
-            // Set the values for username and password
             pstmt.setString(1, username);
             pstmt.setString(2, password);
 
-            // Execute the query
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    // If credentials are correct, retrieve the user ID
                     userId = rs.getInt("id");
                 }
             }
@@ -114,25 +110,22 @@ public class DatabaseHelper {
         }
         return userId != -1;
     }
+
     public static void insertPlayer(String username, String password) {
-        // SQL query to insert a new user (assuming 'users' table has 'username' and 'password' columns)
         String query = "INSERT INTO Players (username, password) VALUES (?, ?)";
 
         try (Connection conn = DriverManager.getConnection(PATH);
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
-            // Set the values for username and password
             pstmt.setString(1, username);
             pstmt.setString(2, password);
 
-            // Execute the query
-            int affectedRows = pstmt.executeUpdate(); // Returns number of affected rows (should be 1 if insert is successful)
+            int affectedRows = pstmt.executeUpdate();
 
             if (affectedRows > 0) {
-                // Get the generated user ID if the insert was successful
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
-                        int userId = generatedKeys.getInt(1); // Get the generated ID (first column)
+                        int userId = generatedKeys.getInt(1);
                         System.out.println("Inserted user with ID: " + userId);
                     }
                 }
@@ -145,7 +138,66 @@ public class DatabaseHelper {
         }
     }
 
+    public static Boolean checkUsername(String username) {
+        String query = "SELECT EXISTS(SELECT 1 FROM Players WHERE username = ?)";
 
+        try (Connection conn = DriverManager.getConnection(PATH);
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setString(1, username);
+
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    return !rs.getBoolean(1);
+                }
+            }
+        } catch (SQLException e) {
+                System.out.println("SQL Error: " + e.getMessage());
+        }
+
+        return false;
+    }
+
+    public static void changeUsername(String username, int id) {
+        String update = "UPDATE Players SET username = ? WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(PATH);
+            PreparedStatement pstmt = conn.prepareStatement(update)) {
+
+            pstmt.setString(1, username);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+
+    public static void changePassword(String password, int id) {
+        String update = "UPDATE Players SET password = ? WHERE id = ?";
+
+        try (Connection conn = DriverManager.getConnection(PATH);
+            PreparedStatement pstmt = conn.prepareStatement(update)) {
+
+            pstmt.setString(1, password);
+            pstmt.setInt(2, id);
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+
+    public static void setOffline() {
+        String update = "UPDATE Players SET online = 0";
+
+        try(Connection conn = DriverManager.getConnection(PATH);
+        Statement stmt = conn.createStatement()) {
+            stmt.executeUpdate(update);
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
 
     public static void clearList(List<String> list){
         list.clear();
@@ -164,7 +216,5 @@ public class DatabaseHelper {
         boolean userid = checkCredentials("dave", "letmein");
         System.out.println(userid);
         insertPlayer("globi", "sfhufhs");
-
-
     }
 }

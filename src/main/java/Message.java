@@ -30,11 +30,8 @@ public class Message {
         String type = content[0];
 
         switch (type) {
-            case "chatAll" -> {
-                if (content.length != 4) {
-                    throw new IllegalArgumentException("Message of type " + type + " need exactly 3 parameters.");
-                }
-                else if (!(content[2] instanceof String)) {
+            case "chatAll", "chatTo" -> {
+                if (content[2] == null) {
                     throw new IllegalArgumentException("The username has to be a string");
                 } else {
                     try {
@@ -59,9 +56,9 @@ public class Message {
             case "signUp", "logIn" -> {
                 if (content.length != 4) {
                     throw new IllegalArgumentException("Message of type " + type + " need exactly 3 parameters.");
-                } else if (!(content[2] instanceof String)) {
+                } else if (content[2] == null) {
                     throw new IllegalArgumentException("The username has to be a string");
-                } else if (!(content[3] instanceof String)) {
+                } else if (content[3] == null) {
                     throw new IllegalArgumentException("The password has to be a string");
                 } else {
                     try {
@@ -78,7 +75,7 @@ public class Message {
                     }
                 }
             }
-            case "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
+            case "changeUsername", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
                 if (content.length == 3) {
                     try {
                         Integer.parseInt(content[1]);

@@ -123,10 +123,6 @@ public class ServerThread implements Runnable {
                         System.out.println(clientMessage);
                         receivedPong = true;
                     }
-                    case "username" -> {
-                        clientUsername = message.getParams()[1];
-                        System.out.println(clientMessage);
-                    }
                     default -> {
                         clientMessageQueue.add(clientMessage);
                     }

@@ -52,8 +52,12 @@ public class Main {
                     clientMessageQueue.add(response.toString());
                 }
                 case "pong" -> receivedPong = true;
-                case "disconnect" -> client.disconnect();
-                case "chatAll" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
+                case "disconnect" -> {
+                    sendPing = false;
+                    System.out.println("Server isn't reachable");
+                    client.disconnect();
+                }
+                case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
                 case "whatUsername" -> {
                     Message response = new Message("username", new String[]{serverID + "", username});
                     clientMessageQueue.add(response.toString());
@@ -101,8 +105,7 @@ public class Main {
 
             if (splitClientMessage.length == 2 && splitClientMessage[0].equals("/nick")) {
                 username = splitClientMessage[1];
-                System.out.println("Changed username to: " + username);
-                Message message = new Message("username", new String[]{serverID + "", username});
+                Message message = new Message("changeUsername", new String[]{serverID + "", username});
                 clientMessageQueue.add(message.toString());
             } else {
                 Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
@@ -173,8 +176,9 @@ public class Main {
 
         if (answer.equals("su")) {
             String suggestedUsername = System.getProperty("user.name") + (int) (Math.random() * 100);
+            suggestedUsername = suggestedUsername.replaceAll("\\s+", "");
             System.out.println("Do you want to use: " + suggestedUsername + "? (y/n)");
-            answer = scanner.nextLine().replaceAll("\\s+", "");
+            answer = scanner.nextLine();
 
             while (!(answer.equals("y") || answer.equals("n"))) {
                 System.out.println("Answer with 'y' or 'n'!");
@@ -207,12 +211,7 @@ public class Main {
             }
 
             clientMessageQueue.add("signUp " + serverID + " " + username + " " + password);
-            sendMessage();
 
-            while(!loggedIn) {
-                receiveMessage();
-                handleServerMessage();
-            }
         } else {
             System.out.println("Enter your username:");
             String[] usernameArray = scanner.nextLine().split("\\s+");
@@ -239,12 +238,12 @@ public class Main {
             password = passwordArray[0] +"";
 
             clientMessageQueue.add("logIn " + serverID + " " + username + " " + password);
-            sendMessage();
 
-            while(!loggedIn) {
-                receiveMessage();
-                handleServerMessage();
-            }
+        }
+        sendMessage();
+        while(!loggedIn) {
+            receiveMessage();
+            handleServerMessage();
         }
     }
 
