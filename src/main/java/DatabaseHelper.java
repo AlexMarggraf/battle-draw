@@ -2,9 +2,19 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles database operations for player management and theme word retrieval.
+ * Uses SQLite database located at resources/Thema.db.
+ */
 public class DatabaseHelper {
     private static final String PATH = "jdbc:sqlite:resources/Thema.db";
 
+    /**
+     * Fetches random theme words from the database.
+     *
+     * @param amount Number of random words to retrieve
+     * @return List of theme words (might be empty if something goes wrong)
+     */
     public static List<String> getRandomWords(int amount) {
         String query = "SELECT thema FROM Thema ORDER BY RANDOM() LIMIT " + amount;
         List<String> themaList = new ArrayList<>();
@@ -23,9 +33,16 @@ public class DatabaseHelper {
 
         return themaList;
     }
+
+    /**
+     * Looks up a player's database ID by their username.
+     *
+     * @param username Name of the player to find
+     * @return Player ID if found, -1 if not found or error occurs
+     */
     public static int getPlayerId(String username) {
         String query = "SELECT id FROM players WHERE username = ?";
-        int id = -1; // Default to -1 if user is not found
+        int id = -1;
 
         try (Connection conn = DriverManager.getConnection(PATH);
              PreparedStatement pstmt = conn.prepareStatement(query)) {
@@ -33,7 +50,7 @@ public class DatabaseHelper {
             pstmt.setString(1, username);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    id = rs.getInt("id"); // Retrieve the player ID
+                    id = rs.getInt("id");
                 }
             }
 
@@ -41,8 +58,15 @@ public class DatabaseHelper {
             System.out.println("SQL Error: " + e.getMessage());
         }
 
-        return id; // Returns -1 if the player is not found
+        return id;
     }
+
+    /**
+     * Gets the username associated with a playerID.
+     *
+     * @param id Player ID to look up
+     * @return Username if found, null if not found
+     */
     public static String getPlayerName(int id) {
         String query = "SELECT username FROM players WHERE id = ?";
         String username = null;
@@ -53,7 +77,7 @@ public class DatabaseHelper {
             pstmt.setInt(1, id);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    username = rs.getString("username"); // Retrieve the player ID
+                    username = rs.getString("username");
                 }
             }
 
@@ -64,8 +88,14 @@ public class DatabaseHelper {
         return username;
     }
 
-    public static void setStatus (int id, int status) {
-        String update = "Update Players set online = " + status + " where id = " + id;
+    /**
+     * Updates a player's online status.
+     *
+     * @param id Player ID to update
+     * @param status New status (0 for offline, 1 for online)
+     */
+    public static void setStatus(int id, int status) {
+        String update = "UPDATE Players SET online = " + status + " WHERE id = " + id;
 
         try (Connection conn = DriverManager.getConnection(PATH)) {
             PreparedStatement pstmt = conn.prepareStatement(update);
@@ -75,8 +105,14 @@ public class DatabaseHelper {
         }
     }
 
-    public static Boolean getStatus (int id) {
-        String query = "Select online from Players where id = " + id;
+    /**
+     * Checks if a player is currently marked as online.
+     *
+     * @param id Player ID to check
+     * @return True if player is online, false if offline or error occurs
+     */
+    public static Boolean getStatus(int id) {
+        String query = "SELECT online FROM Players WHERE id = " + id;
 
         try (Connection con = DriverManager.getConnection(PATH)) {
             PreparedStatement pstmt = con.prepareStatement(query);
@@ -89,6 +125,13 @@ public class DatabaseHelper {
         return false;
     }
 
+    /**
+     * Validates player login credentials.
+     *
+     * @param username Username to check
+     * @param password Password to verify
+     * @return True if credentials match, false otherwise
+     */
     public static Boolean checkCredentials(String username, String password) {
         String query = "SELECT id FROM Players WHERE username = ? AND password = ?";
         int userId = -1;
@@ -111,6 +154,12 @@ public class DatabaseHelper {
         return userId != -1;
     }
 
+    /**
+     * Creates a new player account in the database.
+     *
+     * @param username New player's username
+     * @param password New player's password
+     */
     public static void insertPlayer(String username, String password) {
         String query = "INSERT INTO Players (username, password) VALUES (?, ?)";
 
@@ -138,6 +187,12 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * Checks if a username is available for registration.
+     *
+     * @param username Username to check
+     * @return True if username is available, false if already taken
+     */
     public static Boolean checkUsername(String username) {
         String query = "SELECT EXISTS(SELECT 1 FROM Players WHERE username = ?)";
 
@@ -152,17 +207,23 @@ public class DatabaseHelper {
                 }
             }
         } catch (SQLException e) {
-                System.out.println("SQL Error: " + e.getMessage());
+            System.out.println("SQL Error: " + e.getMessage());
         }
 
         return false;
     }
 
+    /**
+     * Changes a player's username.
+     *
+     * @param username New username to set
+     * @param id Player ID to update
+     */
     public static void changeUsername(String username, int id) {
         String update = "UPDATE Players SET username = ? WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(PATH);
-            PreparedStatement pstmt = conn.prepareStatement(update)) {
+             PreparedStatement pstmt = conn.prepareStatement(update)) {
 
             pstmt.setString(1, username);
             pstmt.setInt(2, id);
@@ -173,11 +234,17 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * Updates a player's password.
+     *
+     * @param password New password to set
+     * @param id Player ID to update
+     */
     public static void changePassword(String password, int id) {
         String update = "UPDATE Players SET password = ? WHERE id = ?";
 
         try (Connection conn = DriverManager.getConnection(PATH);
-            PreparedStatement pstmt = conn.prepareStatement(update)) {
+             PreparedStatement pstmt = conn.prepareStatement(update)) {
 
             pstmt.setString(1, password);
             pstmt.setInt(2, id);
@@ -188,33 +255,28 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * Marks all players as offline in the database.
+     * Useful for resetting statuses on server startup/shutdown.
+     */
     public static void setOffline() {
         String update = "UPDATE Players SET online = 0";
 
-        try(Connection conn = DriverManager.getConnection(PATH);
-        Statement stmt = conn.createStatement()) {
+        try (Connection conn = DriverManager.getConnection(PATH);
+             Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(update);
         } catch (SQLException e) {
             System.out.println("SQL Error: " + e.getMessage());
         }
     }
 
-    public static void clearList(List<String> list){
+    /**
+     * Clears a list and logs the action.
+     *
+     * @param list List to clear
+     */
+    public static void clearList(List<String> list) {
         list.clear();
         System.out.println("List cleared");
-    }
-
-    public static void main(String[] args) {
-        List<String> selectedTopics = getRandomWords(3);
-        System.out.println("Selected Topics: " + selectedTopics);
-        //clearList(selectedTopics);
-        //System.out.println("Selected Topics:" selectedTopics);
-        int id = getPlayerId("dave");
-        System.out.println("" + id);
-        String username = getPlayerName(4);
-        System.out.println(username);
-        boolean userid = checkCredentials("dave", "letmein");
-        System.out.println(userid);
-        insertPlayer("globi", "sfhufhs");
     }
 }
