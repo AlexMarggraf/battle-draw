@@ -10,18 +10,89 @@ public class Message {
     private String[] params;
 
     /**
-     * This method is a constructor and sets type and parameters.
+     * This method is a constructor and sets type and parameters. Furthermore, it ensures that the Message object
+     * created is valid.
      *
      * @param type The type of the message
      * @param params The parameters of the message
      */
     public Message(String type, String[] params) {
-        this.type = type;
-        this.params = params;
+        switch (type) {
+            case "chatAll", "chatTo" -> {
+                if (params[1] == null) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "signUp", "logIn" -> {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if(params[1] == null) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else if(params[2] == null) {
+                    throw new IllegalArgumentException("The password has to be a string");
+                } else {
+                    try{
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "changeUsername", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup" -> {
+                if (params.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if(params[1] == null) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "ping", "pong", "disconnect", "id" -> {
+                if(params.length != 1) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "whatID" -> {
+                if (params.length != 0) {
+                    throw new IllegalArgumentException("Message of type " + type + " doesn't need parameters.");
+                } else {
+                    this.type = type;
+                    this.params = new String[0];
+                }
+            }
+            default -> {
+                throw new IllegalArgumentException("Not a valid message type: " + type);
+            }
+        }
     }
 
     /**
-     * This method is a constructor and sets the type and parameters.
+     * This method is a constructor and sets the type and parameters. Furthermore, it ensures that every String passed into this
+     * will create a valid Message object.
      *
      * @param message The string literal of the message
      */
@@ -55,7 +126,7 @@ public class Message {
             }
             case "signUp", "logIn" -> {
                 if (content.length != 4) {
-                    throw new IllegalArgumentException("Message of type " + type + " need exactly 3 parameters.");
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
                 } else if (content[2] == null) {
                     throw new IllegalArgumentException("The username has to be a string");
                 } else if (content[3] == null) {
@@ -76,7 +147,11 @@ public class Message {
                 }
             }
             case "changeUsername", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
-                if (content.length == 3) {
+                if (content.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else {
                     try {
                         Integer.parseInt(content[1]);
 
@@ -89,7 +164,7 @@ public class Message {
             }
             case "ping", "pong", "disconnect", "id" -> {
                 if (content.length != 2) {
-                    throw new IllegalArgumentException("Message of type " + type + " need exactly 1 parameters.");
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
                     try {
                         Integer.parseInt(content[1]);
@@ -101,8 +176,10 @@ public class Message {
                     }
                 }
             }
-            case "whatID"/*, "whatUsername"*/ -> {
-                if (content.length == 1) {
+            case "whatID" -> {
+                if (content.length != 1) {
+                    throw new IllegalArgumentException("Message of type " + type + " doesn't need parameters.");
+                } else {
                     this.type = type;
                     this.params = new String[0];
                 }

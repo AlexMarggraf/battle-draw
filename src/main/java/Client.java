@@ -43,6 +43,11 @@ public class Client implements Runnable {
         this.disconnect = true;
     }
 
+    /**
+     * This method sets the server ID.
+     *
+     * @param id The value of the ID
+     */
     public void setServerID(int id) {
         this.serverID = id;
     }
