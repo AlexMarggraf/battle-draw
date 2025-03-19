@@ -129,6 +129,9 @@ public class Main {
         clientThread.start();
     }
 
+    /**
+     * This method handles the Ping-Pong procedure on the client side.
+     */
     public void handlePingPong(){
         if((System.currentTimeMillis() - lastPing > 10000) && sendPing) {
             if(receivedPong) {
@@ -144,6 +147,9 @@ public class Main {
         }
     }
 
+    /**
+     * This method starts the client and retrieves the ID of the server.
+     */
     public void initClient() {
         startClient("localhost", 1234);
         clientMessageQueue.add("whatID");
@@ -155,6 +161,9 @@ public class Main {
         }
     }
 
+    /**
+     * This method handles the Sign up and Log in processes.
+     */
     public void signInLogIn() {
         Scanner scanner = new Scanner(System.in);
 
@@ -250,8 +259,8 @@ public class Main {
     }
 
     /**
-     * This method connects the client to the server and parses the user
-     * input.
+     * This method connects the client to the server, handles the login/ sign up process and the continuously
+     * handles the communication between users and the server.
      *
      * @param args Nothing yet
      */

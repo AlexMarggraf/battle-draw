@@ -140,8 +140,10 @@ public class ServerThread implements Runnable {
                 lastPing = System.currentTimeMillis();
                 receivedPong = false;
             } else {
-                System.out.println("Client not reachable");
                 disconnect = true;
+                Message response = new Message("disconnect", new String[] {id + ""});
+                clientMessageQueue.add(response.toString());
+                System.out.println("Client not reachable");
             }
         }
     }
