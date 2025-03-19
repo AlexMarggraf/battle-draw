@@ -214,6 +214,25 @@ public class DatabaseHelper {
     }
 
     /**
+     * Get an available username if the chosen username is already taken.
+     *
+     * @param username Username to change
+     * @return new player's username
+     */
+    public static String getAvailableUsername(String username) {
+        String baseUsername = username;
+        int counter = 1;
+        String newUsername = baseUsername + String.format("%03d", counter);
+
+        while (!checkUsername(newUsername)) {
+            counter++;
+            newUsername = baseUsername + String.format("%03d", counter);
+        }
+
+        return newUsername;
+    }
+
+    /**
      * Changes a player's username.
      *
      * @param username New username to set

@@ -185,15 +185,21 @@ public class Main {
                 username = suggestedUsername;
             } else {
                 System.out.println("Enter username:");
-                String[] usernameArray = scanner.nextLine().split("\\s+");
+                String usernameInput = scanner.nextLine().trim();
 
-                while (usernameArray.length != 1 || usernameArray[0] == "") {
-                    System.out.println("Whitespaces or an empty Username are not allowed!");
-                    System.out.println("Enter new username:");
-                    usernameArray = scanner.nextLine().split("\\s+");
+                while (usernameInput.contains(" ") || usernameInput.isEmpty()) {
+                    System.out.println("Username cannot be empty or contain spaces!");
+                    System.out.println("Enter a valid username:");
+                    usernameInput = scanner.nextLine().trim();
                 }
 
-                username = usernameArray[0].trim();
+                if (!DatabaseHelper.checkUsername(usernameInput)) {
+                    System.out.println("Username is already taken. Suggesting a new username...");
+                    username = DatabaseHelper.getAvailableUsername(usernameInput);
+                    System.out.println("Your new suggested username is: " + username);
+                } else {
+                    username = usernameInput;
+                }
             }
 
             System.out.println("Choose a password:");
