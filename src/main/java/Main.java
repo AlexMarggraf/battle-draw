@@ -58,10 +58,6 @@ public class Main {
                     client.disconnect();
                 }
                 case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
-                case "whatUsername" -> {
-                    Message response = new Message("username", new String[]{serverID + "", username});
-                    clientMessageQueue.add(response.toString());
-                }
                 case "acceptLogin", "acceptSignup" -> {
                     serverID = message.getID();
                     loggedIn = true;

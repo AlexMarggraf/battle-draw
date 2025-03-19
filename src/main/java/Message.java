@@ -101,7 +101,7 @@ public class Message {
                     }
                 }
             }
-            case "whatID", "whatUsername" -> {
+            case "whatID"/*, "whatUsername"*/ -> {
                 if (content.length == 1) {
                     this.type = type;
                     this.params = new String[0];
