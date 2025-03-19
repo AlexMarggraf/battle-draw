@@ -91,7 +91,7 @@ public class Server {
                     sendMessageQueue.add(message.toString());
                 }
                 case "changeUsername" -> {
-                    if(DatabaseHelper.checkUsername(message.getParams()[1])) {
+                    if (DatabaseHelper.checkUsername(message.getParams()[1])) {
                         DatabaseHelper.changeUsername(message.getParams()[1], Integer.parseInt(message.getParams()[0]));
                         Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Changed username to " + message.getParams()[1]});
                         sendMessageQueue.add(response.toString());
@@ -123,24 +123,19 @@ public class Server {
                 case "signUp" -> {
                     String username = message.getParams()[1];
 
-                    if (DatabaseHelper.getPlayerId(username) == -1) {
-                        DatabaseHelper.insertPlayer(message.getParams()[1], message.getParams()[2]);
-                        DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
+                    DatabaseHelper.insertPlayer(message.getParams()[1], message.getParams()[2]);
+                    DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
 
-                        for (ServerThread st : serverThreadList) {
-                            if (st.getId() == message.getID()) {
-                                st.setId(DatabaseHelper.getPlayerId(username));
-                                st.setClientUsername(username);
-                            }
+                    for (ServerThread st : serverThreadList) {
+                        if (st.getId() == message.getID()) {
+                            st.setId(DatabaseHelper.getPlayerId(username));
+                            st.setClientUsername(username);
                         }
-
-                        Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
-                        sendMessageQueue.add(response.toString());
-                        connection++;
-                    } else {
-                        Message response = new Message("rejectSignup", new String[]{message.getID() + "", username});
-                        sendMessageQueue.add(response.toString());
                     }
+
+                    Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
+                    sendMessageQueue.add(response.toString());
+                    connection++;
                 }
             }
         }

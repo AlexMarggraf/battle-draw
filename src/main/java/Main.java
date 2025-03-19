@@ -61,14 +61,10 @@ public class Main {
                 case "acceptLogin", "acceptSignup" -> {
                     serverID = message.getID();
                     loggedIn = true;
-                    System.out.println("You're logged in");
+                    System.out.println("You're logged in as " + username);
                 }
                 case "rejectLogin" -> {
                     System.out.println("Username or password is wrong");
-                    signInLogIn();
-                }
-                case "rejectSignup" -> {
-                    System.out.println("Username is already being used");
                     signInLogIn();
                 }
                 default -> {System.out.println(message.getID() + ": " + message.getParams()[1]);}
@@ -188,18 +184,22 @@ public class Main {
                 String usernameInput = scanner.nextLine().trim();
 
                 while (usernameInput.contains(" ") || usernameInput.isEmpty()) {
-                    System.out.println("Username cannot be empty or contain spaces!");
-                    System.out.println("Enter a valid username:");
+                    System.out.println("Whitespaces or an empty Username are not allowed!");
+                    System.out.println("Enter new username:");
                     usernameInput = scanner.nextLine().trim();
                 }
 
                 if (!DatabaseHelper.checkUsername(usernameInput)) {
-                    System.out.println("Username is already taken. Suggesting a new username...");
-                    username = DatabaseHelper.getAvailableUsername(usernameInput);
-                    System.out.println("Your new suggested username is: " + username);
-                } else {
-                    username = usernameInput;
+                    int counter = 1;
+                    String originalUsername = usernameInput;
+
+                    while (!DatabaseHelper.checkUsername(usernameInput)) {
+                        counter++;
+                        usernameInput = originalUsername + String.format("%03d", counter);
+                    }
+                    System.out.println("Your new suggested username is: " + usernameInput);
                 }
+                username = usernameInput;
             }
 
             System.out.println("Choose a password:");
