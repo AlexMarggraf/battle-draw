@@ -121,7 +121,17 @@ public class Server {
                 case "signUp" -> {
                     String username = message.getParams()[1];
 
-                    DatabaseHelper.insertPlayer(message.getParams()[1], message.getParams()[2]);
+                    if (!DatabaseHelper.checkUsername(username)) {
+                        int counter = 1;
+                        String originalUsername = username;
+
+                        while (!DatabaseHelper.checkUsername(username)) {
+                            username = originalUsername + String.format("%03d", counter);
+                            counter++;
+                        }
+                    }
+
+                    DatabaseHelper.insertPlayer(username, message.getParams()[2]);
                     DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
 
                     for (ServerThread st : serverThreadList) {

@@ -59,6 +59,7 @@ public class Main {
                 }
                 case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
                 case "acceptLogin", "acceptSignup" -> {
+                    username = message.getParams()[1];
                     serverID = message.getID();
                     loggedIn = true;
                     System.out.println("You're logged in as " + username);
@@ -198,16 +199,6 @@ public class Main {
                     usernameInput = scanner.nextLine().trim();
                 }
 
-                if (!DatabaseHelper.checkUsername(usernameInput)) {
-                    int counter = 1;
-                    String originalUsername = usernameInput;
-
-                    while (!DatabaseHelper.checkUsername(usernameInput)) {
-                        counter++;
-                        usernameInput = originalUsername + String.format("%03d", counter);
-                    }
-                    System.out.println("Your new suggested username is: " + usernameInput);
-                }
                 username = usernameInput;
             }
 
