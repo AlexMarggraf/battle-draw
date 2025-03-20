@@ -161,7 +161,7 @@ public class Message {
                         this.type = type;
                         this.params = new String[]{content[1], content[2]};
                     } catch (NumberFormatException NFException) {
-                        throw new IllegalArgumentException("Invalid number format for the id");
+                        throw new IllegalArgumentException("The id has to be an integer");
                     }
                 }
             }
