@@ -1,5 +1,5 @@
 /**
- * This class is used to structure messages according to the network protocoll.
+ * This class is used to structure messages according to the network protocol.
  *
  * @author Alexander Marggraf
  * @author Frederic Weyssow
@@ -19,7 +19,10 @@ public class Message {
     public Message(String type, String[] params) {
         switch (type) {
             case "chatAll", "chatTo" -> {
-                if (params[1] == null) {
+                if(params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                }
+                else if (params[1] == null) {
                     throw new IllegalArgumentException("The username has to be a string");
                 } else {
                     try {
@@ -84,9 +87,7 @@ public class Message {
                     this.params = new String[0];
                 }
             }
-            default -> {
-                throw new IllegalArgumentException("Not a valid message type: " + type);
-            }
+            default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
 
@@ -102,7 +103,9 @@ public class Message {
 
         switch (type) {
             case "chatAll", "chatTo" -> {
-                if (content[2] == null) {
+                if (content.length < 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (content[2] == null) {
                     throw new IllegalArgumentException("The username has to be a string");
                 } else {
                     try {
@@ -184,9 +187,7 @@ public class Message {
                     this.params = new String[0];
                 }
             }
-            default -> {
-                throw new IllegalArgumentException("Not a valid message type: " + type);
-            }
+            default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
 
@@ -218,7 +219,7 @@ public class Message {
     }
 
     /**
-     * This method construcs a string according to the network protocoll.
+     * This method constructs a string according to the network protocol.
      *
      * @return Returns the message in string format
      */

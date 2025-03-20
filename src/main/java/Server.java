@@ -72,7 +72,7 @@ public class Server {
     }
 
     /**
-     * This method handles any message that is in the recieveMessageQueue.
+     * This method handles any message that is in the receiveMessageQueue.
      */
     public void handleReceiveMessage() {
         while (receiveMessageQueue.peek() != null) {
@@ -87,9 +87,7 @@ public class Server {
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
                 }
-                case "chatAll", "chatTo" -> {
-                    sendMessageQueue.add(message.toString());
-                }
+                case "chatAll", "chatTo" -> sendMessageQueue.add(message.toString());
                 case "changeUsername" -> {
                     if (DatabaseHelper.checkUsername(message.getParams()[1])) {
                         DatabaseHelper.changeUsername(message.getParams()[1], Integer.parseInt(message.getParams()[0]));
