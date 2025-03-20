@@ -9,7 +9,7 @@ A competitive drawing game where players create artwork based on themes and vote
 ## Table of Contents
 - [Features](#-features)
 - [Installation](#-installation)
-- [How to Play](#-how-to-play-)
+- [How to Play](#-how-to-play)
 - [Authors](#-authors)
 
 ## ✨ Features
@@ -30,7 +30,7 @@ A competitive drawing game where players create artwork based on themes and vote
    git clone ssh://git@git.scicore.unibas.ch:2222/cs108-fs25/Gruppe-23.git
    ```
 
-## 🎮 How to Play 
+## 🎮 How to Play
 
 ### 🛠️ Compile and Run the Project
 
