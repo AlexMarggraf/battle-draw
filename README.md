@@ -1,6 +1,6 @@
 # 🎨 Battle Draw 🖌️
 
-[![Java Version](https://img.shields.io/badge/Java-21-blue)](https://java.com)
+[![Java Version](https://img.shields.io/badge/Java-21-blue)](https://www.java.com/de/)
 [![Gradle Version](https://img.shields.io/badge/Gradle-8.6-green)](https://gradle.org)
 [![JavaFX Version](https://img.shields.io/badge/JavaFX-21-orange)](https://openjfx.io)
 
@@ -9,8 +9,8 @@ A competitive drawing game where players create artwork based on themes and vote
 ## Table of Contents
 - [Features](#-features)
 - [Installation](#-installation)
-- [How to Play](#-how-to-play)
-- [Authors](#-Authors)
+- [How to Play](#-how-to-play-)
+- [Authors](#-authors)
 
 ## ✨ Features
 - 🎮 3+ player online multiplayer
@@ -30,7 +30,7 @@ A competitive drawing game where players create artwork based on themes and vote
    git clone ssh://git@git.scicore.unibas.ch:2222/cs108-fs25/Gruppe-23.git
    ```
 
-## How to Play 🎮
+## 🎮 How to Play 
 
 ### 🛠️ Compile and Run the Project
 
@@ -53,7 +53,7 @@ A competitive drawing game where players create artwork based on themes and vote
    ```
 6. Have fun! 🎨🎮🖌️
 
-## Authors
+## 💻 Authors
 * Frédéric Weyssow
 * Alex Marggraf
 * Noah Nellen
