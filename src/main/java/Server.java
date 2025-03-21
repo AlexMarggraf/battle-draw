@@ -72,7 +72,7 @@ public class Server {
     }
 
     /**
-     * This method handles any message that is in the recieveMessageQueue.
+     * This method handles any message that is in the receiveMessageQueue.
      */
     public void handleReceiveMessage() {
         while (receiveMessageQueue.peek() != null) {
@@ -87,11 +87,9 @@ public class Server {
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
                 }
-                case "chatAll", "chatTo" -> {
-                    sendMessageQueue.add(message.toString());
-                }
+                case "chatAll", "chatTo" -> sendMessageQueue.add(message.toString());
                 case "changeUsername" -> {
-                    if(DatabaseHelper.checkUsername(message.getParams()[1])) {
+                    if (DatabaseHelper.checkUsername(message.getParams()[1])) {
                         DatabaseHelper.changeUsername(message.getParams()[1], Integer.parseInt(message.getParams()[0]));
                         Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Changed username to " + message.getParams()[1]});
                         sendMessageQueue.add(response.toString());
@@ -123,24 +121,29 @@ public class Server {
                 case "signUp" -> {
                     String username = message.getParams()[1];
 
-                    if (DatabaseHelper.getPlayerId(username) == -1) {
-                        DatabaseHelper.insertPlayer(message.getParams()[1], message.getParams()[2]);
-                        DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
+                    if (!DatabaseHelper.checkUsername(username)) {
+                        int counter = 1;
+                        String originalUsername = username;
 
-                        for (ServerThread st : serverThreadList) {
-                            if (st.getId() == message.getID()) {
-                                st.setId(DatabaseHelper.getPlayerId(username));
-                                st.setClientUsername(username);
-                            }
+                        while (!DatabaseHelper.checkUsername(username)) {
+                            username = originalUsername + String.format("%03d", counter);
+                            counter++;
                         }
-
-                        Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
-                        sendMessageQueue.add(response.toString());
-                        connection++;
-                    } else {
-                        Message response = new Message("rejectSignup", new String[]{message.getID() + "", username});
-                        sendMessageQueue.add(response.toString());
                     }
+
+                    DatabaseHelper.insertPlayer(username, message.getParams()[2]);
+                    DatabaseHelper.setStatus(DatabaseHelper.getPlayerId(username), 1);
+
+                    for (ServerThread st : serverThreadList) {
+                        if (st.getId() == message.getID()) {
+                            st.setId(DatabaseHelper.getPlayerId(username));
+                            st.setClientUsername(username);
+                        }
+                    }
+
+                    Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
+                    sendMessageQueue.add(response.toString());
+                    connection++;
                 }
             }
         }

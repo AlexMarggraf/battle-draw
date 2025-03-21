@@ -1,6 +1,6 @@
 /**
  * This class is the client which connects to the server and serves
- * as the communication point between users. Furthermore all game updates
+ * as the communication point between users. Furthermore, all game updates
  * are sent via this class.
  *
  * @author Alexander Marggraf
@@ -43,6 +43,11 @@ public class Client implements Runnable {
         this.disconnect = true;
     }
 
+    /**
+     * This method sets the server ID.
+     *
+     * @param id The value of the ID
+     */
     public void setServerID(int id) {
         this.serverID = id;
     }
@@ -95,7 +100,8 @@ public class Client implements Runnable {
 
         while (message != null) {
             if (message.equals("disconnect -1")){
-                serverMessageQueue.add("disconnect " + serverID);
+                Message response = new Message("disconnect " + serverID);
+                serverMessageQueue.add(response.toString());
             } else {
                 serverMessageQueue.add(message);
             }

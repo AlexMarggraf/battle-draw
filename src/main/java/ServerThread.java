@@ -12,7 +12,7 @@ import java.util.*;
 public class ServerThread implements Runnable {
 
     private int id;
-    private Socket socket;
+    private final Socket socket;
     protected volatile Queue<String> serverMessageQueue;
     protected volatile Queue<String> clientMessageQueue;
     public volatile Boolean disconnect;
@@ -123,9 +123,7 @@ public class ServerThread implements Runnable {
                         System.out.println(clientMessage);
                         receivedPong = true;
                     }
-                    default -> {
-                        clientMessageQueue.add(clientMessage);
-                    }
+                    default -> clientMessageQueue.add(clientMessage);
                 }
                 clientMessage = msgListener.getMessage();
             }
@@ -140,8 +138,10 @@ public class ServerThread implements Runnable {
                 lastPing = System.currentTimeMillis();
                 receivedPong = false;
             } else {
-                System.out.println("Client not reachable");
                 disconnect = true;
+                Message response = new Message("disconnect", new String[] {id + ""});
+                clientMessageQueue.add(response.toString());
+                System.out.println("Client not reachable");
             }
         }
     }

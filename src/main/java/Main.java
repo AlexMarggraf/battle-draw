@@ -59,19 +59,16 @@ public class Main {
                 }
                 case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
                 case "acceptLogin", "acceptSignup" -> {
+                    username = message.getParams()[1];
                     serverID = message.getID();
                     loggedIn = true;
-                    System.out.println("You're logged in");
+                    System.out.println("You're logged in as " + username);
                 }
                 case "rejectLogin" -> {
                     System.out.println("Username or password is wrong");
                     signInLogIn();
                 }
-                case "rejectSignup" -> {
-                    System.out.println("Username is already being used");
-                    signInLogIn();
-                }
-                default -> {System.out.println(message.getID() + ": " + message.getParams()[1]);}
+                default -> System.out.println(message.getID() + ": " + message.getParams()[1]);
             }
         }
     }
@@ -128,11 +125,14 @@ public class Main {
      * @param port The port it should connect to
      */
     public void startClient(String ip, int port) {
-        this.client = new Client("localhost", 1234);
+        this.client = new Client(ip, port);
         Thread clientThread = new Thread(client);
         clientThread.start();
     }
 
+    /**
+     * This method handles the Ping-Pong procedure on the client side.
+     */
     public void handlePingPong(){
         if((System.currentTimeMillis() - lastPing > 10000) && sendPing) {
             if(receivedPong) {
@@ -148,6 +148,9 @@ public class Main {
         }
     }
 
+    /**
+     * This method starts the client and retrieves the ID of the server.
+     */
     public void initClient() {
         startClient("localhost", 1234);
         clientMessageQueue.add("whatID");
@@ -159,6 +162,9 @@ public class Main {
         }
     }
 
+    /**
+     * This method handles the Sign-up and Log in processes.
+     */
     public void signInLogIn() {
         Scanner scanner = new Scanner(System.in);
 
@@ -185,25 +191,25 @@ public class Main {
                 username = suggestedUsername;
             } else {
                 System.out.println("Enter username:");
-                String[] usernameArray = scanner.nextLine().split("\\s+");
+                String usernameInput = scanner.nextLine().trim();
 
-                while (usernameArray.length != 1 || usernameArray[0] == "") {
+                while (usernameInput.contains(" ") || usernameInput.isEmpty()) {
                     System.out.println("Whitespaces or an empty Username are not allowed!");
                     System.out.println("Enter new username:");
-                    usernameArray = scanner.nextLine().split("\\s+");
+                    usernameInput = scanner.nextLine().trim();
                 }
 
-                username = usernameArray[0].trim();
+                username = usernameInput;
             }
 
             System.out.println("Choose a password:");
             String[] passwordArray = scanner.nextLine().split("\\s+");
-            String password = passwordArray[0] + "";
+            String password = passwordArray[0];
 
-            while (passwordArray.length != 1 || passwordArray[0] == "" || password.length() < 6) {
+            while (passwordArray.length != 1 || passwordArray[0].isEmpty() || password.length() < 6) {
                 System.out.println("Choose a different password!");
                 passwordArray = scanner.nextLine().split("\\s+");
-                password = passwordArray[0] + "";
+                password = passwordArray[0];
             }
 
             clientMessageQueue.add("signUp " + serverID + " " + username + " " + password);
@@ -212,7 +218,7 @@ public class Main {
             System.out.println("Enter your username:");
             String[] usernameArray = scanner.nextLine().split("\\s+");
 
-            while (usernameArray.length != 1 || usernameArray[0] == "") {
+            while (usernameArray.length != 1 || usernameArray[0].isEmpty()) {
                 System.out.println("Whitespaces or an empty username are not allowed!");
                 System.out.println("Enter your username:");
                 usernameArray = scanner.nextLine().split("\\s+");
@@ -222,19 +228,16 @@ public class Main {
 
             System.out.println("Enter your password:");
             String[] passwordArray = scanner.nextLine().split("\\s+");
-            String password = passwordArray[0] + "";
 
 
-            while (usernameArray.length != 1 || usernameArray[0] == "") {
+            while (passwordArray.length != 1 || passwordArray[0].isEmpty()) {
                 System.out.println("Whitespaces or an empty password are not allowed!");
                 System.out.println("Enter your password:");
-                usernameArray = scanner.nextLine().split("\\s+");
+                passwordArray = scanner.nextLine().split("\\s+");
             }
 
-            password = passwordArray[0] +"";
-
+            String password = passwordArray[0];
             clientMessageQueue.add("logIn " + serverID + " " + username + " " + password);
-
         }
         sendMessage();
         while(!loggedIn) {
@@ -244,8 +247,8 @@ public class Main {
     }
 
     /**
-     * This method connects the client to the server and parses the user
-     * input.
+     * This method connects the client to the server, handles the login/ sign up process and the continuously
+     * handles the communication between users and the server.
      *
      * @param args Nothing yet
      */

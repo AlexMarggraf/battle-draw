@@ -2,6 +2,17 @@
 *.class
 *.jar
 
+# Ignore build files
+.build/
+
+# Ignore linux trash and swap files
+*.swp
+*.swo
+
+# Ignore macOS metadata files
+.DS_Store
+.AppleDouble
+.LSOverride
 
 # Ignore temporary and backup LaTeX files
 *.aux
