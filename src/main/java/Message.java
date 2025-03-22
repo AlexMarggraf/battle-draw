@@ -18,13 +18,15 @@ public class Message {
      */
     public Message(String type, String[] params) {
         switch (type) {
-            case "chatAll", "chatTo" -> {
-                if(params.length != 3) {
+            case "chatAll" -> {
+                if (params.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
-                }
-                else if (params[1] == null) {
+                } else if (params[1] == null) {
                     throw new IllegalArgumentException("The username has to be a string");
-                } else {
+                } else if (params[2] == null) {
+                    throw new IllegalArgumentException("The message has to be a string");
+                }
+                else {
                     try {
                         Integer.parseInt(params[0]);
                         this.type = type;
@@ -51,7 +53,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup" -> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup" -> {
                 if (params.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if(params[1] == null) {
@@ -102,7 +104,7 @@ public class Message {
         String type = content[0];
 
         switch (type) {
-            case "chatAll", "chatTo" -> {
+            case "chatAll" -> {
                 if (content.length < 4) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
                 } else if (content[2] == null) {
@@ -149,7 +151,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {
