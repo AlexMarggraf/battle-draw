@@ -154,7 +154,7 @@ public class Message {
                         }
 
                         params[1] = content[2];
-                        params[3] = content[3];
+                        params[2] = content[3];
                         params[3] = msgBuilder.toString();
                     } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("The id has to be an integer");

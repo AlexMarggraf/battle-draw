@@ -8,6 +8,10 @@
  */
 
 import java.util.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javafx.application.Application;
 
 public class Main {
 
@@ -20,6 +24,7 @@ public class Main {
     private Boolean sendPing;
     private String username;
     private Boolean loggedIn;
+    public ChatGui chatGui;
 
     /**
      * This method is the constructor and initializes the queues.
@@ -54,28 +59,29 @@ public class Main {
                 case "pong" -> receivedPong = true;
                 case "disconnect" -> {
                     sendPing = false;
-                    System.out.println("Server isn't reachable");
+                    print("Server isn't reachable");
                     client.disconnect();
                 }
-                case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[3]);
+                case "chatTo" -> print("(whisper) " + message.getParams()[1] + ": " + message.getParams()[3]);
+                case "chatAll" -> print(message.getParams()[1] + ": " + message.getParams()[2]);
                 case "acceptLogin", "acceptSignup" -> {
                     username = message.getParams()[1];
                     serverID = message.getID();
                     loggedIn = true;
-                    System.out.println("You're logged in as " + username);
+                    print("You're logged in as " + username);
                 }
                 case "rejectLogin" -> {
-                    System.out.println("Username or password is wrong");
+                    print("Username or password is wrong");
                     signInLogIn();
                 }
                 case "broadcast" -> {
-                    System.out.println("Server: " + message.getParams()[0]);
+                    print("Server: " + message.getParams()[0]);
                 }
                 case "username" -> {
                     username = message.getParams()[1];
-                    System.out.println("Change username to:" + username);
+                    print("Change username to:" + username);
                 }
-                default -> System.out.println(message.getID() + ": " + message.getParams()[1]);
+                default -> print(message.getID() + ": " + message.getParams()[1]);
             }
         }
     }
@@ -92,15 +98,18 @@ public class Main {
         }
     }
 
+    public void print(String message) {
+        chatGui.queuePrintMessage(message);
+    }
+
     /**
      * This method retrieves all unhandled user input and adds it to the client message queue.
-     *
-     * @param msgListener The object that listens to the users inputs
      */
-    public void handleClientMessage(MessageListener msgListener) {
-        String clientMessage = msgListener.getMessage();
+    public void handleClientMessage() {
+        String clientMessage = chatGui.getUserInput();
 
         while (clientMessage != null) {
+            System.out.println(clientMessage);
             String[] splitClientMessage = clientMessage.split("\\s+");
 
             switch (splitClientMessage[0]) {
@@ -127,7 +136,6 @@ public class Main {
                     } else {
                         message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
                     }
-                    System.out.println(message.toString());
                     clientMessageQueue.add(message.toString());
                 }
                 default -> {
@@ -136,7 +144,7 @@ public class Main {
                 }
             }
 
-            clientMessage = msgListener.getMessage();
+            clientMessage = chatGui.getUserInput();
         }
     }
 
@@ -172,7 +180,7 @@ public class Main {
                 lastPing = System.currentTimeMillis();
                 receivedPong = false;
             } else {
-                System.out.println("Server not reachable");
+                print("Server not reachable");
                 sendPing = false;
                 client.disconnect();
             }
@@ -197,74 +205,113 @@ public class Main {
      * This method handles the Sign-up and Log in processes.
      */
     public void signInLogIn() {
-        Scanner scanner = new Scanner(System.in);
 
-        System.out.println("Do you want to sign up or log in? (su/li)");
-        String answer = scanner.nextLine();
+        print("Do you want to sign up or log in? (su/li)");
+        String answer = chatGui.getUserInput();
+
+        while (answer == null) {
+            answer = chatGui.getUserInput();
+        }
 
         while (!(answer.equals("su") || answer.equals("li"))) {
-            System.out.println("Answer with 'su ' or 'li'");
-            answer = scanner.nextLine();
+            print("Answer with 'su ' or 'li'");
+            do {
+                answer = chatGui.getUserInput();
+            } while (answer == null);
         }
 
         if (answer.equals("su")) {
             String suggestedUsername = System.getProperty("user.name") + (int) (Math.random() * 100);
             suggestedUsername = suggestedUsername.replaceAll("\\s+", "");
-            System.out.println("Do you want to use: " + suggestedUsername + "? (y/n)");
-            answer = scanner.nextLine();
+            print("Do you want to use: " + suggestedUsername + "? (y/n)");
+            do {
+                answer = chatGui.getUserInput();
+            } while (answer == null);
 
             while (!(answer.equals("y") || answer.equals("n"))) {
-                System.out.println("Answer with 'y' or 'n'!");
-                answer = scanner.nextLine();
+                print("Answer with 'y' or 'n'!");
+                do {
+                    answer = chatGui.getUserInput();
+                } while (answer == null);
             }
 
             if (answer.equals("y")) {
                 username = suggestedUsername;
             } else {
-                System.out.println("Enter username:");
-                String usernameInput = scanner.nextLine().trim();
+                print("Enter username:");
+                do {
+                    answer = chatGui.getUserInput();
+                } while (answer == null);
+                String usernameInput = answer.trim();
 
                 while (usernameInput.contains(" ") || usernameInput.isEmpty()) {
-                    System.out.println("Whitespaces or an empty Username are not allowed!");
-                    System.out.println("Enter new username:");
-                    usernameInput = scanner.nextLine().trim();
+                    print("Whitespaces or an empty Username are not allowed!");
+                    print("Enter new username:");
+                    do {
+                        usernameInput = chatGui.getUserInput();
+                    } while (usernameInput == null);
                 }
 
                 username = usernameInput;
             }
 
-            System.out.println("Choose a password:");
-            String[] passwordArray = scanner.nextLine().split("\\s+");
+            print("Choose a password:");
+            do {
+                answer = chatGui.getUserInput();
+            } while (answer == null);
+
+            String[] passwordArray = answer.split("\\s+");
             String password = passwordArray[0];
 
             while (passwordArray.length != 1 || passwordArray[0].isEmpty() || password.length() < 6) {
-                System.out.println("Choose a different password!");
-                passwordArray = scanner.nextLine().split("\\s+");
+                print("Choose a different password!");
+
+                do {
+                    answer = chatGui.getUserInput();
+                } while (answer == null);
+
+                passwordArray = answer.split("\\s+");
                 password = passwordArray[0];
             }
 
             clientMessageQueue.add("signUp " + serverID + " " + username + " " + password);
 
         } else {
-            System.out.println("Enter your username:");
-            String[] usernameArray = scanner.nextLine().split("\\s+");
+            print("Enter your username:");
+            do {
+                answer = chatGui.getUserInput();
+            } while (answer == null);
+
+            String[] usernameArray = answer.split("\\s+");
 
             while (usernameArray.length != 1 || usernameArray[0].isEmpty()) {
-                System.out.println("Whitespaces or an empty username are not allowed!");
-                System.out.println("Enter your username:");
-                usernameArray = scanner.nextLine().split("\\s+");
+                print("Whitespaces or an empty username are not allowed!");
+                print("Enter your username:");
+                do {
+                    answer = chatGui.getUserInput();
+                } while (answer == null);
+
+                usernameArray = answer.split("\\s+");
             }
 
             username = usernameArray[0];
 
-            System.out.println("Enter your password:");
-            String[] passwordArray = scanner.nextLine().split("\\s+");
+            print("Enter your password:");
+            do {
+                answer = chatGui.getUserInput();
+            } while (answer == null);
+
+            String[] passwordArray = answer.split("\\s+");
 
 
             while (passwordArray.length != 1 || passwordArray[0].isEmpty()) {
-                System.out.println("Whitespaces or an empty password are not allowed!");
-                System.out.println("Enter your password:");
-                passwordArray = scanner.nextLine().split("\\s+");
+                print("Whitespaces or an empty password are not allowed!");
+                print("Enter your password:");
+                do {
+                    answer = chatGui.getUserInput();
+                } while (answer == null);
+
+                passwordArray = answer.split("\\s+");
             }
 
             String password = passwordArray[0];
@@ -285,6 +332,17 @@ public class Main {
      */
     public static void main(String[] args) {
         Main main = new Main();
+
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> Application.launch(ChatGui.class, args));
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        main.chatGui = ChatGui.getChatGui();
+
         main.initClient();
         main.signInLogIn();
 
@@ -293,7 +351,7 @@ public class Main {
 
         while (true) {
             main.handlePingPong();
-            main.handleClientMessage(msgListener);
+            main.handleClientMessage();
             main.receiveMessage();
             main.sendMessage();
             main.handleServerMessage();

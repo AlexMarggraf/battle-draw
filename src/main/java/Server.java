@@ -90,7 +90,11 @@ public class Server {
                 }
                 case "chatAll" -> sendMessageQueue.add(message.toString());
                 case "chatTo" -> {
-                    if (!DatabaseHelper.checkUsername(message.getParams()[2]) && DatabaseHelper.getStatus(DatabaseHelper.getPlayerId(message.getParams()[2]))) {
+                    String recipientUsername = message.getParams()[2];
+                    if (message.getParams()[1].equals(message.getParams()[2])) {
+                        Message response = new Message("chatTo", new String[]{0 + "", "Server", message.getParams()[1], "You can't whisper yourself"});
+                        sendMessageQueue.add(response.toString());
+                    } else if (!DatabaseHelper.checkUsername(message.getParams()[2]) && DatabaseHelper.getStatus(DatabaseHelper.getPlayerId(recipientUsername))) {
                         sendMessageQueue.add(message.toString());
                     } else {
                         Message response = new Message("chatTo", new String[]{0 + "", "Server", message.getParams()[1], "The user " + message.getParams()[2] + " isn't online or doesn't exist"});
@@ -103,7 +107,7 @@ public class Server {
                         Message response = new Message("username", new String[]{message.getID() + "", message.getParams()[1]});
                         sendMessageQueue.add(response.toString());
                     } else {
-                        Message response = new Message("chatTo", new String[]{0 + "", DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Server", "Username is already in use"});
+                        Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Username is already in use"});
                         sendMessageQueue.add(response.toString());
                     }
                 }
