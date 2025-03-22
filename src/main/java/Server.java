@@ -6,6 +6,7 @@
  * @author Alexander Maggraf
  */
 
+import javax.xml.crypto.Data;
 import java.util.*;
 
 public class Server {
@@ -89,11 +90,10 @@ public class Server {
                 }
                 case "chatAll" -> sendMessageQueue.add(message.toString());
                 case "chatTo" -> {
-                    if (!DatabaseHelper.checkUsername(message.getParams()[1])) {
-                        Message response = new Message("chatTo", new String[]{message.getParams()[1], "You", "Whispered to " + message.getParams()[1] + ": " + message.getParams()[2]});
-                        sendMessageQueue.add(response.toString());
+                    if (!DatabaseHelper.checkUsername(message.getParams()[2]) && DatabaseHelper.getStatus(DatabaseHelper.getPlayerId(message.getParams()[2]))) {
+                        sendMessageQueue.add(message.toString());
                     } else {
-                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "The player " + message.getParams()[1] + " doesn't exist"});
+                        Message response = new Message("chatTo", new String[]{0 + "", "Server", message.getParams()[1], "The user " + message.getParams()[2] + " isn't online or doesn't exist"});
                         sendMessageQueue.add(response.toString());
                     }
                 }
@@ -103,7 +103,7 @@ public class Server {
                         Message response = new Message("username", new String[]{message.getID() + "", message.getParams()[1]});
                         sendMessageQueue.add(response.toString());
                     } else {
-                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Username is already in use"});
+                        Message response = new Message("chatTo", new String[]{0 + "", DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Server", "Username is already in use"});
                         sendMessageQueue.add(response.toString());
                     }
                 }
@@ -178,6 +178,9 @@ public class Server {
                     for (ServerThread st : serverThreadList) {
                         sendMessage(message.toString(), st.getId());
                     }
+                }
+                case "chatTo" -> {
+                    sendMessage(message.toString(), DatabaseHelper.getPlayerId(message.getParams()[2]));
                 }
                 default -> sendMessage(message.toString(), message.getID());
             }

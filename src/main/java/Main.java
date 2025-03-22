@@ -57,7 +57,7 @@ public class Main {
                     System.out.println("Server isn't reachable");
                     client.disconnect();
                 }
-                case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
+                case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[3]);
                 case "acceptLogin", "acceptSignup" -> {
                     username = message.getParams()[1];
                     serverID = message.getID();
@@ -116,11 +116,18 @@ public class Main {
                 }
                 case "/whisper" -> {
                     Message message;
-                    if (splitClientMessage.length > 3) {
-                        message = new Message("chatTo", new String[]{serverID + "", splitClientMessage[2]});
+                    if (splitClientMessage.length > 2) {
+                        StringBuilder msgBuilder = new StringBuilder(splitClientMessage[2]);
+
+                        for (int i = 3; i < splitClientMessage.length; i++) {
+                            msgBuilder.append(" ").append(splitClientMessage[i]);
+                        }
+
+                        message = new Message("chatTo", new String[]{serverID + "", username, splitClientMessage[1], msgBuilder.toString()});
                     } else {
                         message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
                     }
+                    System.out.println(message.toString());
                     clientMessageQueue.add(message.toString());
                 }
                 default -> {

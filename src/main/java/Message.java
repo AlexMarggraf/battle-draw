@@ -18,12 +18,33 @@ public class Message {
      */
     public Message(String type, String[] params) {
         switch (type) {
-            case "chatAll", "chatTo" -> {
+            case "chatTo" -> {
+                if(params.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 4 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The sender username has to be a string");
+                } else if (params[2] == null) {
+                    throw new IllegalArgumentException("The recipient username has to be a string");
+                } else if (params[3] == null) {
+                    throw new IllegalArgumentException("The message has to be a string");
+                }
+                else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "chatAll" -> {
                 if(params.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
-                }
-                else if (params[1] == null) {
+                } else if (params[1] == null) {
                     throw new IllegalArgumentException("The username has to be a string");
+                }  else if (params[2] == null) {
+                    throw new IllegalArgumentException("The message has to be a string");
                 } else {
                     try {
                         Integer.parseInt(params[0]);
@@ -112,7 +133,35 @@ public class Message {
         String type = content[0];
 
         switch (type) {
-            case "chatAll", "chatTo" -> {
+            case "chatTo" -> {
+                if (content.length < 5) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 4 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The sender username has to be a string");
+                } else if (content[3] == null) {
+                    throw new IllegalArgumentException("The recipient username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+
+                        this.type = type;
+                        this.params = new String[4];
+                        params[0] = content[1];
+
+                        StringBuilder msgBuilder = new StringBuilder(content[4]);
+                        for (int i = 5; i < content.length; i++) {
+                            msgBuilder.append(" ").append(content[i]);
+                        }
+
+                        params[1] = content[2];
+                        params[3] = content[3];
+                        params[3] = msgBuilder.toString();
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "chatAll" -> {
                 if (content.length < 4) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
                 } else if (content[2] == null) {
