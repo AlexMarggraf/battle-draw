@@ -71,6 +71,10 @@ public class Main {
                 case "broadcast" -> {
                     System.out.println("Server: " + message.getParams()[0]);
                 }
+                case "username" -> {
+                    username = message.getParams()[1];
+                    System.out.println("Change username to:" + username);
+                }
                 default -> System.out.println(message.getID() + ": " + message.getParams()[1]);
             }
         }
@@ -124,6 +128,8 @@ public class Main {
                     clientMessageQueue.add(message.toString());
                 }
             }
+
+            clientMessage = msgListener.getMessage();
         }
     }
 
