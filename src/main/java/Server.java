@@ -87,7 +87,16 @@ public class Server {
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
                 }
-                case "chatAll", "chatTo" -> sendMessageQueue.add(message.toString());
+                case "chatAll" -> sendMessageQueue.add(message.toString());
+                case "chatTo" -> {
+                    if (!DatabaseHelper.checkUsername(message.getParams()[1])) {
+                        Message response = new Message("chatTo", new String[]{message.getParams()[1], "You", "Whispered to " + message.getParams()[1] + ": " + message.getParams()[2]});
+                        sendMessageQueue.add(response.toString());
+                    } else {
+                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "The player " + message.getParams()[1] + " doesn't exist"});
+                        sendMessageQueue.add(response.toString());
+                    }
+                }
                 case "changeUsername" -> {
                     if (DatabaseHelper.checkUsername(message.getParams()[1])) {
                         DatabaseHelper.changeUsername(message.getParams()[1], Integer.parseInt(message.getParams()[0]));
@@ -157,14 +166,20 @@ public class Server {
             String serverMessage = sendMessageQueue.remove();
             Message message = new Message(serverMessage);
 
-            if (message.getType().equals("chatAll")) {
-                for (ServerThread st : serverThreadList) {
-                    if (st.getId() != message.getID()) {
+            switch (message.getType()) {
+                case "chatAll" -> {
+                    for (ServerThread st : serverThreadList) {
+                        if (st.getId() != message.getID()) {
+                            sendMessage(message.toString(), st.getId());
+                        }
+                    }
+                }
+                case "broadcast" -> {
+                    for (ServerThread st : serverThreadList) {
                         sendMessage(message.toString(), st.getId());
                     }
                 }
-            } else {
-                sendMessage(message.toString(), message.getID());
+                default -> sendMessage(message.toString(), message.getID());
             }
         }
     }

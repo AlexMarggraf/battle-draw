@@ -68,6 +68,9 @@ public class Main {
                     System.out.println("Username or password is wrong");
                     signInLogIn();
                 }
+                case "broadcast" -> {
+                    System.out.println("Server: " + message.getParams()[0]);
+                }
                 default -> System.out.println(message.getID() + ": " + message.getParams()[1]);
             }
         }
@@ -96,16 +99,31 @@ public class Main {
         while (clientMessage != null) {
             String[] splitClientMessage = clientMessage.split("\\s+");
 
-            if (splitClientMessage.length == 2 && splitClientMessage[0].equals("/nick")) {
-                username = splitClientMessage[1];
-                Message message = new Message("changeUsername", new String[]{serverID + "", username});
-                clientMessageQueue.add(message.toString());
-            } else {
-                Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                clientMessageQueue.add(message.toString());
+            switch (splitClientMessage[0]) {
+                case "/nick" -> {
+                    Message message;
+                    if (splitClientMessage.length == 2) {
+                        String username = splitClientMessage[1];
+                        message = new Message("changeUsername", new String[]{serverID + "", username});
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
+                case "/whisper" -> {
+                    Message message;
+                    if (splitClientMessage.length > 3) {
+                        message = new Message("chatTo", new String[]{serverID + "", splitClientMessage[2]});
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
+                default -> {
+                    Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                    clientMessageQueue.add(message.toString());
+                }
             }
-
-            clientMessage = msgListener.getMessage();
         }
     }
 

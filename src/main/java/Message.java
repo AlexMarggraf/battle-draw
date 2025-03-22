@@ -87,6 +87,16 @@ public class Message {
                     this.params = new String[0];
                 }
             }
+            case "broadcast" -> {
+                if (params.length != 1) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
+                } else if(params[0] == null) {
+                    throw new IllegalArgumentException("The message cannot be null");
+                } else {
+                        this.type = type;
+                        this.params = params;
+                }
+            }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
@@ -185,6 +195,19 @@ public class Message {
                 } else {
                     this.type = type;
                     this.params = new String[0];
+                }
+            }
+            case "broadcast" -> {
+                if (content.length < 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
+                } else {
+                    this.type = type;
+
+                    StringBuilder msgBuilder = new StringBuilder(content[1]);
+                    for (int i = 2; i < content.length; i++) {
+                        msgBuilder.append(" ").append(content[i]);
+                    }
+                    this.params = new String[]{msgBuilder.toString()};
                 }
             }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
