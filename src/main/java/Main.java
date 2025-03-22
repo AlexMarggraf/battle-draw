@@ -68,6 +68,10 @@ public class Main {
                     System.out.println("Username or password is wrong");
                     signInLogIn();
                 }
+                case "username" -> {
+                    username = message.getParams()[1];
+                    System.out.println("Change username to:" + username);
+                }
                 default -> System.out.println(message.getID() + ": " + message.getParams()[1]);
             }
         }
@@ -97,7 +101,7 @@ public class Main {
             String[] splitClientMessage = clientMessage.split("\\s+");
 
             if (splitClientMessage.length == 2 && splitClientMessage[0].equals("/nick")) {
-                username = splitClientMessage[1];
+                String username = splitClientMessage[1];
                 Message message = new Message("changeUsername", new String[]{serverID + "", username});
                 clientMessageQueue.add(message.toString());
             } else {

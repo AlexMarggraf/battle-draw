@@ -1,0 +1,13 @@
+-d 'C:\\Users\\alexa\\Gruppe-23\\build\\docs\\javadoc'
+-doctitle 'Battle_Draw v1 API'
+-notimestamp 
+-quiet 
+-windowtitle 'Battle_Draw v1 API'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Client.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\ConnectionListener.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\DatabaseHelper.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Main.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Message.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\MessageListener.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Server.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\ServerThread.java'

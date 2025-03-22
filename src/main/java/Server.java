@@ -91,7 +91,7 @@ public class Server {
                 case "changeUsername" -> {
                     if (DatabaseHelper.checkUsername(message.getParams()[1])) {
                         DatabaseHelper.changeUsername(message.getParams()[1], Integer.parseInt(message.getParams()[0]));
-                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Changed username to " + message.getParams()[1]});
+                        Message response = new Message("username", new String[]{message.getID() + "", message.getParams()[1]});
                         sendMessageQueue.add(response.toString());
                     } else {
                         Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Username is already in use"});
