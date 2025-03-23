@@ -1,26 +1,21 @@
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Lobby {
-    private int lobbyId;
     private String lobbyName;
-    private LinkedList<Integer> players;
+    private ArrayList<Integer> players;
 
-    public Lobby(int lobbyId, String lobbyName) {
-        this.lobbyId = lobbyId;
+    public Lobby(String lobbyName) {
         this.lobbyName = lobbyName;
-        this.players = new LinkedList<Integer>();
+        this.players = new ArrayList<>();
 
-    }
-
-    public int getLobbyId() {
-        return lobbyId;
     }
 
     public String getLobbyName() {
         return lobbyName;
     }
 
-    public LinkedList<Integer> getPlayers() {
+    public ArrayList<Integer> getPlayers() {
         return players;
     }
 
@@ -30,9 +25,5 @@ public class Lobby {
 
     public void removePlayer(Integer playerId) {
         players.remove(playerId);
-    }
-
-    public String listPlayers(){
-        return "Lobby " + lobbyId + " (" + lobbyName + ") Players: " + players.toString();
     }
 }

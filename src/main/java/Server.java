@@ -15,7 +15,6 @@ public class Server {
     private Queue<String> sendMessageQueue;
     private ArrayList<ServerThread> serverThreadList;
     private int connection;
-    private int lobby;
     private LinkedList<Lobby> lobbyList;
     private LinkedList<Game> gameList;
     private HashMap<Lobby, Game> lobbyGameMap;
@@ -29,7 +28,6 @@ public class Server {
         this.sendMessageQueue = new LinkedList<>();
         this.serverThreadList = new ArrayList<>();
         this.connection = -2;
-        this.lobby = 0;
         this.lobbyList = new LinkedList<>();
         this.gameList = new LinkedList<>();
         this.lobbyGameMap = new HashMap<>();
@@ -184,6 +182,24 @@ public class Server {
                         gamesList.add(game.getLobbyName() + " - " + game.getStatus());
                     }
                     Message response = new Message("games", gamesList.toArray(new String[0]));
+                    sendMessageQueue.add(response.toString());
+                }
+                case "createLobby" -> {
+                    String lobbyName = "Lobby von " + DatabaseHelper.getPlayerName(message.getID());
+                    Lobby newLobby = new Lobby(lobbyName);
+                    newLobby.addPlayer(message.getID());
+                    Game game = new Game(lobbyName);
+                    lobbyList.add(newLobby);
+                    gameList.add(game);
+                    lobbyGameMap.put(newLobby, game);
+                }
+                case "joinLobby" -> {
+                    Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
+                    for(Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});
+                        }
+                    }
                     sendMessageQueue.add(response.toString());
                 }
             }

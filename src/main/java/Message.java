@@ -87,7 +87,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby" -> {
                 if(params.length != 1) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -128,6 +128,22 @@ public class Message {
                         }
                     }
 
+                    try {
+                        Integer.parseInt(params[0]);
+
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "joinLobby", "lobbyJoined" -> {
+                if (params.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                } else {
                     try {
                         Integer.parseInt(params[0]);
 
@@ -264,7 +280,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby" -> {
                 if (content.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -338,6 +354,22 @@ public class Message {
                         this.params = new String[content.length - 1];
 
                         System.arraycopy(content, 1, params, 0, content.length - 1);
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "joinLobby", "lobbyJoined" -> {
+                if (content.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2]};
                     } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("The id has to be an integer");
                     }
