@@ -200,7 +200,7 @@ public class Server {
         Server server = new Server();
         DatabaseHelper.setOffline();
 
-        ConnectionListener conListener = new ConnectionListener(1234);
+        ConnectionListener conListener = new ConnectionListener(Integer.parseInt(args[0]));
         Thread.startVirtualThread(conListener);
 
         while (true) {
