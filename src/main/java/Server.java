@@ -59,6 +59,7 @@ public class Server {
     public void sendMessage(String message, int id) {
         for (ServerThread st : serverThreadList) {
             if (st.getId() == id) {
+                System.out.println(message);
                 st.queueServerMessage(message);
             }
         }
@@ -179,13 +180,14 @@ public class Server {
                     List<String> gamesList = new ArrayList<>();
                     gamesList.add(message.getID() + "");
                     for (Game game : lobbyGameMap.values()) {
-                        gamesList.add(game.getLobbyName() + " - " + game.getStatus());
+                        gamesList.add(game.getLobbyName());
+                        gamesList.add(game.getStatus());
                     }
                     Message response = new Message("games", gamesList.toArray(new String[0]));
                     sendMessageQueue.add(response.toString());
                 }
                 case "createLobby" -> {
-                    String lobbyName = "Lobby von " + DatabaseHelper.getPlayerName(message.getID());
+                    String lobbyName = "Lobby_von_" + DatabaseHelper.getPlayerName(message.getID());
                     Lobby newLobby = new Lobby(lobbyName);
                     newLobby.addPlayer(message.getID());
                     Game game = new Game(lobbyName);

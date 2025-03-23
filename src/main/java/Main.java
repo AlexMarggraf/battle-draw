@@ -95,8 +95,9 @@ public class Main {
                 }
                 case "games" -> {
                     print("Games:");
-                    for (int i = 1; i < message.getParams().length; i++){
-                        print(message.getParams()[i]);
+                    for (int i = 1; i < message.getParams().length; i = i + 2){
+                        String game = message.getParams()[i] + " - " + message.getParams()[i+1];
+                        print(game);
                     }
                 }
                 case "joinedLobby" -> {
