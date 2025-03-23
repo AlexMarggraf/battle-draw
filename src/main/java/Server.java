@@ -17,6 +17,7 @@ public class Server {
     private int connection;
     private int lobby;
     private LinkedList<Lobby> lobbyList;
+    private LinkedList<Game> gameList;
     private HashMap<Lobby, Game> lobbyGameMap;
 
     /**
@@ -30,6 +31,7 @@ public class Server {
         this.connection = -2;
         this.lobby = 0;
         this.lobbyList = new LinkedList<>();
+        this.gameList = new LinkedList<>();
         this.lobbyGameMap = new HashMap<>();
     }
 

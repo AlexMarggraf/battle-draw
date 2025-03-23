@@ -3,9 +3,13 @@
 -notimestamp 
 -quiet 
 -windowtitle 'Battle_Draw v1 API'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\ChatGui.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\ChatGuiWrapper.java'
 'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Client.java'
 'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\ConnectionListener.java'
 'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\DatabaseHelper.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Game.java'
+'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Lobby.java'
 'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Main.java'
 'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\Message.java'
 'C:\\Users\\alexa\\Gruppe-23\\src\\main\\java\\MessageListener.java'
