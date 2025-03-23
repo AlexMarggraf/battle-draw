@@ -76,7 +76,7 @@ public class ChatGui extends Application {
 
         Scene scene = new Scene(vbox);
 
-        primaryStage.setTitle("Chat Application");
+        primaryStage.setTitle("Chat GUI");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

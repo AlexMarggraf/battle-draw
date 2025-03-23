@@ -141,6 +141,14 @@ public class Main {
                     }
                     clientMessageQueue.add(message.toString());
                 }
+                case "/online" -> {
+                    Message message;
+                    if (splitClientMessage.length == 1) {
+                        message = new Message("whoOnline", new String[]{serverID + ""});
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                    }
+                }
                 default -> {
                     Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
                     clientMessageQueue.add(message.toString());
@@ -360,6 +368,7 @@ public class Main {
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(() -> Application.launch(ChatGui.class, args));
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

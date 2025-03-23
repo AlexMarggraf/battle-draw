@@ -118,6 +118,11 @@ public class Message {
                         this.params = params;
                 }
             }
+            case "whoOnline" -> {
+                if (params.length != 1) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
+                }
+            }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
