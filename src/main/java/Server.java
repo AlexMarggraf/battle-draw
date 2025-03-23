@@ -14,8 +14,10 @@ public class Server {
     private Queue<String> receiveMessageQueue;
     private Queue<String> sendMessageQueue;
     private ArrayList<ServerThread> serverThreadList;
-    public int connection;
+    private int connection;
+    private int lobby;
     private LinkedList<Lobby> lobbyList;
+    private HashMap<Lobby, Game> lobbyGameMap;
 
     /**
      * This method is the constructor and initializes the message queues and the server list and
@@ -26,11 +28,9 @@ public class Server {
         this.sendMessageQueue = new LinkedList<>();
         this.serverThreadList = new ArrayList<>();
         this.connection = -2;
-        this.lobbyList = new LinkedList<Lobby>();
-    }
-
-    public void addLobby(Lobby lobby) {
-        this.lobbyList.add(lobby);
+        this.lobby = 0;
+        this.lobbyList = new LinkedList<>();
+        this.lobbyGameMap = new HashMap<>();
     }
 
     /**
