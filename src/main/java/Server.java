@@ -177,6 +177,15 @@ public class Server {
                     Message response = new Message("online", onlineList.toArray(new String[0]));
                     sendMessageQueue.add(response.toString());
                 }
+                case "whatGames" -> {
+                    List<String> gamesList = new ArrayList<>();
+                    gamesList.add(message.getID() + "");
+                    for (Game game : lobbyGameMap.values()) {
+                        gamesList.add(game.getLobbyName() + " - " + game.getStatus());
+                    }
+                    Message response = new Message("games", gamesList.toArray(new String[0]));
+                    sendMessageQueue.add(response.toString());
+                }
             }
         }
     }

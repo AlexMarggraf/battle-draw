@@ -91,6 +91,12 @@ public class Main {
                         print(message.getParams()[i]);
                     }
                 }
+                case "games" -> {
+                    print("Games:");
+                    for (int i = 1; i < message.getParams().length; i++){
+                        print(message.getParams()[i]);
+                    }
+                }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
         }
@@ -151,6 +157,15 @@ public class Main {
                     Message message;
                     if (splitClientMessage.length == 1) {
                         message = new Message("whoOnline", new String[]{serverID + ""});
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
+                case "/games" -> {
+                    Message message;
+                    if (splitClientMessage.length == 1) {
+                        message = new Message("whatGames", new String[]{serverID + ""});
                     } else {
                         message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
                     }
