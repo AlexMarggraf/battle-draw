@@ -179,22 +179,30 @@ public class Main {
                     clientMessageQueue.add(message.toString());
                 }
                 case "/joinLobby" -> {
-                    Message message;
-                    if (splitClientMessage.length == 2) {
-                        message = new Message("joinLobby", new String[]{serverID + "", splitClientMessage[1]});
+                    if (inLobby) {
+                        Message message;
+                        if (splitClientMessage.length == 2) {
+                            message = new Message("joinLobby", new String[] {serverID + "", splitClientMessage[1]});
+                        } else {
+                            message = new Message("chatAll", new String[] {serverID + "", username, clientMessage});
+                        }
+                        clientMessageQueue.add(message.toString());
                     } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                        print("You're already in a lobby");
                     }
-                    clientMessageQueue.add(message.toString());
                 }
                 case "/createLobby" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        message = new Message("createLobby", new String[]{serverID + ""});
+                    if (inLobby) {
+                        Message message;
+                        if (splitClientMessage.length == 1) {
+                            message = new Message("createLobby", new String[] {serverID + ""});
+                        } else {
+                            message = new Message("chatAll", new String[] {serverID + "", username, clientMessage});
+                        }
+                        clientMessageQueue.add(message.toString());
                     } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                        print("You're already in a lobby");
                     }
-                    clientMessageQueue.add(message.toString());
                 }
                 default -> {
                     Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
