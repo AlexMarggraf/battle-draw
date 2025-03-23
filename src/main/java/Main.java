@@ -85,6 +85,12 @@ public class Main {
                     username = message.getParams()[1];
                     print("Change username to:" + username);
                 }
+                case "online" -> {
+                    print("Online:");
+                    for (int i = 1; i < message.getParams().length; i++){
+                        print(message.getParams()[i]);
+                    }
+                }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
         }
@@ -148,6 +154,7 @@ public class Main {
                     } else {
                         message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
                     }
+                    clientMessageQueue.add(message.toString());
                 }
                 default -> {
                     Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});

@@ -164,6 +164,17 @@ public class Server {
                     sendMessageQueue.add(response.toString());
                     connection++;
                 }
+                case "whoOnline" -> {
+                    List<String> onlineList = new ArrayList<>();
+                    onlineList.add(message.getID() + "");
+                    for (ServerThread st : serverThreadList) {
+                        if (DatabaseHelper.getStatus(st.getId())) {
+                            onlineList.add(DatabaseHelper.getPlayerName(st.getId()));
+                        }
+                    }
+                    Message response = new Message("online", onlineList.toArray(new String[0]));
+                    sendMessageQueue.add(response.toString());
+                }
             }
         }
     }

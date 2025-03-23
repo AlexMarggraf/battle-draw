@@ -87,7 +87,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline" -> {
                 if(params.length != 1) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -118,9 +118,24 @@ public class Message {
                         this.params = params;
                 }
             }
-            case "whoOnline" -> {
-                if (params.length != 1) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
+            case "online" -> {
+                if (params.length < 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs at least 2 parameters.");
+                } else {
+                    for (int i = 1; i < params.length; i++) {
+                        if (params[i] == null) {
+                            throw new IllegalArgumentException("The username has to be a string");
+                        }
+                    }
+
+                    try {
+                        Integer.parseInt(params[0]);
+
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
                 }
             }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
@@ -229,7 +244,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline" -> {
                 if (content.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -262,6 +277,28 @@ public class Message {
                         msgBuilder.append(" ").append(content[i]);
                     }
                     this.params = new String[]{msgBuilder.toString()};
+                }
+            }
+            case "online" -> {
+                if (content.length < 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs at least 2 parameters.");
+                } else {
+                    for (int i = 2; i < content.length; i++) {
+                        if (content[i] == null) {
+                            throw new IllegalArgumentException("The username has to be a string");
+                        }
+                    }
+
+                    try {
+                        Integer.parseInt(content[1]);
+
+                        this.type = type;
+                        this.params = new String[content.length - 1];
+
+                        System.arraycopy(content, 1, params, 0, content.length - 1);
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
                 }
             }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
