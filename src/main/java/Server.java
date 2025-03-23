@@ -15,6 +15,7 @@ public class Server {
     private Queue<String> sendMessageQueue;
     private ArrayList<ServerThread> serverThreadList;
     public int connection;
+    private LinkedList<Lobby> lobbyList;
 
     /**
      * This method is the constructor and initializes the message queues and the server list and
@@ -25,6 +26,11 @@ public class Server {
         this.sendMessageQueue = new LinkedList<>();
         this.serverThreadList = new ArrayList<>();
         this.connection = -2;
+        this.lobbyList = new LinkedList<Lobby>();
+    }
+
+    public void addLobby(Lobby lobby) {
+        this.lobbyList.add(lobby);
     }
 
     /**
