@@ -39,6 +39,7 @@ public class Main {
         this.receivedPong = true;
         this.sendPing = true;
         this.loggedIn = false;
+        this.inLobby = false;
     }
 
     private void setUsername(String username) {
@@ -180,7 +181,7 @@ public class Main {
                     clientMessageQueue.add(message.toString());
                 }
                 case "/joinLobby" -> {
-                    if (inLobby) {
+                    if (!inLobby) {
                         Message message;
                         if (splitClientMessage.length == 2) {
                             message = new Message("joinLobby", new String[] {serverID + "", splitClientMessage[1]});
@@ -193,7 +194,7 @@ public class Main {
                     }
                 }
                 case "/createLobby" -> {
-                    if (inLobby) {
+                    if (!inLobby) {
                         Message message;
                         if (splitClientMessage.length == 1) {
                             message = new Message("createLobby", new String[] {serverID + ""});
