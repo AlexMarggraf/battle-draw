@@ -57,7 +57,11 @@ public class Main {
                     System.out.println("Server isn't reachable");
                     client.disconnect();
                 }
-                case "chatAll", "chatTo" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
+                case "chatAll" -> System.out.println(message.getParams()[1] + ": " + message.getParams()[2]);
+                case "username" -> {
+                    username = message.getParams()[1];
+                    System.out.println("Changed username to: " + message.getParams()[1]);
+                }
                 case "acceptLogin", "acceptSignup" -> {
                     username = message.getParams()[1];
                     serverID = message.getID();
@@ -97,7 +101,7 @@ public class Main {
             String[] splitClientMessage = clientMessage.split("\\s+");
 
             if (splitClientMessage.length == 2 && splitClientMessage[0].equals("/nick")) {
-                username = splitClientMessage[1];
+                String username = splitClientMessage[1];
                 Message message = new Message("changeUsername", new String[]{serverID + "", username});
                 clientMessageQueue.add(message.toString());
             } else {
@@ -191,54 +195,52 @@ public class Main {
                 username = suggestedUsername;
             } else {
                 System.out.println("Enter username:");
-                String usernameInput = scanner.nextLine().trim();
+                answer = scanner.nextLine().trim();
 
-                while (usernameInput.contains(" ") || usernameInput.isEmpty()) {
+                while (answer.contains(" ") || answer.isEmpty()) {
                     System.out.println("Whitespaces or an empty Username are not allowed!");
                     System.out.println("Enter new username:");
-                    usernameInput = scanner.nextLine().trim();
+                    answer = scanner.nextLine().trim();
                 }
 
-                username = usernameInput;
+                username = answer;
             }
 
             System.out.println("Choose a password:");
-            String[] passwordArray = scanner.nextLine().split("\\s+");
-            String password = passwordArray[0];
+            answer = scanner.nextLine().trim();
 
-            while (passwordArray.length != 1 || passwordArray[0].isEmpty() || password.length() < 6) {
+            while (answer.contains(" ") || answer.length() < 6) {
                 System.out.println("Choose a different password!");
-                passwordArray = scanner.nextLine().split("\\s+");
-                password = passwordArray[0];
+                answer = scanner.nextLine().trim();
             }
 
-            clientMessageQueue.add("signUp " + serverID + " " + username + " " + password);
+            clientMessageQueue.add("signUp " + serverID + " " + username + " " + answer);
 
         } else {
             System.out.println("Enter your username:");
-            String[] usernameArray = scanner.nextLine().split("\\s+");
+            answer = scanner.nextLine().trim();
 
-            while (usernameArray.length != 1 || usernameArray[0].isEmpty()) {
+            while (answer.contains(" ") || answer.isEmpty()) {
                 System.out.println("Whitespaces or an empty username are not allowed!");
                 System.out.println("Enter your username:");
-                usernameArray = scanner.nextLine().split("\\s+");
+                answer = scanner.nextLine().trim();
             }
 
-            username = usernameArray[0];
+            username = answer;
 
             System.out.println("Enter your password:");
-            String[] passwordArray = scanner.nextLine().split("\\s+");
+            answer = scanner.nextLine().trim();
 
 
-            while (passwordArray.length != 1 || passwordArray[0].isEmpty()) {
+            while (answer.contains(" ") || answer.isEmpty()) {
                 System.out.println("Whitespaces or an empty password are not allowed!");
                 System.out.println("Enter your password:");
-                passwordArray = scanner.nextLine().split("\\s+");
+                answer = scanner.nextLine().trim();
             }
 
-            String password = passwordArray[0];
-            clientMessageQueue.add("logIn " + serverID + " " + username + " " + password);
+            clientMessageQueue.add("logIn " + serverID + " " + username + " " + answer);
         }
+
         sendMessage();
         while(!loggedIn) {
             receiveMessage();

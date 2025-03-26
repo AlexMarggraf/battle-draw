@@ -87,15 +87,28 @@ public class Server {
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
                 }
-                case "chatAll", "chatTo" -> sendMessageQueue.add(message.toString());
+                case "chatAll" -> sendMessageQueue.add(message.toString());
                 case "changeUsername" -> {
                     if (DatabaseHelper.checkUsername(message.getParams()[1])) {
                         DatabaseHelper.changeUsername(message.getParams()[1], Integer.parseInt(message.getParams()[0]));
-                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Changed username to " + message.getParams()[1]});
+                        Message response = new Message("username", new String[]{message.getParams()[0], message.getParams()[1]});
                         sendMessageQueue.add(response.toString());
                     } else {
-                        Message response = new Message("chatTo", new String[]{message.getParams()[0], "Server", "Username is already in use"});
-                        sendMessageQueue.add(response.toString());
+                        String username = message.getParams()[1];
+
+                        if (!DatabaseHelper.checkUsername(username)) {
+                            int counter = 1;
+                            String originalUsername = username;
+
+                            while (!DatabaseHelper.checkUsername(username)) {
+                                username = originalUsername + String.format("%03d", counter);
+                                counter++;
+                            }
+
+                            DatabaseHelper.changeUsername(username, Integer.parseInt(message.getParams()[0]));
+                            Message response = new Message("username", new String[]{message.getParams()[0], username});
+                            sendMessageQueue.add(response.toString());
+                        }
                     }
                 }
                 case "logIn" -> {
