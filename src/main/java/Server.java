@@ -245,8 +245,9 @@ public class Server {
                         if (lobby.getLobbyName().equals(message.getParams()[2])) {
                             Integer[] playerId = lobby.getPlayers();
                             for (Integer id : playerId) {
-                                System.out.println("send lobby msg");
-                                sendMessage(message.toString(), id);
+                                if(id != message.getID()) {
+                                    sendMessage(message.toString(), id);
+                                }
                             }
                         }
                     }
