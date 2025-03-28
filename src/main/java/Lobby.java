@@ -1,3 +1,8 @@
+/**
+ * This class represents a game lobby where players can join, leave, and interact.
+ * It manages the list of players in the lobby and provides methods to modify them.
+ */
+
 import java.util.ArrayList;
 
 public class Lobby {
