@@ -100,6 +100,21 @@ public class Message {
                     }
                 }
             }
+            case "listLobbyPlayers", "joinLobby", "lobbyJoined" -> {
+                if (params.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
             case "whatID" -> {
                 if (params.length != 0) {
                     throw new IllegalArgumentException("Message of type " + type + " doesn't need parameters.");
@@ -138,29 +153,13 @@ public class Message {
                     }
                 }
             }
-            case "joinLobby", "lobbyJoined" -> {
-                if (params.length != 2) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
-                } else if (params[1] == null) {
-                    throw new IllegalArgumentException("The lobby name has to be a string");
-                } else {
-                    try {
-                        Integer.parseInt(params[0]);
-
-                        this.type = type;
-                        this.params = params;
-                    } catch (NumberFormatException NFException) {
-                        throw new IllegalArgumentException("The id has to be an integer");
-                    }
-                }
-            }
-            case "games" -> {
+            case "games", "lobbyPlayers" -> {
                 if (params.length < 1) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs at least 2 parameters.");
+                    throw new IllegalArgumentException("Message of type " + type + " needs at least 1 parameter.");
                 } else {
                     for (int i = 1; i < params.length; i++) {
                         if (params[i] == null) {
-                            throw new IllegalArgumentException("The username has to be a string");
+                            throw new IllegalArgumentException("The content has to be a string");
                         }
                     }
 
@@ -337,13 +336,13 @@ public class Message {
                     }
                 }
             }
-            case "games" -> {
+            case "games", "lobbyPlayers" -> {
                 if (content.length < 2) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs at least 2 parameters.");
+                    throw new IllegalArgumentException("Message of type " + type + " needs at least 1 parameter.");
                 } else {
                     for (int i = 2; i < content.length; i++) {
                         if (content[i] == null) {
-                            throw new IllegalArgumentException("The username has to be a string");
+                            throw new IllegalArgumentException("The content has to be a string");
                         }
                     }
 
@@ -359,7 +358,7 @@ public class Message {
                     }
                 }
             }
-            case "joinLobby", "lobbyJoined" -> {
+            case "joinLobby", "lobbyJoined", "listLobbyPlayers" -> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {
