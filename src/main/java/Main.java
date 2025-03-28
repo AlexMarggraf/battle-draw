@@ -240,7 +240,7 @@ public class Main {
                     Message message;
                     if (splitClientMessage.length == 1) {
                         if (inLobby) {
-                            message = new Message("leaveLobby", new String[] {serverID + "", username});
+                            message = new Message("leaveLobby", new String[] {serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
                         } else {
                             print("You're not in a lobby");

@@ -211,8 +211,10 @@ public class Server {
                     for(Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobby.removePlayer(message.getID());
+                            Message response = new Message("lobbyLeft", new String[]{message.getID() + "", lobby.getLobbyName()});
+                            sendMessageQueue.add(response.toString());
                             if(lobby.isEmpty()) {
-                                lobbyGameMap.remove(lobby.getLobbyName());
+                                lobbyGameMap.remove(lobby);
                                 lobbyList.remove(lobby);
                             }
                         }
