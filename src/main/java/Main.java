@@ -318,13 +318,16 @@ public class Main {
 
         if (username != null) {
             print("Do you want to use " + username + " as your username? (y/n)");
-            do {
+            do
+            {
                 answer = chatGui.getUserInput();
             } while (answer == null);
 
             while (!(answer.equals("y") || answer.equals("n"))) {
                 print("Answer with 'y' or 'n'!");
-                do {
+
+                do
+                {
                     answer = chatGui.getUserInput();
                 } while (answer == null);
             }
@@ -335,22 +338,35 @@ public class Main {
         }
 
         print("Do you want to sign up or log in? (su/li)");
-        do {
+
+        while (answer == null) {
             answer = chatGui.getUserInput();
-        } while (answer == null || !(answer.equals("su") || answer.equals("li")));
+        }
+
+        while (!(answer.equals("su") || answer.equals("li"))) {
+            print("Answer with 'su ' or 'li'");
+            do
+            {
+                answer = chatGui.getUserInput();
+            } while (answer == null);
+        }
 
         if (answer.equals("su")) {
             if (!useUnParam) {
                 String suggestedUsername = System.getProperty("user.name") + (int) (Math.random() * 100);
                 suggestedUsername = suggestedUsername.replaceAll("\\s+", "");
                 print("Do you want to use: " + suggestedUsername + "? (y/n)");
-                do {
+
+                do
+                {
                     answer = chatGui.getUserInput();
                 } while (answer == null);
 
                 while (!(answer.equals("y") || answer.equals("n"))) {
                     print("Answer with 'y' or 'n'!");
-                    do {
+
+                    do
+                    {
                         answer = chatGui.getUserInput();
                     } while (answer == null);
                 }
@@ -359,34 +375,90 @@ public class Main {
                     username = suggestedUsername;
                 } else {
                     print("Enter username:");
-                    do {
+
+                    do
+                    {
                         answer = chatGui.getUserInput();
-                    } while (answer == null || answer.trim().isEmpty() || answer.contains(" "));
-                    username = answer.trim();
+                    } while (answer == null);
+                    String usernameInput = answer.trim();
+
+                    while (usernameInput.contains(" ") || usernameInput.isEmpty()) {
+                        print("Whitespaces or an empty Username are not allowed!");
+                        print("Enter new username:");
+                        do
+                        {
+                            usernameInput = chatGui.getUserInput();
+                        } while (usernameInput == null);
+                    }
+
+                    username = usernameInput;
                 }
             }
 
             print("Choose a password:");
-            do {
+            do
+            {
                 answer = chatGui.getUserInput();
-            } while (answer == null || answer.trim().isEmpty() || answer.contains(" ") || answer.trim().length() < 6);
+            } while (answer == null);
 
-            clientMessageQueue.add("signUp " + serverID + " " + username + " " + answer.trim());
+            answer = answer.trim();
+
+            while (answer.contains(" ") || answer.length() < 6) {
+                print("Choose a different password!");
+
+                do
+                {
+                    answer = chatGui.getUserInput();
+                } while (answer == null);
+
+                answer = answer.trim();
+            }
+
+            clientMessageQueue.add("signUp " + serverID + " " + username + " " + answer);
         } else {
             if (!useUnParam) {
                 print("Enter your username:");
-                do {
+                do
+                {
                     answer = chatGui.getUserInput();
-                } while (answer == null || answer.trim().isEmpty() || answer.contains(" "));
-                username = answer.trim();
+                } while (answer == null);
+
+                answer = answer.trim();
+
+                while (answer.contains(" ") || answer.isEmpty()) {
+                    print("Whitespaces or an empty username are not allowed!");
+                    print("Enter your username:");
+                    do
+                    {
+                        answer = chatGui.getUserInput();
+                    } while (answer == null);
+
+                    answer = answer.trim();
+                }
+
+                username = answer;
             }
 
             print("Enter your password:");
-            do {
+            do
+            {
                 answer = chatGui.getUserInput();
-            } while (answer == null || answer.trim().isEmpty() || answer.contains(" "));
+            } while (answer == null);
 
-            clientMessageQueue.add("logIn " + serverID + " " + username + " " + answer.trim());
+            answer = answer.trim();
+
+            while (answer.contains(" ") || answer.isEmpty()) {
+                print("Whitespaces or an empty password are not allowed!");
+                print("Enter your password:");
+                do
+                {
+                    answer = chatGui.getUserInput();
+                } while (answer == null);
+
+                answer = answer.trim();
+            }
+
+            clientMessageQueue.add("logIn " + serverID + " " + username + " " + answer);
         }
 
         sendMessage();
