@@ -6,7 +6,6 @@
  * @author Alexander Maggraf
  */
 
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class Server {
@@ -185,6 +184,22 @@ public class Server {
                     }
                     Message response = new Message("games", gamesList.toArray(new String[0]));
                     sendMessageQueue.add(response.toString());
+                }
+                case "listLobbyPlayers" -> {
+                    for(Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            Integer[] players = lobby.getPlayers();
+                            List<String> playerList = new ArrayList<>();
+                            playerList.add(message.getID() + "");
+
+                            for (int id : players) {
+                                playerList.add(DatabaseHelper.getPlayerName(id));
+                            }
+
+                            Message response = new Message("lobbyPlayers", playerList.toArray(new String[0]));
+                            sendMessageQueue.add(response.toString());
+                        }
+                    }
                 }
                 case "createLobby" -> {
                     String lobbyName = "Lobby_von_" + DatabaseHelper.getPlayerName(message.getID());

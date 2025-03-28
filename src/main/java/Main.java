@@ -104,6 +104,12 @@ public class Main {
                         print(game);
                     }
                 }
+                case "lobbyPlayers" -> {
+                    print("Players in Lobby: " + lobbyName);
+                    for(int i = 1; i < message.getParams().length; i++){
+                        print(message.getParams()[i]);
+                    }
+                }
                 case "lobbyJoined" -> {
                     lobbyName = message.getParams()[1];
                     messageType = "chatLobby";
@@ -241,6 +247,20 @@ public class Main {
                     if (splitClientMessage.length == 1) {
                         if (inLobby) {
                             message = new Message("leaveLobby", new String[] {serverID + "", lobbyName});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[] {serverID + "", username, clientMessage});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/listPlayers" -> {
+                    Message message;
+                    if (splitClientMessage.length == 1) {
+                        if (inLobby) {
+                            message = new Message("listLobbyPlayers", new String[] {serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
                         } else {
                             print("You're not in a lobby");
@@ -478,7 +498,7 @@ public class Main {
      * This method connects the client to the server, handles the login/ sign up process and the continuously
      * handles the communication between users and the server.
      *
-     * @param args Nothing yet
+     * @param args Either server port or client ip port username depending on what class you want to start
      */
     public static void main(String[] args) {
 
