@@ -194,6 +194,8 @@ public class Server {
                     lobbyList.add(newLobby);
                     gameList.add(game);
                     lobbyGameMap.put(newLobby, game);
+                    Message response = new Message("lobbyJoined", new String[]{message.getID() + "", lobbyName});
+                    sendMessageQueue.add(response.toString());
                 }
                 case "joinLobby" -> {
                     Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
