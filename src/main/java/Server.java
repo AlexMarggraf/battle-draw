@@ -95,7 +95,7 @@ public class Server {
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
                 }
-                case "chatAll" -> sendMessageQueue.add(message.toString());
+                case "chatAll", "chatLobby" -> sendMessageQueue.add(message.toString());
                 case "chatTo" -> {
                     String recipientUsername = message.getParams()[2];
                     if (message.getParams()[1].equals(message.getParams()[2])) {
@@ -201,6 +201,7 @@ public class Server {
                     Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
                     for(Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.addPlayer(message.getID());
                             response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});
                         }
                     }
@@ -223,6 +224,17 @@ public class Server {
                     for (ServerThread st : serverThreadList) {
                         if (st.getId() != message.getID()) {
                             sendMessage(message.toString(), st.getId());
+                        }
+                    }
+                }
+                case "chatLobby" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[2])) {
+                            Integer[] playerId = lobby.getPlayers();
+                            for (Integer id : playerId) {
+                                System.out.println("send lobby msg");
+                                sendMessage(message.toString(), id);
+                            }
                         }
                     }
                 }

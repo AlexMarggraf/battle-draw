@@ -3,7 +3,7 @@ public class Game {
     private String lobbyName;
 
     public Game(String lobbyName) {
-        this.status = "notStarted";
+        this.status = "open";
         this.lobbyName = lobbyName;
     }
 

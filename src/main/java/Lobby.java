@@ -1,5 +1,4 @@
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class Lobby {
     private String lobbyName;
@@ -15,8 +14,8 @@ public class Lobby {
         return lobbyName;
     }
 
-    public ArrayList<Integer> getPlayers() {
-        return players;
+    public Integer[] getPlayers() {
+        return players.toArray(new Integer[0]);
     }
 
     public void addPlayer(Integer playerId) {

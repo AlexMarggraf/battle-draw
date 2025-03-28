@@ -18,7 +18,7 @@ public class Message {
      */
     public Message(String type, String[] params) {
         switch (type) {
-            case "chatTo" -> {
+            case "chatTo", "chatLobby" -> {
                 if(params.length != 4) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 4 parameters.");
                 } else if (params[1] == null) {
@@ -189,7 +189,7 @@ public class Message {
         String type = content[0];
 
         switch (type) {
-            case "chatTo" -> {
+            case "chatTo", "chatLobby" -> {
                 if (content.length < 5) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 4 parameters.");
                 } else if (content[2] == null) {
