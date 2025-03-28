@@ -104,6 +104,11 @@ public class Main {
                     inLobby = true;
                     print("You are in Lobby: " + message.getParams()[1]);
                 }
+                case "lobbyLeft" -> {
+                    inLobby = false;
+                    messageType = "chatAll";
+                    print("You left Lobby: " + message.getParams()[1]);
+                }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
         }
@@ -200,6 +205,20 @@ public class Main {
                             clientMessageQueue.add(message.toString());
                         } else {
                             print("You're already in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[] {serverID + "", username, clientMessage});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/leaveLobby" -> {
+                    Message message;
+                    if (splitClientMessage.length == 1) {
+                        if (inLobby) {
+                            message = new Message("leaveLobby", new String[] {serverID + "", username});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            print("You're not in a lobby");
                         }
                     } else {
                         message = new Message("chatAll", new String[] {serverID + "", username, clientMessage});

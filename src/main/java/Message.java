@@ -72,7 +72,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup" -> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup", "leaveLobby" -> {
                 if (params.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if(params[1] == null) {
@@ -264,7 +264,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup"-> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "rejectSignup", "leaveLobby" -> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {

@@ -11,6 +11,10 @@ public class Lobby {
 
     }
 
+    public boolean isEmpty() {
+        return players.isEmpty();
+    }
+
     public String getLobbyName() {
         return lobbyName;
     }

@@ -206,6 +206,17 @@ public class Server {
                     }
                     sendMessageQueue.add(response.toString());
                 }
+                case "leaveLobby" -> {
+                    for(Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.removePlayer(message.getID());
+                            if(lobby.isEmpty()) {
+                                lobbyGameMap.remove(lobby.getLobbyName());
+                                lobbyList.remove(lobby);
+                            }
+                        }
+                    }
+                }
             }
         }
     }
