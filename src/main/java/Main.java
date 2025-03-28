@@ -25,7 +25,9 @@ public class Main {
     private String username;
     private Boolean loggedIn;
     private Boolean inLobby;
-    public ChatGui chatGui;
+    private ChatGui chatGui;
+    private String lobbyName;
+    private String messageType;
 
     /**
      * This method is the constructor and initializes the queues.
@@ -39,6 +41,7 @@ public class Main {
         this.sendPing = true;
         this.loggedIn = false;
         this.inLobby = false;
+        this.messageType = "chatAll";
     }
 
     private void setUsername(String username) {
@@ -69,7 +72,8 @@ public class Main {
                     client.disconnect();
                 }
                 case "chatTo" -> print("(whisper) " + message.getParams()[1] + ": " + message.getParams()[3]);
-                case "chatAll" -> print(message.getParams()[1] + ": " + message.getParams()[2]);
+                case "chatAll" -> print("(All) " + message.getParams()[1] + ": " + message.getParams()[2]);
+                case "chatLobby" -> print("(Lobby) " + message.getParams()[1] + ": " + message.getParams()[3]);
                 case "acceptLogin", "acceptSignup" -> {
                     username = message.getParams()[1];
                     serverID = message.getID();
@@ -101,6 +105,8 @@ public class Main {
                     }
                 }
                 case "lobbyJoined" -> {
+                    lobbyName = message.getParams()[1];
+                    messageType = "chatLobby";
                     inLobby = true;
                     print("You are in Lobby: " + message.getParams()[1]);
                 }
@@ -146,7 +152,11 @@ public class Main {
                         String username = splitClientMessage[1];
                         message = new Message("changeUsername", new String[]{serverID + "", username});
                     } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                        }
                     }
                     clientMessageQueue.add(message.toString());
                 }
@@ -161,8 +171,11 @@ public class Main {
 
                         message = new Message("chatTo", new String[]{serverID + "", username, splitClientMessage[1], msgBuilder.toString()});
                     } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                    }
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                        }                    }
                     clientMessageQueue.add(message.toString());
                 }
                 case "/online" -> {
@@ -170,8 +183,11 @@ public class Main {
                     if (splitClientMessage.length == 1) {
                         message = new Message("whoOnline", new String[]{serverID + ""});
                     } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                    }
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                        }                    }
                     clientMessageQueue.add(message.toString());
                 }
                 case "/games" -> {
@@ -179,8 +195,11 @@ public class Main {
                     if (splitClientMessage.length == 1) {
                         message = new Message("whatGames", new String[]{serverID + ""});
                     } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                    }
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                        }                    }
                     clientMessageQueue.add(message.toString());
                 }
                 case "/joinLobby" -> {
@@ -193,8 +212,11 @@ public class Main {
                                 print("You're already in a lobby");
                             }
                         } else {
-                            message = new Message("chatAll", new String[] {serverID + "", username, clientMessage});
-                            clientMessageQueue.add(message.toString());
+                            if (messageType.equals("chatAll")) {
+                                message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                            } else {
+                                message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                            }                            clientMessageQueue.add(message.toString());
                         }
                 }
                 case "/createLobby" -> {
@@ -207,8 +229,11 @@ public class Main {
                             print("You're already in a lobby");
                         }
                     } else {
-                        message = new Message("chatAll", new String[] {serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                        }                        clientMessageQueue.add(message.toString());
                     }
                 }
                 case "/leaveLobby" -> {
@@ -226,7 +251,12 @@ public class Main {
                     }
                 }
                 default -> {
-                    Message message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
+                    Message message;
+                    if (messageType.equals("chatAll")) {
+                        message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                    } else {
+                        message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                    }
                     clientMessageQueue.add(message.toString());
                 }
             }
