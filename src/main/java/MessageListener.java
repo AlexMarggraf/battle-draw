@@ -40,10 +40,8 @@ public class MessageListener implements Runnable {
         try {
             while (true) {
                 message = MessageReader.readLine();
-                if(message != null) {
-                    if (!message.isEmpty()) {
-                        messageQueue.add(message);
-                    }
+                if (message != null && !message.isEmpty()) {
+                    messageQueue.add(message);
                 }
             }
         } catch (IOException ioException) {
