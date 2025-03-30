@@ -1,8 +1,10 @@
+package gui;
+
 import javafx.application.Application;
 
-public class ChatGuiWrapper {
+public class GUIAppWrapper {
     public static void main(String[] args) {
-        Application.launch(ChatGui.class, args);
+        Application.launch(GUIApp.class, args);
     }
 }
 

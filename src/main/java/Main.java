@@ -11,7 +11,9 @@ import java.util.*;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import gui.GUIApp;
 import javafx.application.Application;
+import javafx.application.Platform;
 
 public class Main {
 
@@ -25,7 +27,7 @@ public class Main {
     private String username;
     private Boolean loggedIn;
     private Boolean inLobby;
-    private ChatGui chatGui;
+    private GUIApp guiApp;
     private String lobbyName;
     private String messageType;
 
@@ -139,14 +141,14 @@ public class Main {
     }
 
     public void print(String message) {
-        chatGui.queuePrintMessage(message);
+        guiApp.queuePrintMessage(message);
     }
 
     /**
      * This method retrieves all unhandled user input and adds it to the client message queue.
      */
     public void handleClientMessage() {
-        String clientMessage = chatGui.getUserInput();
+        String clientMessage = guiApp.getUserInput();
 
         while (clientMessage != null) {
             String[] splitClientMessage = clientMessage.split("\\s+");
@@ -281,7 +283,7 @@ public class Main {
                 }
             }
 
-            clientMessage = chatGui.getUserInput();
+            clientMessage = guiApp.getUserInput();
         }
     }
 
@@ -340,7 +342,7 @@ public class Main {
             print("Do you want to use " + username + " as your username? (y/n)");
             do
             {
-                answer = chatGui.getUserInput();
+                answer = guiApp.getUserInput();
             } while (answer == null);
 
             while (!(answer.equals("y") || answer.equals("n"))) {
@@ -348,7 +350,7 @@ public class Main {
 
                 do
                 {
-                    answer = chatGui.getUserInput();
+                    answer = guiApp.getUserInput();
                 } while (answer == null);
             }
 
@@ -360,14 +362,14 @@ public class Main {
         print("Do you want to sign up or log in? (su/li)");
 
         while (answer == null) {
-            answer = chatGui.getUserInput();
+            answer = guiApp.getUserInput();
         }
 
         while (!(answer.equals("su") || answer.equals("li"))) {
             print("Answer with 'su ' or 'li'");
             do
             {
-                answer = chatGui.getUserInput();
+                answer = guiApp.getUserInput();
             } while (answer == null);
         }
 
@@ -379,7 +381,7 @@ public class Main {
 
                 do
                 {
-                    answer = chatGui.getUserInput();
+                    answer = guiApp.getUserInput();
                 } while (answer == null);
 
                 while (!(answer.equals("y") || answer.equals("n"))) {
@@ -387,7 +389,7 @@ public class Main {
 
                     do
                     {
-                        answer = chatGui.getUserInput();
+                        answer = guiApp.getUserInput();
                     } while (answer == null);
                 }
 
@@ -398,7 +400,7 @@ public class Main {
 
                     do
                     {
-                        answer = chatGui.getUserInput();
+                        answer = guiApp.getUserInput();
                     } while (answer == null);
                     String usernameInput = answer.trim();
 
@@ -407,7 +409,7 @@ public class Main {
                         print("Enter new username:");
                         do
                         {
-                            usernameInput = chatGui.getUserInput();
+                            usernameInput = guiApp.getUserInput();
                         } while (usernameInput == null);
                     }
 
@@ -418,7 +420,7 @@ public class Main {
             print("Choose a password:");
             do
             {
-                answer = chatGui.getUserInput();
+                answer = guiApp.getUserInput();
             } while (answer == null);
 
             answer = answer.trim();
@@ -428,7 +430,7 @@ public class Main {
 
                 do
                 {
-                    answer = chatGui.getUserInput();
+                    answer = guiApp.getUserInput();
                 } while (answer == null);
 
                 answer = answer.trim();
@@ -440,7 +442,7 @@ public class Main {
                 print("Enter your username:");
                 do
                 {
-                    answer = chatGui.getUserInput();
+                    answer = guiApp.getUserInput();
                 } while (answer == null);
 
                 answer = answer.trim();
@@ -450,7 +452,7 @@ public class Main {
                     print("Enter your username:");
                     do
                     {
-                        answer = chatGui.getUserInput();
+                        answer = guiApp.getUserInput();
                     } while (answer == null);
 
                     answer = answer.trim();
@@ -462,7 +464,7 @@ public class Main {
             print("Enter your password:");
             do
             {
-                answer = chatGui.getUserInput();
+                answer = guiApp.getUserInput();
             } while (answer == null);
 
             answer = answer.trim();
@@ -472,7 +474,7 @@ public class Main {
                 print("Enter your password:");
                 do
                 {
-                    answer = chatGui.getUserInput();
+                    answer = guiApp.getUserInput();
                 } while (answer == null);
 
                 answer = answer.trim();
@@ -489,8 +491,8 @@ public class Main {
     }
 
     private void setChatGui() {
-        while(this.chatGui == null) {
-            this.chatGui = ChatGui.getChatGui();
+        while(this.guiApp == null) {
+            this.guiApp = GUIApp.getGuiApp();
         }
     }
 
@@ -518,7 +520,29 @@ public class Main {
             main.setUsername(args2[2]);
 
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(() -> Application.launch(ChatGui.class, args));
+            executor.execute(() -> Application.launch(GUIApp.class, args));
+
+            while (GUIApp.getGuiApp() == null) {
+                try {
+                    Thread.sleep(50);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            Platform.runLater(() ->{
+                GUIApp.getGuiApp().showHomeView();
+            });
+            /*
+            //bsp code
+            HashMap<String, Integer> map = new HashMap<>();
+            map.put("Bob", 230);
+            map.put("Alice", 150);
+            map.put("Charlie", 120);
+            Platform.runLater(() ->{
+                GUIApp.getGuiApp().setPlayers(map);
+            });
+            */
 
             main.setChatGui();
             main.initClient(args2[0], Integer.parseInt(args2[1]));
