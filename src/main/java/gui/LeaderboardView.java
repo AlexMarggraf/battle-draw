@@ -11,13 +11,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
-
-import static gui.GUIApp.*;
+import java.util.stream.Collectors;
 
 
 public class LeaderboardView {
@@ -31,11 +31,11 @@ public class LeaderboardView {
      * Initializes the leaderboard display, development buttons and ready button.
      */
     public LeaderboardView() {
-        HBox hboxScene = createDevButtons();
+        setReadyFalse();
         Button rdy = createRdyBtn();
         updateLeaderboard();
 
-        view = new VBox(30, new Label("Leaderboard"), hboxScene, vboxLeaderboard, rdy);
+        view = new VBox(30, new Label("Leaderboard"), vboxLeaderboard, rdy);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -48,11 +48,23 @@ public class LeaderboardView {
     static void updateLeaderboard() {
         Map<String, Integer> players = GUIApp.getPlayers();
         vboxLeaderboard.getChildren().clear();
+
+        HashMap<String, Integer> playersSorted = players.entrySet().stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(
+                        Map.Entry::getKey,
+                        Map.Entry::getValue,
+                        (e1, e2) -> e1,
+                        LinkedHashMap::new
+                ));
+
         int rank = 1;
-        for (Map.Entry<String, Integer> entry : players.entrySet()) {
-            vboxLeaderboard.getChildren().add(new Text(rank + ". " + entry.getKey() + " with " + entry.getValue() + " points"));
+        for (Map.Entry<String, Integer> player : playersSorted.entrySet()) {
+            String leaderboardEntry = String.format("%d. %s with %d points", rank, player.getKey(), player.getValue());
+            vboxLeaderboard.getChildren().add(new Text(leaderboardEntry));
             rank++;
         }
+
     }
 
     /**

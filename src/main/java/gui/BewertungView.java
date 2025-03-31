@@ -19,8 +19,6 @@ import javafx.scene.layout.VBox;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 
-import static gui.GUIApp.createDevButtons;
-
 
 public class BewertungView {
 
@@ -37,12 +35,11 @@ public class BewertungView {
      */
     public BewertungView() throws IOException {
         ComboBox<Integer> voteBox = createVoteBox();
-        HBox hboxScene = createDevButtons();
         Button nextBtn = createNextBtn();
 
         Label label = new Label("Bewertung");
 
-        HBox controls = new HBox(10, label, hboxScene);
+        HBox controls = new HBox(10, label);
 
         VBox view2 = new VBox(10, controls, imageView);
         view = new VBox(10, view2, voteBox);

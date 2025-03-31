@@ -1,4 +1,5 @@
-/** not finished and not used for now
+/**
+ * not finished and not used for now
  *
  * @author Simon Zeugin
  */
@@ -12,8 +13,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import static gui.GUIApp.createDevButtons;
 
 public class LoginSignupView {
 
@@ -29,10 +28,9 @@ public class LoginSignupView {
         Button loginBtn = createLoginButton(username, password);
         Button signupBtn = createSignUpButton(username, password);
 
-        HBox hboxScene = createDevButtons();
         HBox hbox = new HBox(10, username, password, loginBtn, signupBtn);
 
-        view = new VBox(20, new Label("LogIn/Signup"), hboxScene, hbox);
+        view = new VBox(20, new Label("LogIn/Signup"), hbox);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
 

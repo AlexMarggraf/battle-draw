@@ -14,12 +14,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import static gui.GUIApp.createDevButtons;
 import static gui.GUIApp.print;
 
 public class HomeView {
@@ -34,8 +32,7 @@ public class HomeView {
         Button joinButton = createJoinButton();
         Button createLobbyButton = createLobbyButton();
         Button tutorialButton = createTutorialButton();
-        HBox hboxScene = createDevButtons();
-        view = new VBox(20, new Label("Willkommen bei Battle Draw!"), new Label("Home"), hboxScene, createLobbyButton, joinButton, tutorialButton);
+        view = new VBox(20, new Label("Willkommen bei Battle Draw!"), new Label("Home"), createLobbyButton, joinButton, tutorialButton);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -50,7 +47,6 @@ public class HomeView {
         Button btn = new Button("Create Lobby");
         btn.setOnAction(event -> {
             GUIApp.addUserInputQueue("/createLobby");
-            GUIApp.showLobbyView();
         });
         return btn;
     }

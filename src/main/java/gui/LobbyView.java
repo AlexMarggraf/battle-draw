@@ -13,7 +13,6 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
@@ -31,8 +30,8 @@ public class LobbyView {
      */
     public LobbyView() {
         this.vboxUsers = new VBox(10);
-        HBox devBtns = GUIApp.createDevButtons();
         Button readyBtn = createReadyButton();
+        Button leaderBtn = createLeaderButton();
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), e -> createLobbyListing())
@@ -40,9 +39,16 @@ public class LobbyView {
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
 
-        view = new VBox(20, new Label("Lobby"), devBtns, vboxUsers, readyBtn);
+
+        view = new VBox(20, new Label("Lobby"), vboxUsers);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
+
+        if (GUIApp.getLobbyLeader()) {
+            view.getChildren().add(leaderBtn);
+        } else {
+            view.getChildren().add(readyBtn);
+        }
     }
 
     /**
@@ -66,6 +72,14 @@ public class LobbyView {
      */
     public Button createReadyButton() {
         Button btn = new Button("Ready?");
+        btn.setOnAction(event -> {
+            ready = true;
+        });
+        return btn;
+    }
+
+    public Button createLeaderButton() {
+        Button btn = new Button("Force start");
         btn.setOnAction(event -> {
             ready = true;
         });

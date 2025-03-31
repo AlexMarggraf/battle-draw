@@ -9,31 +9,29 @@ package gui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.util.Duration;
-import javafx.scene.image.WritableImage;
-import javafx.embed.swing.SwingFXUtils;
 
 import java.awt.image.BufferedImage;
 import java.util.Optional;
-
-import static gui.GUIApp.createDevButtons;
 
 
 public class GameView {
 
     private final VBox view;
     private static Canvas canvas;
-    private static final int canvasHeight = 550;
-    private static final int canvasWidth = 550;
+    private static final int canvasHeight = 500;
+    private static final int canvasWidth = 500;
     private Color selectedColor = Color.BLACK;
     private int selectedLineWidth = 8;
     private double lastX;
@@ -46,10 +44,10 @@ public class GameView {
      * Initializes the canvas, tools and countdown timer.
      */
     public GameView() {
+
         canvas = new Canvas(canvasWidth, canvasHeight);
         gc = canvas.getGraphicsContext2D();
 
-        HBox hboxScene = createDevButtons();
         TextField countdownField = createCountdown(5);
         Label themeLabel = createThemeLabel();
 
@@ -62,7 +60,7 @@ public class GameView {
         ComboBox<Integer> widthCombo = createWidthCombo();
         Button clearBtn = createClearButton();
 
-        HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn, hboxScene);
+        HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn);
         controls.setTranslateY(-15);
         controls.setTranslateX(-15);
         view = new VBox(20, controls, countdownField, themeLabel, canvas);
@@ -222,10 +220,11 @@ public class GameView {
         return bufferedImage;
     }
 
-    private Label createThemeLabel(){
+    private Label createThemeLabel() {
         Label label = new Label("Thema: " + GUIApp.getTheme());
         return label;
     }
+
     public static int getCanvasHeight() {
         return canvasHeight;
     }

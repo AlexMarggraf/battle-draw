@@ -72,12 +72,15 @@ public class GUIApp extends Application {
     /**
      * Initializes the root layout of the application.
      * Sets up the basic BorderPane structure with chat panel on the right.
+     * Optionally with devButtons.
      */
     private void initializeRootLayout() {
         rootLayout = new BorderPane();
 
         VBox chatPanel = createChatPanel();
         rootLayout.setRight(chatPanel);
+        HBox devButtons = createDevButtons();
+        rootLayout.setTop(devButtons);
     }
 
     /**
@@ -147,7 +150,7 @@ public class GUIApp extends Application {
         Button endingBtn = GUIApp.createEndingButton();
         Button boardBtn = GUIApp.createLeaderboardButton();
 
-        return new HBox(10, new Label("Developing Buttons: "), homeButton, lobbyBtn, gameButton, bewertungButton, boardBtn, endingBtn);
+        return new HBox(10, new Label("DevButtons: "), homeButton, lobbyBtn, gameButton, bewertungButton, boardBtn, endingBtn);
     }
 
     //HomeView Methoden
@@ -158,6 +161,7 @@ public class GUIApp extends Application {
     }
 
     public static void showLobbyView() {
+        LobbyView.setReadyFalse();
         Platform.runLater(() ->
                 rootLayout.setCenter(new LobbyView().getView())
         );
@@ -176,6 +180,7 @@ public class GUIApp extends Application {
 
     // BewertungView Methoden
     public static void showBewertungView() {
+        BewertungView.setVoteZero();
         Platform.runLater(() -> {
             try {
                 rootLayout.setCenter(new BewertungView().getView());
@@ -194,24 +199,17 @@ public class GUIApp extends Application {
     }
 
     public static void setLobbyLeader(Boolean bool) {
-        lobbyLeader = true;
+        lobbyLeader = bool;
     }
 
     public static Boolean getNextIndicatorBewertung() {
         return BewertungView.getNextIndicator();
     }
 
-    public static void setNextIndicatorBewertung(Boolean bool) {
-        BewertungView.setNextIndicator(bool);
-    }
-
-    public static void setVoteZero() {
-        BewertungView.setVoteZero();
-    }
-
     //LeaderboardView Methoden
 
     public static void showLeaderboardView() {
+        LeaderboardView.setReadyFalse();
         Platform.runLater(() ->
                 rootLayout.setCenter(new LeaderboardView().getView())
         );
@@ -232,6 +230,7 @@ public class GUIApp extends Application {
     //EndingView Methoden
 
     public static void showEndingView() {
+        EndingView.setAgainEnding(false);
         Platform.runLater(() ->
                 rootLayout.setCenter(new EndingView().getView())
         );
@@ -239,10 +238,6 @@ public class GUIApp extends Application {
 
     public static boolean getAgainEnding() {
         return EndingView.getAgainEnding();
-    }
-
-    public void setAgainEnding(boolean bool) {
-        EndingView.setAgainEnding(bool);
     }
 
     //LoginSignUpView Methoden
@@ -324,6 +319,19 @@ public class GUIApp extends Application {
         return players;
     }
 
+    public static void addPlayer(String username, Integer points) {
+        players.put(username, points);
+    }
+
+    public static void removePlayer(String username) {
+        players.remove(username);
+    }
+
+    public static void addPointsPlayer(String username, Integer points) {
+        players.merge(username, points, Integer::sum);
+    }
+
+
     public static void clearPlayers() {
         players.clear();
     }
@@ -335,6 +343,7 @@ public class GUIApp extends Application {
     public boolean getReadyLobby() {
         return LobbyView.getReadyLobby();
     }
+
     public String getUserInput() {
         return userInputQueue.poll();
     }
