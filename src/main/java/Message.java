@@ -173,6 +173,21 @@ public class Message {
                     }
                 }
             }
+            case "playerJoined" -> {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameter.");
+                } else if(params[2] == null) {
+                    throw new IllegalArgumentException("The username of the new player has to be a string");
+                }
+                try{
+                    Integer.parseInt(params[0]);
+                    Integer.parseInt(params[2]);
+                    this.type = type;
+                    this.params = params;
+                } catch (NumberFormatException NFException) {
+                    throw new IllegalArgumentException("The id and id of the new player have to be integers");
+                }
+            }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
@@ -372,6 +387,21 @@ public class Message {
                     } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("The id has to be an integer");
                     }
+                }
+            }
+            case "playerJoined" -> {
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (content[3] == null) {
+                    throw new IllegalArgumentException("The username of the new player has to be a string");
+                }
+                try {
+                    Integer.parseInt(content[1]);
+                    Integer.parseInt(content[3]);
+                    this.type = type;
+                    this.params = new String[]{content[1], content[2], content[3]};
+                } catch (NumberFormatException NFException) {
+                    throw new IllegalArgumentException("The id and the id of the new player have to be integers");
                 }
             }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
