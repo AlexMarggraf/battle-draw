@@ -123,6 +123,13 @@ public class Main {
                     messageType = "chatAll";
                     print("You left Lobby: " + message.getParams()[1]);
                 }
+                case "playerJoined" -> {
+                    if(message.getParams()[0].equals(message.getParams()[2])) {
+                        GUIApp.showLobbyView();
+                    } else {
+                        print(message.getParams()[1] + " has joined the lobby");
+                    }
+                }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
         }
