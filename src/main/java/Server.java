@@ -218,6 +218,11 @@ public class Server {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobby.addPlayer(message.getID());
                             response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});
+                            Integer[] players = lobby.getPlayers();
+                            for (int id : players) {
+                                Message responseToLobby = new Message("playerJoined", new String[]{id + "", DatabaseHelper.getPlayerName(message.getID()), message.getID() + ""});
+                                sendMessageQueue.add(responseToLobby.toString());
+                            }
                         }
                     }
                     sendMessageQueue.add(response.toString());
