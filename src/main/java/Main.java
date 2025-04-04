@@ -9,6 +9,7 @@
 
 import gui.BewertungView;
 import gui.GUIApp;
+import gui.GameView;
 import javafx.application.Application;
 
 import java.awt.image.BufferedImage;
@@ -174,6 +175,10 @@ public class Main {
                         Message response = new Message("startDrawing", new String[]{serverID + "", lobbyName});
                         clientMessageQueue.add(response.toString());
                     }
+                }
+                case "image" -> {
+                    BufferedImage image = decodeImage(message.getParams()[2]);
+                    BewertungView.setImage(image);
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
@@ -351,6 +356,7 @@ public class Main {
                     if (splitClientMessage.length == 1) {
                         if (inLobby) {
                             print("Your picture will be uploaded");
+                            sendImage(GameView.getCanvasAsBufferedImage());
                             message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
                         } else {
