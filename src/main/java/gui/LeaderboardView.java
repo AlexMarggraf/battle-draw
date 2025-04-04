@@ -35,7 +35,10 @@ public class LeaderboardView {
         Button rdy = createRdyBtn();
         updateLeaderboard();
 
-        view = new VBox(30, new Label("Leaderboard"), vboxLeaderboard, rdy);
+        view = new VBox(30, new Label("Leaderboard"), vboxLeaderboard);
+        if(GUIApp.getLobbyLeader()){
+            view.getChildren().add(rdy);
+        }
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -74,9 +77,11 @@ public class LeaderboardView {
      * @return the configured Button instance for indicating readiness
      */
     public static Button createRdyBtn() {
-        Button btn = new Button("Ready for next round?");
+        Button btn = new Button("Force next round (leader)");
         btn.setOnAction(event -> {
             ready = true;
+            GUIApp.addUserInputQueue("/nextRound");
+
         });
         return btn;
     }

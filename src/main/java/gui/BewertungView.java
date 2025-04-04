@@ -34,18 +34,19 @@ public class BewertungView {
      * @throws IOException if there's an error loading image resources
      */
     public BewertungView() throws IOException {
+        setVoteZero();
+        setNextFalse();
+
         ComboBox<Integer> voteBox = createVoteBox();
         Button nextBtn = createNextBtn();
+        Button sendVoteBtn = createSendVoteButton();
 
         Label label = new Label("Bewertung");
 
         HBox controls = new HBox(10, label);
 
         VBox view2 = new VBox(10, controls, imageView);
-        view = new VBox(10, view2, voteBox);
-        if (GUIApp.getLobbyLeader()) {
-            view.getChildren().add(nextBtn);
-        }
+        view = new VBox(10, view2, voteBox, sendVoteBtn);
         view.setPadding(new javafx.geometry.Insets(50));
     }
 
@@ -84,7 +85,15 @@ public class BewertungView {
      */
     private Button createNextBtn() {
         Button btn = new Button("Next");
-        setNextIndicator(true);
+        next = true;
+        return btn;
+    }
+
+    private Button createSendVoteButton(){
+        Button btn = new Button("send Vote");
+        btn.setOnAction( e -> {
+            GUIApp.addUserInputQueue("/sendVote");
+        });
         return btn;
     }
 
@@ -96,8 +105,8 @@ public class BewertungView {
         vote = 0;
     }
 
-    public static void setNextIndicator(Boolean bool) {
-        next = bool;
+    public static void setNextFalse() {
+        next = false;
     }
 
     public static Boolean getNextIndicator() {

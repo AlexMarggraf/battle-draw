@@ -46,9 +46,10 @@ public class LobbyView {
 
         if (GUIApp.getLobbyLeader()) {
             view.getChildren().add(leaderBtn);
-        } else {
+        } /* else {
             view.getChildren().add(readyBtn);
         }
+        */
     }
 
     /**
@@ -82,6 +83,7 @@ public class LobbyView {
         Button btn = new Button("Force start");
         btn.setOnAction(event -> {
             ready = true;
+            GUIApp.addUserInputQueue("/startGame");
         });
         return btn;
     }
