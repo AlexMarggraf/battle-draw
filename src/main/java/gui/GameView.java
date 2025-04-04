@@ -9,6 +9,7 @@ package gui;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -24,6 +25,8 @@ import javafx.util.Duration;
 
 import java.awt.image.BufferedImage;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
 
 
 public class GameView {
@@ -220,10 +223,18 @@ public class GameView {
             return null;
         }
 
-        try {
+        FutureTask<BufferedImage> task = new FutureTask<>(() -> {
             WritableImage snapshot = canvas.snapshot(null, null);
             return SwingFXUtils.fromFXImage(snapshot, null);
-        } catch (Exception e) {
+        });
+
+        Platform.runLater(task);
+
+        try {
+            //WritableImage snapshot = canvas.snapshot(null, null);
+            //return SwingFXUtils.fromFXImage(snapshot, null);
+            return task.get();
+        } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
             return null;
         }
