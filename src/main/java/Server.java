@@ -298,6 +298,8 @@ public class Server {
                                     lobby.setPlayerVotingOn();
                                     for (int id : players) {
                                         Message response2 = new Message("votingStarts", new String[]{id + "", numberOfRoundsVotes + ""});
+                                        Message response3 = new Message("image", new String[]{id + "", lobby.getLobbyName(), lobby.getImageOfPlayer()});
+                                        sendMessageQueue.add(response3.toString());
                                         sendMessageQueue.add(response2.toString());
                                     }
                                     lobby.resetHowManyPlayersAreReady();
@@ -331,6 +333,13 @@ public class Server {
                                     sendMessageQueue.add(response.toString());
                                 }
                             }
+                        }
+                    }
+                }
+                case "image" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.setImageOfPlayer(message.getID(), message.getParams()[2]);
                         }
                     }
                 }
