@@ -188,6 +188,20 @@ public class Message {
                     throw new IllegalArgumentException("The id and id of the new player have to be integers");
                 }
             }
+            case "image" -> {
+                if (params.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if(params[1] == null) {
+                    throw new IllegalArgumentException("The image has to be a string");
+                }
+                try {
+                    Integer.parseInt(params[0]);
+                    this.type = type;
+                    this.params = params;
+                } catch (NumberFormatException NFException) {
+                    throw new IllegalArgumentException("The id has to be an integer");
+                }
+            }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
@@ -402,6 +416,20 @@ public class Message {
                     this.params = new String[]{content[1], content[2], content[3]};
                 } catch (NumberFormatException NFException) {
                     throw new IllegalArgumentException("The id and the id of the new player have to be integers");
+                }
+            }
+            case "image" -> {
+                if (content.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The image has to be a string");
+                }
+                try {
+                    Integer.parseInt(content[1]);
+                    this.type = type;
+                    this.params = new String[]{content[1], content[2]};
+                } catch (NumberFormatException NFException) {
+                    throw new IllegalArgumentException("The id has to be an integer");
                 }
             }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);

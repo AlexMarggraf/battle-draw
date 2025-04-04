@@ -10,11 +10,17 @@
 import gui.GUIApp;
 import javafx.application.Application;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.imageio.ImageIO;
 
 public class Main {
 
@@ -493,6 +499,41 @@ public class Main {
     private void setChatGui() {
         while (this.guiApp == null) {
             this.guiApp = GUIApp.getGuiApp();
+        }
+    }
+
+    /**
+     * This method encodes a buffered image into a base 64 string and sends it to the server.
+     *
+     * @param image The image to be encoded
+     */
+    public void sendImage(BufferedImage image) {
+        try {
+            ByteArrayOutputStream stream = new ByteArrayOutputStream();
+            ImageIO.write(image, "png", stream);
+            byte[] imageBytes = stream.toByteArray();
+
+            String encodedImage = Base64.getEncoder().encodeToString(imageBytes);
+            clientMessageQueue.add("image " + serverID + " " + encodedImage);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * This method decodes a base 64 String into a buffered image.
+     *
+     * @param encodedImage The base 64 String of the encoded image
+     * @return Returns the decoded image as a buffered image
+     */
+    public BufferedImage decodeImage(String encodedImage) {
+        try {
+            byte[] imageBytes = Base64.getDecoder().decode(encodedImage);
+            ByteArrayInputStream stream = new ByteArrayInputStream(imageBytes);
+            return ImageIO.read(stream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 
