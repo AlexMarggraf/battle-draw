@@ -500,6 +500,7 @@ public class Main {
             receiveMessage();
             handleServerMessage();
         }
+        LOGGER.info("Logged in");
     }
 
     private void setChatGui() {
