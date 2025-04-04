@@ -206,11 +206,14 @@ public class Server {
                     Lobby newLobby = new Lobby(lobbyName);
                     newLobby.addPlayer(message.getID());
                     Game game = new Game(lobbyName);
+                    game.plusOnePlayer();
                     lobbyList.add(newLobby);
                     gameList.add(game);
                     lobbyGameMap.put(newLobby, game);
                     Message response = new Message("lobbyJoined", new String[]{message.getID() + "", lobbyName});
                     sendMessageQueue.add(response.toString());
+                    Message response2 = new Message("playerJoined", new String[]{message.getID() + "", lobbyName, message.getID() + ""});
+                    sendMessageQueue.add(response2.toString());
                 }
                 case "joinLobby" -> {
                     Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
@@ -223,6 +226,7 @@ public class Server {
                                 Message responseToLobby = new Message("playerJoined", new String[]{id + "", DatabaseHelper.getPlayerName(message.getID()), message.getID() + ""});
                                 sendMessageQueue.add(responseToLobby.toString());
                             }
+                            lobbyGameMap.get(lobby).plusOnePlayer();
                         }
                     }
                     sendMessageQueue.add(response.toString());
@@ -231,11 +235,101 @@ public class Server {
                     for(Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobby.removePlayer(message.getID());
+                            lobbyGameMap.get(lobby).minusOnePlayer();
                             Message response = new Message("lobbyLeft", new String[]{message.getID() + "", lobby.getLobbyName()});
                             sendMessageQueue.add(response.toString());
                             if(lobby.isEmpty()) {
                                 lobbyGameMap.remove(lobby);
                                 lobbyList.remove(lobby);
+                            }
+                        }
+                    }
+                }
+                case "startDrawing" -> {
+                    for(Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobbyGameMap.get(lobby).setStatus("drawing");
+                            String theme = DatabaseHelper.getRandomWords(1).toString();
+                            Integer[] players = lobby.getPlayers();
+                            for (int id : players) {
+                                Message responseToLobby = new Message("drawingStarts", new String[]{id + "", theme});
+                                sendMessageQueue.add(responseToLobby.toString());
+                            }
+                            if(lobbyGameMap.get(lobby).getRoundNumber() == 0) {
+                                lobby.initialiseLeaderboard();
+                            }
+                        }
+                    }
+                }
+                case "readyToVote" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.plusOnePlayerIsReady();
+                            if (lobby.getNumberOfPlayers() == lobby.getHowManyPlayersAreReady()) {
+                                Integer[] players = lobby.getPlayers();
+                                Integer numberOfRoundsVotes = lobbyGameMap.get(lobby).getNumberOfRoundsVoted();
+                                Integer numberOfPlayers = lobby.getNumberOfPlayers();
+                                if (numberOfRoundsVotes >= numberOfPlayers) {
+                                    String lastPlayer = DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn());
+                                    lobby.addPointsToLeaderboard(lastPlayer);
+                                    Integer pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
+                                    for (int id : players) {
+                                        Message response = new Message("updatePoints", new String[]{id + "", lastPlayer, pointsOfLastPlayer + ""});
+                                        sendMessageQueue.add(response.toString());
+                                        Message response2 = new Message("showLeaderboard", new String[]{id + ""});
+                                        sendMessageQueue.add(response2.toString());
+                                    }
+                                    lobbyGameMap.get(lobby).resetNumberOfRoundsVoted();
+                                    lobby.resetHowManyPlayersAreReady();
+                                    lobbyGameMap.get(lobby).setStatus("leaderboard");
+                                } else {
+                                    if (numberOfRoundsVotes == 0) {
+                                        lobby.resetPlayersToVoteFor();
+                                        lobbyGameMap.get(lobby).setStatus("voting");
+                                    } else {
+                                        String lastPlayer = DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn());
+                                        lobby.addPointsToLeaderboard(lastPlayer);
+                                        Integer pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
+                                        for (int id : players) {
+                                            Message response = new Message("updatePoints", new String[]{id + "", lastPlayer, pointsOfLastPlayer + ""});
+                                            sendMessageQueue.add(response.toString());
+                                        }
+                                    }
+                                    lobby.setPlayerVotingOn();
+                                    for (int id : players) {
+                                        Message response2 = new Message("votingStarts", new String[]{id + "", numberOfRoundsVotes + ""});
+                                        sendMessageQueue.add(response2.toString());
+                                    }
+                                    lobby.resetHowManyPlayersAreReady();
+                                    lobbyGameMap.get(lobby).plusOneVotedRound();
+                                }
+                            }
+                        }
+                    }
+                }
+                case "sendVote" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.addToVotesOfARound(Integer.parseInt(message.getParams()[2]));
+                        }
+                    }
+                }
+                case "nextRound" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobbyGameMap.get(lobby).nextRound();
+                            Integer[] players = lobby.getPlayers();
+                            if (lobbyGameMap.get(lobby).getRoundNumber() == lobbyGameMap.get(lobby).getMaxNumberOfRounds()) {
+                                lobbyGameMap.get(lobby).setStatus("ended");
+                                for (int id : players) {
+                                     Message response = new Message("showEnding", new String[]{id + ""});
+                                     sendMessageQueue.add(response.toString());
+                                }
+                            } else {
+                                for (int id : players) {
+                                    Message response = new Message("startNextRound", new String[]{id + ""});
+                                    sendMessageQueue.add(response.toString());
+                                }
                             }
                         }
                     }
