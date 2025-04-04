@@ -87,7 +87,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby", "showLeaderboard", "showEnding", "startNextRound" -> {
                 if(params.length != 1) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -100,7 +100,7 @@ public class Message {
                     }
                 }
             }
-            case "listLobbyPlayers", "joinLobby", "lobbyJoined" -> {
+            case "listLobbyPlayers", "joinLobby", "lobbyJoined", "startDrawing", "startVoting", "readyToVote", "nextRound" -> {
                 if (params.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (params[1] == null) {
@@ -186,6 +186,67 @@ public class Message {
                     this.params = params;
                 } catch (NumberFormatException NFException) {
                     throw new IllegalArgumentException("The id and id of the new player have to be integers");
+                }
+            }
+            case "drawingStarts" -> {
+                if (params.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The theme has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "votingStarts" -> {
+                if (params.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        Integer.parseInt(params[1]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and number of voted rounds have to be integers");
+                    }
+                }
+            }
+            case "sendVote" -> {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        Integer.parseInt(params[2]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and vote have to be integers");
+                    }
+                }
+            }
+            case "updatePoints" -> {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        Integer.parseInt(params[2]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and points have to be integers");
+                    }
                 }
             }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
@@ -294,7 +355,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby", "showLeaderboard", "showEnding", "startNextRound" -> {
                 if (content.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -373,7 +434,7 @@ public class Message {
                     }
                 }
             }
-            case "joinLobby", "lobbyJoined", "listLobbyPlayers" -> {
+            case "joinLobby", "lobbyJoined", "listLobbyPlayers", "startDrawing", "startVoting", "readyToVote", "nextRound" -> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {
@@ -402,6 +463,68 @@ public class Message {
                     this.params = new String[]{content[1], content[2], content[3]};
                 } catch (NumberFormatException NFException) {
                     throw new IllegalArgumentException("The id and the id of the new player have to be integers");
+                }
+            }
+            case "drawingStarts" -> {
+                if (content.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The theme has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer");
+                    }
+                }
+            }
+            case "votingStarts" -> {
+                if (content.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+                        Integer.parseInt(content[2]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and number of voted rounds have to be integers");
+                    }
+                }
+            }
+            case "sendVote" -> {
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The username lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+                        Integer.parseInt(content[3]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2], content[3]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and vote have to be integers");
+                    }
+                }
+            }
+            case "updatePoints" -> {
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+                        Integer.parseInt(content[3]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2], content[3]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and points have to be integers");
+                    }
                 }
             }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
