@@ -189,9 +189,12 @@ public class Message {
                 }
             }
             case "image" -> {
-                if (params.length != 2) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
-                } else if(params[1] == null) {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                }
+                else if(params[2] == null) {
                     throw new IllegalArgumentException("The image has to be a string");
                 }
                 try {
@@ -419,15 +422,18 @@ public class Message {
                 }
             }
             case "image" -> {
-                if (content.length != 3) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
                 } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                }
+                else if (content[3] == null) {
                     throw new IllegalArgumentException("The image has to be a string");
                 }
                 try {
                     Integer.parseInt(content[1]);
                     this.type = type;
-                    this.params = new String[]{content[1], content[2]};
+                    this.params = new String[]{content[1], content[2], content[3]};
                 } catch (NumberFormatException NFException) {
                     throw new IllegalArgumentException("The id has to be an integer");
                 }

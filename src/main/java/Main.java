@@ -520,7 +520,7 @@ public class Main {
             byte[] imageBytes = stream.toByteArray();
 
             String encodedImage = Base64.getEncoder().encodeToString(imageBytes);
-            clientMessageQueue.add("image " + serverID + " " + encodedImage);
+            clientMessageQueue.add("image " + serverID + " " + lobbyName + " " + encodedImage);
         } catch (Exception e) {
             e.printStackTrace();
         }
