@@ -15,6 +15,7 @@ public class Lobby {
     private Integer playerVotingOn;
     private Integer votesOfARound;
     private Map<String, Integer> leaderboard;
+    private Map<Integer, String> images;
 
     public Lobby(String lobbyName) {
         this.lobbyName = lobbyName;
@@ -22,6 +23,7 @@ public class Lobby {
         this.howManyPlayersAreReady = 0;
         this.leaderboard = new HashMap<>();
         this.votesOfARound = 0;
+        this.images = new HashMap<>();
     }
 
     public boolean isEmpty() {
@@ -81,5 +83,13 @@ public class Lobby {
 
     public Integer getPointsOfAPlayer(String playerName) {
         return leaderboard.get(playerName);
+    }
+
+    public void setImageOfPlayer(Integer id, String imageAsString) {
+        images.put(id, imageAsString);
+    }
+
+    public String getImageOfPlayer() {
+        return images.get(playerVotingOn);
     }
 }
