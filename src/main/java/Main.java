@@ -15,6 +15,9 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.Configurator;
 
 public class Main {
 
@@ -46,6 +49,8 @@ public class Main {
         this.inLobby = false;
         this.messageType = "chatAll";
     }
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     private void setUsername(String username) {
         this.username = username;
@@ -133,6 +138,7 @@ public class Main {
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
+            LOGGER.info("received and handled Message {}", message.getType());
         }
     }
 
@@ -503,6 +509,7 @@ public class Main {
      * @param args Either server port or client ip port username depending on what class you want to start
      */
     public static void main(String[] args) {
+        Configurator.setRootLevel(org.apache.logging.log4j.Level.INFO);
 
         if (args[0].equals("server")) {
             String[] args2 = Arrays.copyOfRange(args, 1, args.length);
