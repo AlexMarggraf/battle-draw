@@ -44,6 +44,7 @@ public class GameView {
      * Initializes the canvas, tools and countdown timer.
      */
     public GameView() {
+        isTimeUp = false;
 
         canvas = new Canvas(canvasWidth, canvasHeight);
         gc = canvas.getGraphicsContext2D();
@@ -137,8 +138,9 @@ public class GameView {
                         countdownField.setText("Time's up!");
                         canvas.setDisable(true);
                         timeline.stop();
-                        setIsTimeUp(true);
-                    }
+                        GUIApp.addUserInputQueue("/timeIsUp");
+                        isTimeUp = true;
+                            }
                 })
         );
 
@@ -213,12 +215,20 @@ public class GameView {
     }
 
     public static BufferedImage getCanvasAsBufferedImage() {
-        WritableImage snapshot = canvas.snapshot(null, null);
+        if (canvas == null) {
+            System.err.println("Canvas is not initialized!");
+            return null;
+        }
 
-        BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
-
-        return bufferedImage;
+        try {
+            WritableImage snapshot = canvas.snapshot(null, null);
+            return SwingFXUtils.fromFXImage(snapshot, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
+
 
     private Label createThemeLabel() {
         Label label = new Label("Thema: " + GUIApp.getTheme());
