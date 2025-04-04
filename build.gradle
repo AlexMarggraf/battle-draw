@@ -19,26 +19,13 @@ java {
     }
 }
 
-//adds maven central as a maven repository
 repositories {
     mavenCentral()
 }
 
-/* The following lines are extensively documented. Please remove the documentation when you have read and understood it. */
 dependencies {
-    // EXAMPLE: LOGGING
-    /*
-    The following adds the logging framework Apache Log4J2.
-    The statements serve as an example on how to use libraries.
-    Since these are implementation dependencies, they are packed in the final jar.
-    Read the documentation at https://docs.gradle.org/current/userguide/declaring_dependencies.html to learn more
-     */
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
-
-    /*
-    This is another example - it imports the javafx-controls dependency
-     */
     implementation "org.openjfx:javafx-controls:21"
     implementation "org.openjfx:javafx-fxml:21"
     implementation "org.openjfx:javafx-base:21"
@@ -46,11 +33,6 @@ dependencies {
     implementation 'org.openjfx:javafx-swing:21'
     implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
 
-    // JUNIT
-    /*
-    The following dependency is required to perform JUnit tests, as for example HelloWorldTest.
-    Since it is a testCompile dependency, it will not be part of the final product, only during testing.
-     */
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
 }
 
@@ -59,9 +41,7 @@ test {
 }
 
 jar {
-
     duplicatesStrategy(DuplicatesStrategy.INCLUDE)
-
     manifest {
         attributes(
                 'Main-Class': mainClassName
@@ -81,6 +61,8 @@ tasks.register('build-cs108', Jar) {
 
 tasks.register('cs108Javadoc', Javadoc) {
     source = sourceSets.main.allJava
+    classpath = sourceSets.main.compileClasspath
+    destinationDir = file("$buildDir/docs/javadoc")
 }
 
 tasks.named('build-cs108') {
