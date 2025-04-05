@@ -43,7 +43,7 @@ public class GUIApp extends Application {
     private volatile Queue<String> clientMessageQueue;
     private static boolean lobbyLeader = false;
     private static String theme;
-    private static Map<String, Integer> players;
+    private static Map<String, Double> players;
 
     /**
      * The main entry point for the JavaFX application.
@@ -311,15 +311,15 @@ public class GUIApp extends Application {
         return theme;
     }
 
-    public static void setPlayers(Map<String, Integer> map) {
+    public static void setPlayers(Map<String, Double> map) {
         players = map;
     }
 
-    public static Map<String, Integer> getPlayers() {
+    public static Map<String, Double> getPlayers() {
         return players;
     }
 
-    public static void addPlayer(String username, Integer points) {
+    public static void addPlayer(String username, Double points) {
         players.put(username, points);
     }
 
@@ -327,8 +327,9 @@ public class GUIApp extends Application {
         players.remove(username);
     }
 
-    public static void addPointsPlayer(String username, Integer points) {
-        players.merge(username, points, Integer::sum);
+    public static void addPointsPlayer(String username, Double points) {
+        //players.merge(username, points, Double::sum);
+        players.put(username, points);
     }
 
 
