@@ -234,10 +234,13 @@ public class Server {
                 case "leaveLobby" -> {
                     for(Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            Integer[] players = lobby.getPlayers();
+                            for (int id : players) {
+                                Message response = new Message("lobbyLeft", new String[]{id + "", DatabaseHelper.getPlayerName(message.getID())});
+                                sendMessageQueue.add(response.toString());
+                            }
                             lobby.removePlayer(message.getID());
                             lobbyGameMap.get(lobby).minusOnePlayer();
-                            Message response = new Message("lobbyLeft", new String[]{message.getID() + "", lobby.getLobbyName()});
-                            sendMessageQueue.add(response.toString());
                             if(lobby.isEmpty()) {
                                 lobbyGameMap.remove(lobby);
                                 lobbyList.remove(lobby);
@@ -271,8 +274,8 @@ public class Server {
                                 Integer numberOfPlayers = lobby.getNumberOfPlayers();
                                 if (numberOfRoundsVotes >= numberOfPlayers) {
                                     String lastPlayer = DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn());
-                                    lobby.addPointsToLeaderboard(lastPlayer);
-                                    Integer pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
+                                    lobby.addPointsToLeaderboard(lastPlayer, lobbyGameMap.get(lobby).getRoundNumber());
+                                    Double pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
                                     for (int id : players) {
                                         Message response = new Message("updatePoints", new String[]{id + "", lastPlayer, pointsOfLastPlayer + ""});
                                         sendMessageQueue.add(response.toString());
@@ -284,21 +287,23 @@ public class Server {
                                     lobbyGameMap.get(lobby).setStatus("leaderboard");
                                 } else {
                                     if (numberOfRoundsVotes == 0) {
+                                        lobby.resetVotesOfARound();
                                         lobby.resetPlayersToVoteFor();
                                         lobbyGameMap.get(lobby).setStatus("voting");
                                     } else {
                                         String lastPlayer = DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn());
-                                        lobby.addPointsToLeaderboard(lastPlayer);
-                                        Integer pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
+                                        lobby.addPointsToLeaderboard(lastPlayer, lobbyGameMap.get(lobby).getRoundNumber());
+                                        Double pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
                                         for (int id : players) {
                                             Message response = new Message("updatePoints", new String[]{id + "", lastPlayer, pointsOfLastPlayer + ""});
                                             sendMessageQueue.add(response.toString());
                                         }
+                                        lobby.resetVotesOfARound();
                                     }
                                     lobby.setPlayerVotingOn();
                                     for (int id : players) {
                                         Message response2 = new Message("votingStarts", new String[]{id + "", numberOfRoundsVotes + ""});
-                                        Message response3 = new Message("image", new String[]{id + "", lobby.getLobbyName(), lobby.getImageOfPlayer()});
+                                        Message response3 = new Message("image", new String[]{id + "", DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn()), lobby.getImageOfPlayer()});
                                         sendMessageQueue.add(response3.toString());
                                         sendMessageQueue.add(response2.toString());
                                     }
