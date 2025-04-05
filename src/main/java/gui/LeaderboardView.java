@@ -49,11 +49,11 @@ public class LeaderboardView {
      * showing each player's rank, name and score in descending order.
      */
     static void updateLeaderboard() {
-        Map<String, Integer> players = GUIApp.getPlayers();
+        Map<String, Double> players = GUIApp.getPlayers();
         vboxLeaderboard.getChildren().clear();
 
-        HashMap<String, Integer> playersSorted = players.entrySet().stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+        HashMap<String, Double> playersSorted = players.entrySet().stream()
+                .sorted(Map.Entry.<String, Double>comparingByValue().reversed())
                 .collect(Collectors.toMap(
                         Map.Entry::getKey,
                         Map.Entry::getValue,
@@ -62,8 +62,8 @@ public class LeaderboardView {
                 ));
 
         int rank = 1;
-        for (Map.Entry<String, Integer> player : playersSorted.entrySet()) {
-            String leaderboardEntry = String.format("%d. %s with %d points", rank, player.getKey(), player.getValue());
+        for (Map.Entry<String, Double> player : playersSorted.entrySet()) {
+            String leaderboardEntry = String.format("%d. %s with %.2f points", rank, player.getKey(), player.getValue());
             vboxLeaderboard.getChildren().add(new Text(leaderboardEntry));
             rank++;
         }
