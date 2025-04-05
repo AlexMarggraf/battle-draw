@@ -57,7 +57,7 @@ public class LobbyView {
      * Clears the existing player list and repopulates it with current player data.
      */
     private void createLobbyListing() {
-        Map<String, Integer> players = GUIApp.getPlayers();
+        Map<String, Double> players = GUIApp.getPlayers();
         vboxUsers.getChildren().clear();
         for (String username : players.keySet()) {
             Label label = new Label(username);
