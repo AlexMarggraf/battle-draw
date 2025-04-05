@@ -258,11 +258,11 @@ public class Message {
                 } else {
                     try {
                         Integer.parseInt(params[0]);
-                        Integer.parseInt(params[2]);
+                        Double.parseDouble(params[2]);
                         this.type = type;
                         this.params = params;
                     } catch (NumberFormatException NFException) {
-                        throw new IllegalArgumentException("The id and points have to be integers");
+                        throw new IllegalArgumentException("The id has to be an integer and points a double");
                     }
                 }
             }
@@ -553,11 +553,11 @@ public class Message {
                 } else {
                     try {
                         Integer.parseInt(content[1]);
-                        Integer.parseInt(content[3]);
+                        Double.parseDouble(content[3]);
                         this.type = type;
                         this.params = new String[]{content[1], content[2], content[3]};
                     } catch (NumberFormatException NFException) {
-                        throw new IllegalArgumentException("The id and points have to be integers");
+                        throw new IllegalArgumentException("The id has to be an integer and points a double");
                     }
                 }
             }
