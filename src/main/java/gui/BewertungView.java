@@ -26,6 +26,7 @@ public class BewertungView {
     private static final ImageView imageView = new ImageView();
     private static int vote = 0;
     private static boolean next = false;
+    private static boolean isOwnPicture;
 
     /**
      * Constructs a new BewertungView with rating components.
@@ -46,8 +47,13 @@ public class BewertungView {
         HBox controls = new HBox(10, label);
 
         VBox view2 = new VBox(10, controls, imageView);
-        view = new VBox(10, view2, voteBox, sendVoteBtn);
-        view.setPadding(new javafx.geometry.Insets(50));
+        if (isOwnPicture) {
+            view = new VBox(10, view2, nextBtn);
+            view.setPadding(new javafx.geometry.Insets(50));
+        } else {
+            view = new VBox(10, view2, voteBox, sendVoteBtn);
+            view.setPadding(new javafx.geometry.Insets(50));
+        }
     }
 
     /**
@@ -80,12 +86,18 @@ public class BewertungView {
     /**
      * Creates the "Next" button for lobby leaders to proceed.
      * Automatically sets the next indicator when created.
+     * (for the player whose picture is voted on to get to the next round.)
+     *
      *
      * @return the configured Button for navigation
      */
     private Button createNextBtn() {
         Button btn = new Button("Next");
         next = true;
+        btn.setOnAction(e -> {
+            GUIApp.addUserInputQueue("/readyToVote");
+            btn.setDisable(true);
+        });
         return btn;
     }
 
@@ -93,6 +105,7 @@ public class BewertungView {
         Button btn = new Button("send Vote");
         btn.setOnAction( e -> {
             GUIApp.addUserInputQueue("/sendVote");
+            btn.setDisable(true);
         });
         return btn;
     }
@@ -115,5 +128,9 @@ public class BewertungView {
 
     public Parent getView() {
         return view;
+    }
+
+    public static void setIsOwnPicture(String ownUsername, String ownerOfPictureUsername) {
+        isOwnPicture = ownUsername.equals(ownerOfPictureUsername);
     }
 }
