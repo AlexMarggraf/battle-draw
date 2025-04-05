@@ -683,7 +683,6 @@ public class Main {
      * @param args Either server port or client ip port username depending on what class you want to start
      */
     public static void main(String[] args) {
-        Configurator.setRootLevel(org.apache.logging.log4j.Level.INFO);
 
         if (args[0].equals("server")) {
             String[] args2 = Arrays.copyOfRange(args, 1, args.length);
