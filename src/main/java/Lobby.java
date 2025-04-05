@@ -14,7 +14,7 @@ public class Lobby {
     private ArrayList<Integer> playersToVoteFor;
     private Integer playerVotingOn;
     private Integer votesOfARound;
-    private Map<String, Integer> leaderboard;
+    private Map<String, Double> leaderboard;
     private Map<Integer, String> images;
 
     public Lobby(String lobbyName) {
@@ -69,19 +69,24 @@ public class Lobby {
     public void initialiseLeaderboard() {
         leaderboard.clear();
         for (Integer playerId : players) {
-            leaderboard.put(DatabaseHelper.getPlayerName(playerId), 0);
+            leaderboard.put(DatabaseHelper.getPlayerName(playerId), 0.0);
         }
     }
-    public void addPointsToLeaderboard(String playerName) {
-        Integer meanOfVotes = votesOfARound / getNumberOfPlayers();
-        leaderboard.merge(playerName, meanOfVotes, (existingMeans, newMean) -> (existingMeans + newMean) / 2);
+    public void addPointsToLeaderboard(String playerName, Integer roundNumber) {
+        Double votesOfRoundAsDouble = votesOfARound.doubleValue();
+        Double meanOfVotes = votesOfRoundAsDouble / (getNumberOfPlayers() - 1);
+        leaderboard.merge(playerName, meanOfVotes, (existingMeans, newMean) -> (existingMeans * (roundNumber) + newMean) / (roundNumber + 1));
     }
 
     public void addToVotesOfARound(Integer vote) {
         votesOfARound += vote;
     }
 
-    public Integer getPointsOfAPlayer(String playerName) {
+    public void resetVotesOfARound() {
+        votesOfARound = 0;
+    }
+
+    public Double getPointsOfAPlayer(String playerName) {
         return leaderboard.get(playerName);
     }
 
