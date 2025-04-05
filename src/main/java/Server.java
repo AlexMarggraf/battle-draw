@@ -93,6 +93,9 @@ public class Server {
                     int id = message.getID();
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
+
+                    Message broadcast = new Message ("broadcast User " + DatabaseHelper.getPlayerName(message.getID()) + " disconnected");
+                    sendMessageQueue.add(broadcast.toString());
                 }
                 case "chatAll", "chatLobby" -> sendMessageQueue.add(message.toString());
                 case "chatTo" -> {
@@ -135,6 +138,9 @@ public class Server {
                                 st.setClientUsername(username);
                             }
                         }
+
+                        Message broadcast = new Message ("broadcast User " + username + " is online");
+                        sendMessageQueue.add(broadcast.toString());
                     }
                 }
                 case "signUp" -> {
@@ -163,6 +169,9 @@ public class Server {
                     Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
                     sendMessageQueue.add(response.toString());
                     connection++;
+
+                    Message broadcast = new Message ("broadcast User " + username + " is online");
+                    sendMessageQueue.add(broadcast.toString());
                 }
                 case "whoOnline" -> {
                     List<String> onlineList = new ArrayList<>();
@@ -178,7 +187,7 @@ public class Server {
                 case "whatGames" -> {
                     List<String> gamesList = new ArrayList<>();
                     gamesList.add(message.getID() + "");
-                    for (Game game : lobbyGameMap.values()) {
+                    for (Game game : gameList) {
                         gamesList.add(game.getLobbyName());
                         gamesList.add(game.getStatus());
                     }

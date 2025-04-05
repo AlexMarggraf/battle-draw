@@ -53,18 +53,16 @@ jar {
     }
 }
 
-tasks.register('build-cs108', Jar) {
-    archiveBaseName.set("cs108")
-    archiveVersion.set("1.0")
-    from sourceSets.main.output
-}
-
-tasks.register('cs108Javadoc', Javadoc) {
-    source = sourceSets.main.allJava
-    classpath = sourceSets.main.compileClasspath
+javadoc {
     destinationDir = file("$buildDir/docs/javadoc")
 }
 
-tasks.named('build-cs108') {
-    dependsOn 'cs108Javadoc'
+tasks.register('copyDatabase', Copy) {
+    from 'database/Thema.db'
+    into "$buildDir/libs/database"
+}
+
+tasks.register('build-cs108') {
+    group = 'build'
+    dependsOn 'jar', 'javadoc', 'copyDatabase'
 }

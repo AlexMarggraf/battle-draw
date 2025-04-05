@@ -88,7 +88,7 @@ public class Main {
                     print("Server isn't reachable");
                     client.disconnect();
                 }
-                case "chatTo" -> print("(whisper) " + message.getParams()[1] + ": " + message.getParams()[3]);
+                case "chatTo" -> print("(Whisper) " + message.getParams()[1] + ": " + message.getParams()[3]);
                 case "chatAll" -> print("(All) " + message.getParams()[1] + ": " + message.getParams()[2]);
                 case "chatLobby" -> print("(Lobby) " + message.getParams()[1] + ": " + message.getParams()[3]);
                 case "acceptLogin", "acceptSignup" -> {
@@ -102,7 +102,7 @@ public class Main {
                     signInLogIn();
                 }
                 case "broadcast" -> {
-                    print("Server: " + message.getParams()[0]);
+                    print("(Broadcast) " + message.getParams()[0]);
                 }
                 case "username" -> {
                     username = message.getParams()[1];
@@ -119,6 +119,10 @@ public class Main {
                     for (int i = 1; i < message.getParams().length; i = i + 2) {
                         String game = message.getParams()[i] + " - " + message.getParams()[i + 1];
                         print(game);
+                    }
+
+                    if(message.getParams().length == 1) {
+                        print("No active games");
                     }
                 }
                 case "lobbyPlayers" -> {
@@ -512,9 +516,9 @@ public class Main {
 
         print("Do you want to sign up or log in? (su/li)");
 
-        while (answer == null) {
+        do {
             answer = guiApp.getUserInput();
-        }
+        } while (answer == null);
 
         while (!(answer.equals("su") || answer.equals("li"))) {
             print("Answer with 'su ' or 'li'");

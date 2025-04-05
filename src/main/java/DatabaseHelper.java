@@ -7,7 +7,7 @@ import java.util.List;
  * Uses SQLite database located at resources/Thema.db.
  */
 public class DatabaseHelper {
-    private static final String PATH = "jdbc:sqlite:resources/Thema.db";
+    private static final String PATH = "jdbc:sqlite:database/Thema.db";
 
     /**
      * Fetches random theme words from the database.
