@@ -63,8 +63,9 @@ public class GameView {
         ComboBox<String> colorCombo = createColorCombo();
         ComboBox<Integer> widthCombo = createWidthCombo();
         Button clearBtn = createClearButton();
+        Button proceedBtn = createNextBtn();
 
-        HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn);
+        HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn, proceedBtn);
         controls.setTranslateY(-15);
         controls.setTranslateX(-15);
         view = new VBox(20, controls, countdownField, themeLabel, canvas);
@@ -142,6 +143,7 @@ public class GameView {
                         canvas.setDisable(true);
                         timeline.stop();
                         GUIApp.addUserInputQueue("/timeIsUp");
+                        //GUIApp.addUserInputQueue("/readyToVote");
                         isTimeUp = true;
                             }
                 })
@@ -204,6 +206,22 @@ public class GameView {
             }
         });
         return button;
+    }
+
+    /**
+     * Creates the "Proceed to Vote" button for players to proceed.
+     *
+     *
+     * @return the configured Button for navigation
+     */
+    private Button createNextBtn() {
+        Button btn = new Button("Proceed");
+
+        btn.setOnAction(e -> {
+            GUIApp.addUserInputQueue("/readyToVote");
+            btn.setDisable(true);
+        });
+        return btn;
     }
 
     /**
