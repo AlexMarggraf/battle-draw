@@ -7,7 +7,7 @@ import java.util.*;
 
 public class MessageListener implements Runnable {
 
-    public InputStream iStream;
+    public volatile InputStream iStream;
     public volatile Queue<String> messageQueue;
 
     /**
