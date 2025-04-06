@@ -21,6 +21,7 @@ public class ServerThread implements Runnable {
     private String clientUsername;
     private volatile InputStream iStream;
     private volatile OutputStream oStream;
+    private PrintWriter pWriter;
 
     /**
      * This method is the constructor and sets the id of the client, the socket, queues for messages
@@ -81,10 +82,10 @@ public class ServerThread implements Runnable {
         while (serverMessageQueue.peek() != null) {
             try {
                 String serverMessage = serverMessageQueue.remove();
-                oStream.write(serverMessage.getBytes());
-                oStream.write('\n');
-            } catch (
-                    IOException ioException) {
+                //oStream.write(serverMessage.getBytes());
+                //oStream.write('\n');
+                pWriter.println(serverMessage);
+            } catch (Exception e) {
                 System.out.println("IOException in class ServerThread in method sendMessage");
             }
         }
@@ -155,6 +156,7 @@ public class ServerThread implements Runnable {
         try {
             iStream = socket.getInputStream();
             oStream = socket.getOutputStream();
+            pWriter = new PrintWriter(oStream, true);
 
             MessageListener msgListener = new MessageListener(iStream);
             Thread msgListenerThread = new Thread(msgListener);
