@@ -7,8 +7,8 @@ import java.util.*;
 
 public class MessageListener implements Runnable {
 
-    public InputStream iStream;
-    public Queue<String> messageQueue;
+    public volatile InputStream iStream;
+    public volatile Queue<String> messageQueue;
 
     /**
      * This method is the constructor and sets the input Stream and the queue for storing messages.

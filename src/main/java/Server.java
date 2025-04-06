@@ -10,8 +10,8 @@ import java.util.*;
 
 public class Server {
 
-    private Queue<String> receiveMessageQueue;
-    private Queue<String> sendMessageQueue;
+    private volatile Queue<String> receiveMessageQueue;
+    private volatile Queue<String> sendMessageQueue;
     private ArrayList<ServerThread> serverThreadList;
     private int connection;
     private LinkedList<Lobby> lobbyList;
@@ -202,7 +202,9 @@ public class Server {
                             playerList.add(message.getID() + "");
 
                             for (int id : players) {
-                                playerList.add(DatabaseHelper.getPlayerName(id));
+                                if(DatabaseHelper.getStatus(id)) {
+                                    playerList.add(DatabaseHelper.getPlayerName(id));
+                                }
                             }
 
                             Message response = new Message("lobbyPlayers", playerList.toArray(new String[0]));
@@ -412,7 +414,8 @@ public class Server {
         DatabaseHelper.setOffline();
 
         ConnectionListener conListener = new ConnectionListener(Integer.parseInt(args[0]));
-        Thread.startVirtualThread(conListener);
+        Thread conListenerThread = new Thread(conListener);
+        conListenerThread.start();
 
         while (true) {
             server.startServerThread(conListener);
