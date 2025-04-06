@@ -21,6 +21,7 @@ public class Client implements Runnable {
     private volatile int serverID;
     private volatile InputStream iStream;
     private volatile OutputStream oStream;
+    private PrintWriter pWriter;
 
     /**
      * This method is the constructor and sets serverAddress, port number,
@@ -81,11 +82,11 @@ public class Client implements Runnable {
         while (clientMessageQueue.peek() != null) {
             try {
                 String clientMessage = clientMessageQueue.remove();
-                oStream.write(clientMessage.getBytes());
-                oStream.write('\n');
-            } catch (
-                    IOException ioException) {
-                System.out.println("IOException in class Client in method sendMessage");
+                //oStream.write(clientMessage.getBytes());
+                //oStream.write('\n');
+                pWriter.println(clientMessage);
+            } catch (Exception e) {
+                    System.out.println("IOException in class Client in method sendMessage");
             }
         }
     }
@@ -120,6 +121,7 @@ public class Client implements Runnable {
             Socket socket = new Socket(serverAddress, port);
             iStream = socket.getInputStream();
             oStream = socket.getOutputStream();
+            pWriter = new PrintWriter(oStream, true);
 
             MessageListener msgListener = new MessageListener(iStream);
             Thread msgListenerThread = new Thread(msgListener);
