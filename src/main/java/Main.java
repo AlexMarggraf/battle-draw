@@ -29,8 +29,8 @@ import javax.imageio.ImageIO;
 
 public class Main {
 
-    private Queue<String> serverMessageQueue;
-    private Queue<String> clientMessageQueue;
+    private volatile Queue<String> serverMessageQueue;
+    private volatile Queue<String> clientMessageQueue;
     private Client client;
     public long lastPing;
     private int serverID;

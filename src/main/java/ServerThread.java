@@ -80,6 +80,7 @@ public class ServerThread implements Runnable {
     public void sendMessage(OutputStream oStream) {
         while (serverMessageQueue.peek() != null) {
             try {
+                System.out.println("ServerThread: " + serverMessageQueue.peek());
                 String serverMessage = serverMessageQueue.remove();
                 oStream.write(serverMessage.getBytes());
                 oStream.write('\n');
