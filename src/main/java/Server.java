@@ -272,7 +272,7 @@ public class Server {
                 case "startDrawing" -> {
                     for(Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
-                            lobbyGameMap.get(lobby).setStatus("drawing");
+                            lobbyGameMap.get(lobby).setStatus("ongoing");
                             String theme = DatabaseHelper.getRandomWords(1).toString();
                             Integer[] players = lobby.getPlayers();
                             for (int id : players) {
@@ -305,12 +305,12 @@ public class Server {
                                     }
                                     lobbyGameMap.get(lobby).resetNumberOfRoundsVoted();
                                     lobby.resetHowManyPlayersAreReady();
-                                    lobbyGameMap.get(lobby).setStatus("leaderboard");
+                                    lobbyGameMap.get(lobby).setStatus("ongoing");
                                 } else {
                                     if (numberOfRoundsVotes == 0) {
                                         lobby.resetVotesOfARound();
                                         lobby.resetPlayersToVoteFor();
-                                        lobbyGameMap.get(lobby).setStatus("voting");
+                                        lobbyGameMap.get(lobby).setStatus("ongoing");
                                     } else {
                                         String lastPlayer = DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn());
                                         lobby.addPointsToLeaderboard(lastPlayer, lobbyGameMap.get(lobby).getRoundNumber());
