@@ -10,8 +10,8 @@ import java.util.*;
 
 public class Server {
 
-    private Queue<String> receiveMessageQueue;
-    private Queue<String> sendMessageQueue;
+    private volatile Queue<String> receiveMessageQueue;
+    private volatile Queue<String> sendMessageQueue;
     private ArrayList<ServerThread> serverThreadList;
     private int connection;
     private LinkedList<Lobby> lobbyList;

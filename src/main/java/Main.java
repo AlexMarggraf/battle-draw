@@ -29,8 +29,8 @@ import javax.imageio.ImageIO;
 
 public class Main {
 
-    private Queue<String> serverMessageQueue;
-    private Queue<String> clientMessageQueue;
+    private volatile Queue<String> serverMessageQueue;
+    private volatile Queue<String> clientMessageQueue;
     private Client client;
     public long lastPing;
     private int serverID;
@@ -194,8 +194,8 @@ public class Main {
                 }
                 case "image" -> {
                     BufferedImage image = decodeImage(message.getParams()[2]);
-                    BewertungView.setImage(image);
                     BewertungView.setIsOwnPicture(username, message.getParams()[1]);
+                    BewertungView.setImage(image);
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }

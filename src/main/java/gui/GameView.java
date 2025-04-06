@@ -52,7 +52,9 @@ public class GameView {
         canvas = new Canvas(canvasWidth, canvasHeight);
         gc = canvas.getGraphicsContext2D();
 
-        TextField countdownField = createCountdown(5);
+        Button proceedBtn = createNextBtn();
+
+        TextField countdownField = createCountdown(5, proceedBtn);
         Label themeLabel = createThemeLabel();
 
         setupCanvas();
@@ -63,7 +65,6 @@ public class GameView {
         ComboBox<String> colorCombo = createColorCombo();
         ComboBox<Integer> widthCombo = createWidthCombo();
         Button clearBtn = createClearButton();
-        Button proceedBtn = createNextBtn();
 
         HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn, proceedBtn);
         controls.setTranslateY(-15);
@@ -125,7 +126,7 @@ public class GameView {
      * @param initialTime the starting time in seconds for the countdown
      * @return the configured TextField displaying the countdown
      */
-    public TextField createCountdown(int initialTime) {
+    public TextField createCountdown(int initialTime, Button proceedBtn) {
         TextField countdownField = new TextField(String.valueOf(initialTime));
         countdownField.setEditable(false);
 
@@ -145,7 +146,8 @@ public class GameView {
                         GUIApp.addUserInputQueue("/timeIsUp");
                         //GUIApp.addUserInputQueue("/readyToVote");
                         isTimeUp = true;
-                            }
+                        proceedBtn.setDisable(false);
+                    }
                 })
         );
 
@@ -216,7 +218,7 @@ public class GameView {
      */
     private Button createNextBtn() {
         Button btn = new Button("Proceed");
-
+        btn.setDisable(true);
         btn.setOnAction(e -> {
             GUIApp.addUserInputQueue("/readyToVote");
             btn.setDisable(true);
