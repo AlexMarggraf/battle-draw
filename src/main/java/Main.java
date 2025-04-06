@@ -390,8 +390,8 @@ public class Main {
                         if (inLobby) {
                             message = new Message("sendVote", new String[]{serverID + "", lobbyName, BewertungView.getVote() + ""});
                             clientMessageQueue.add(message.toString());
-                            message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message.toString());
+                            Message message2 = new Message("readyToVote", new String[]{serverID + "", lobbyName});
+                            clientMessageQueue.add(message2.toString());
                         } else {
                             print("You're not in a lobby");
                         }
@@ -449,6 +449,7 @@ public class Main {
      */
     public void sendMessage() {
         while (clientMessageQueue.peek() != null) {
+            System.out.println(clientMessageQueue.peek());
             client.queueClientMessage(clientMessageQueue.remove());
         }
     }
@@ -726,7 +727,8 @@ public class Main {
             main.signInLogIn();
 
             MessageListener msgListener = new MessageListener(System.in);
-            Thread.startVirtualThread(msgListener);
+            Thread msgListenerThread = new Thread(msgListener);
+            msgListenerThread.start();
 
             while (true) {
                 main.handlePingPong();

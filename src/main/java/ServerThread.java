@@ -19,6 +19,8 @@ public class ServerThread implements Runnable {
     public long lastPing;
     public Boolean receivedPong;
     private String clientUsername;
+    private volatile InputStream iStream;
+    private volatile OutputStream oStream;
 
     /**
      * This method is the constructor and sets the id of the client, the socket, queues for messages
@@ -74,13 +76,10 @@ public class ServerThread implements Runnable {
 
     /**
      * This method sends any message in the serverMessageQueue to the client.
-     *
-     * @param oStream The output stream to the client
      */
-    public void sendMessage(OutputStream oStream) {
+    public void sendMessage() {
         while (serverMessageQueue.peek() != null) {
             try {
-                System.out.println("ServerThread: " + serverMessageQueue.peek());
                 String serverMessage = serverMessageQueue.remove();
                 oStream.write(serverMessage.getBytes());
                 oStream.write('\n');
@@ -154,21 +153,22 @@ public class ServerThread implements Runnable {
     public void run() {
 
         try {
-            InputStream iStream = socket.getInputStream();
-            OutputStream oStream = socket.getOutputStream();
+            iStream = socket.getInputStream();
+            oStream = socket.getOutputStream();
 
             MessageListener msgListener = new MessageListener(iStream);
-            Thread.startVirtualThread(msgListener);
+            Thread msgListenerThread = new Thread(msgListener);
+            msgListenerThread.start();
 
             while (clientUsername == null) {
                 receiveMessage(msgListener);
-                sendMessage(oStream);
+                sendMessage();
             }
 
             while (!disconnect) {
                 handlePingPong();
                 receiveMessage(msgListener);
-                sendMessage(oStream);
+                sendMessage();
             }
 
             socket.close();

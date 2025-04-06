@@ -414,7 +414,8 @@ public class Server {
         DatabaseHelper.setOffline();
 
         ConnectionListener conListener = new ConnectionListener(Integer.parseInt(args[0]));
-        Thread.startVirtualThread(conListener);
+        Thread conListenerThread = new Thread(conListener);
+        conListenerThread.start();
 
         while (true) {
             server.startServerThread(conListener);
