@@ -6,7 +6,7 @@ plugins {
 
 javafx {
     version = "21"
-    modules = ['javafx.controls', 'javafx.fxml', 'javafx.base']
+    modules = ['javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.base', 'javafx.swing']
 }
 
 group 'ART_FANS'
@@ -24,9 +24,13 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
     implementation "org.openjfx:javafx-controls:21"
     implementation "org.openjfx:javafx-fxml:21"
     implementation "org.openjfx:javafx-base:21"
+    implementation 'org.openjfx:javafx-graphics:21'
+    implementation 'org.openjfx:javafx-swing:21'
     implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
@@ -37,9 +41,7 @@ test {
 }
 
 jar {
-
     duplicatesStrategy(DuplicatesStrategy.INCLUDE)
-
     manifest {
         attributes(
                 'Main-Class': mainClassName
@@ -51,24 +53,16 @@ jar {
     }
 }
 
-tasks.register('build-cs108', Jar) {
-    archiveBaseName.set(tasks.jar.archiveBaseName)
-    archiveVersion.set(tasks.jar.archiveVersion)
-    from sourceSets.main.output
-
-    manifest {
-        attributes(
-                'Main-Class': mainClassName
-        )
-    }
+javadoc {
+    destinationDir = file("$buildDir/docs/javadoc")
 }
 
-
-tasks.register('cs108Javadoc', Javadoc) {
-    source = sourceSets.main.allJava
-    classpath = sourceSets.main.compileClasspath
+tasks.register('copyDatabase', Copy) {
+    from 'database/Thema.db'
+    into "$buildDir/libs/database"
 }
 
-tasks.named('build-cs108') {
-    dependsOn 'cs108Javadoc'
+tasks.register('build-cs108') {
+    group = 'build'
+    dependsOn 'jar', 'javadoc', 'copyDatabase'
 }

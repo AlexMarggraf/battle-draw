@@ -10,8 +10,8 @@ import java.util.*;
 
 public class Server {
 
-    private Queue<String> receiveMessageQueue;
-    private Queue<String> sendMessageQueue;
+    private volatile Queue<String> receiveMessageQueue;
+    private volatile Queue<String> sendMessageQueue;
     private ArrayList<ServerThread> serverThreadList;
     private int connection;
     private LinkedList<Lobby> lobbyList;
@@ -91,8 +91,21 @@ public class Server {
             switch(message.getType()) {
                 case "disconnect" -> {
                     int id = message.getID();
+
+                    for (Lobby lobby : lobbyList) {
+                        Integer[] players = lobby.getPlayers();
+                        for (int player : players) {
+                            if(player == id) {
+                                lobby.removePlayer(player);
+                            }
+                        }
+                    }
+
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
+
+                    Message broadcast = new Message ("broadcast User " + DatabaseHelper.getPlayerName(message.getID()) + " disconnected");
+                    sendMessageQueue.add(broadcast.toString());
                 }
                 case "chatAll", "chatLobby" -> sendMessageQueue.add(message.toString());
                 case "chatTo" -> {
@@ -135,6 +148,9 @@ public class Server {
                                 st.setClientUsername(username);
                             }
                         }
+
+                        Message broadcast = new Message ("broadcast User " + username + " is online");
+                        sendMessageQueue.add(broadcast.toString());
                     }
                 }
                 case "signUp" -> {
@@ -163,6 +179,9 @@ public class Server {
                     Message response = new Message("acceptSignup", new String[]{DatabaseHelper.getPlayerId(username) + "", username});
                     sendMessageQueue.add(response.toString());
                     connection++;
+
+                    Message broadcast = new Message ("broadcast User " + username + " is online");
+                    sendMessageQueue.add(broadcast.toString());
                 }
                 case "whoOnline" -> {
                     List<String> onlineList = new ArrayList<>();
@@ -178,7 +197,7 @@ public class Server {
                 case "whatGames" -> {
                     List<String> gamesList = new ArrayList<>();
                     gamesList.add(message.getID() + "");
-                    for (Game game : lobbyGameMap.values()) {
+                    for (Game game : gameList) {
                         gamesList.add(game.getLobbyName());
                         gamesList.add(game.getStatus());
                     }
@@ -193,7 +212,9 @@ public class Server {
                             playerList.add(message.getID() + "");
 
                             for (int id : players) {
-                                playerList.add(DatabaseHelper.getPlayerName(id));
+                                if(DatabaseHelper.getStatus(id)) {
+                                    playerList.add(DatabaseHelper.getPlayerName(id));
+                                }
                             }
 
                             Message response = new Message("lobbyPlayers", playerList.toArray(new String[0]));
@@ -206,11 +227,14 @@ public class Server {
                     Lobby newLobby = new Lobby(lobbyName);
                     newLobby.addPlayer(message.getID());
                     Game game = new Game(lobbyName);
+                    game.plusOnePlayer();
                     lobbyList.add(newLobby);
                     gameList.add(game);
                     lobbyGameMap.put(newLobby, game);
                     Message response = new Message("lobbyJoined", new String[]{message.getID() + "", lobbyName});
                     sendMessageQueue.add(response.toString());
+                    Message response2 = new Message("playerJoined", new String[]{message.getID() + "", lobbyName, message.getID() + ""});
+                    sendMessageQueue.add(response2.toString());
                 }
                 case "joinLobby" -> {
                     Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
@@ -218,6 +242,12 @@ public class Server {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobby.addPlayer(message.getID());
                             response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});
+                            Integer[] players = lobby.getPlayers();
+                            for (int id : players) {
+                                Message responseToLobby = new Message("playerJoined", new String[]{id + "", DatabaseHelper.getPlayerName(message.getID()), message.getID() + ""});
+                                sendMessageQueue.add(responseToLobby.toString());
+                            }
+                            lobbyGameMap.get(lobby).plusOnePlayer();
                         }
                     }
                     sendMessageQueue.add(response.toString());
@@ -225,13 +255,117 @@ public class Server {
                 case "leaveLobby" -> {
                     for(Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            Integer[] players = lobby.getPlayers();
+                            for (int id : players) {
+                                Message response = new Message("lobbyLeft", new String[]{id + "", DatabaseHelper.getPlayerName(message.getID())});
+                                sendMessageQueue.add(response.toString());
+                            }
                             lobby.removePlayer(message.getID());
-                            Message response = new Message("lobbyLeft", new String[]{message.getID() + "", lobby.getLobbyName()});
-                            sendMessageQueue.add(response.toString());
+                            lobbyGameMap.get(lobby).minusOnePlayer();
                             if(lobby.isEmpty()) {
                                 lobbyGameMap.remove(lobby);
                                 lobbyList.remove(lobby);
                             }
+                        }
+                    }
+                }
+                case "startDrawing" -> {
+                    for(Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobbyGameMap.get(lobby).setStatus("ongoing");
+                            String theme = DatabaseHelper.getRandomWords(1).toString();
+                            Integer[] players = lobby.getPlayers();
+                            for (int id : players) {
+                                Message responseToLobby = new Message("drawingStarts", new String[]{id + "", theme});
+                                sendMessageQueue.add(responseToLobby.toString());
+                            }
+                            if(lobbyGameMap.get(lobby).getRoundNumber() == 0) {
+                                lobby.initialiseLeaderboard();
+                            }
+                        }
+                    }
+                }
+                case "readyToVote" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.plusOnePlayerIsReady();
+                            if (lobby.getNumberOfPlayers() == lobby.getHowManyPlayersAreReady()) {
+                                Integer[] players = lobby.getPlayers();
+                                Integer numberOfRoundsVotes = lobbyGameMap.get(lobby).getNumberOfRoundsVoted();
+                                Integer numberOfPlayers = lobby.getNumberOfPlayers();
+                                if (numberOfRoundsVotes >= numberOfPlayers) {
+                                    String lastPlayer = DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn());
+                                    lobby.addPointsToLeaderboard(lastPlayer, lobbyGameMap.get(lobby).getRoundNumber());
+                                    Double pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
+                                    for (int id : players) {
+                                        Message response = new Message("updatePoints", new String[]{id + "", lastPlayer, pointsOfLastPlayer + ""});
+                                        sendMessageQueue.add(response.toString());
+                                        Message response2 = new Message("showLeaderboard", new String[]{id + ""});
+                                        sendMessageQueue.add(response2.toString());
+                                    }
+                                    lobbyGameMap.get(lobby).resetNumberOfRoundsVoted();
+                                    lobby.resetHowManyPlayersAreReady();
+                                    lobbyGameMap.get(lobby).setStatus("ongoing");
+                                } else {
+                                    if (numberOfRoundsVotes == 0) {
+                                        lobby.resetVotesOfARound();
+                                        lobby.resetPlayersToVoteFor();
+                                        lobbyGameMap.get(lobby).setStatus("ongoing");
+                                    } else {
+                                        String lastPlayer = DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn());
+                                        lobby.addPointsToLeaderboard(lastPlayer, lobbyGameMap.get(lobby).getRoundNumber());
+                                        Double pointsOfLastPlayer = lobby.getPointsOfAPlayer(lastPlayer);
+                                        for (int id : players) {
+                                            Message response = new Message("updatePoints", new String[]{id + "", lastPlayer, pointsOfLastPlayer + ""});
+                                            sendMessageQueue.add(response.toString());
+                                        }
+                                        lobby.resetVotesOfARound();
+                                    }
+                                    lobby.setPlayerVotingOn();
+                                    for (int id : players) {
+                                        Message response2 = new Message("votingStarts", new String[]{id + "", numberOfRoundsVotes + ""});
+                                        Message response3 = new Message("image", new String[]{id + "", DatabaseHelper.getPlayerName(lobby.getPlayerVotingOn()), lobby.getImageOfPlayer()});
+                                        sendMessageQueue.add(response3.toString());
+                                        sendMessageQueue.add(response2.toString());
+                                    }
+                                    lobby.resetHowManyPlayersAreReady();
+                                    lobbyGameMap.get(lobby).plusOneVotedRound();
+                                }
+                            }
+                        }
+                    }
+                }
+                case "sendVote" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.addToVotesOfARound(Integer.parseInt(message.getParams()[2]));
+                        }
+                    }
+                }
+                case "nextRound" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobbyGameMap.get(lobby).nextRound();
+                            Integer[] players = lobby.getPlayers();
+                            if (lobbyGameMap.get(lobby).getRoundNumber() == lobbyGameMap.get(lobby).getMaxNumberOfRounds()) {
+                                lobbyGameMap.get(lobby).setStatus("ended");
+                                for (int id : players) {
+                                     Message response = new Message("showEnding", new String[]{id + ""});
+                                     sendMessageQueue.add(response.toString());
+                                }
+                            } else {
+                                for (int id : players) {
+                                    Message response = new Message("startNextRound", new String[]{id + ""});
+                                    sendMessageQueue.add(response.toString());
+                                }
+                            }
+                        }
+                    }
+                }
+                case "image" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            lobby.setImageOfPlayer(message.getID(), message.getParams()[2]);
                         }
                     }
                 }
@@ -290,7 +424,8 @@ public class Server {
         DatabaseHelper.setOffline();
 
         ConnectionListener conListener = new ConnectionListener(Integer.parseInt(args[0]));
-        Thread.startVirtualThread(conListener);
+        Thread conListenerThread = new Thread(conListener);
+        conListenerThread.start();
 
         while (true) {
             server.startServerThread(conListener);

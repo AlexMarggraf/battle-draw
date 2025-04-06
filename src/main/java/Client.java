@@ -19,6 +19,9 @@ public class Client implements Runnable {
     private volatile Queue<String> serverMessageQueue;
     public volatile Boolean disconnect;
     private volatile int serverID;
+    private volatile InputStream iStream;
+    private volatile OutputStream oStream;
+    private PrintWriter pWriter;
 
     /**
      * This method is the constructor and sets serverAddress, port number,
@@ -74,17 +77,16 @@ public class Client implements Runnable {
     /**
      * This method sends any message in the clientMessageQueue to the server.
      *
-     * @param oStream The output stream to the server
      */
-    public void sendMessage(OutputStream oStream) {
+    public void sendMessage() {
         while (clientMessageQueue.peek() != null) {
             try {
                 String clientMessage = clientMessageQueue.remove();
-                oStream.write(clientMessage.getBytes());
-                oStream.write('\n');
-            } catch (
-                    IOException ioException) {
-                System.out.println("IOException in class Client in method sendMessage");
+                //oStream.write(clientMessage.getBytes());
+                //oStream.write('\n');
+                pWriter.println(clientMessage);
+            } catch (Exception e) {
+                    System.out.println("IOException in class Client in method sendMessage");
             }
         }
     }
@@ -117,15 +119,17 @@ public class Client implements Runnable {
     public void run() {
         try {
             Socket socket = new Socket(serverAddress, port);
-            InputStream iStream = socket.getInputStream();
-            OutputStream oStream = socket.getOutputStream();
+            iStream = socket.getInputStream();
+            oStream = socket.getOutputStream();
+            pWriter = new PrintWriter(oStream, true);
 
             MessageListener msgListener = new MessageListener(iStream);
-            Thread.startVirtualThread(msgListener);
+            Thread msgListenerThread = new Thread(msgListener);
+            msgListenerThread.start();
 
             while (!disconnect) {
                 receiveMessage(msgListener);
-                sendMessage(oStream);
+                sendMessage();
             }
 
             socket.close();
