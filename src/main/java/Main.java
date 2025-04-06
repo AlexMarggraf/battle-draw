@@ -194,8 +194,8 @@ public class Main {
                 }
                 case "image" -> {
                     BufferedImage image = decodeImage(message.getParams()[2]);
-                    BewertungView.setImage(image);
                     BewertungView.setIsOwnPicture(username, message.getParams()[1]);
+                    BewertungView.setImage(image);
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
