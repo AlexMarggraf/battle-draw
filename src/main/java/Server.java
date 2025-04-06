@@ -91,6 +91,16 @@ public class Server {
             switch(message.getType()) {
                 case "disconnect" -> {
                     int id = message.getID();
+
+                    for (Lobby lobby : lobbyList) {
+                        Integer[] players = lobby.getPlayers();
+                        for (int player : players) {
+                            if(player == id) {
+                                lobby.removePlayer(player);
+                            }
+                        }
+                    }
+
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
 

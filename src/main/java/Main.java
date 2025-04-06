@@ -264,9 +264,6 @@ public class Main {
                 }
                 case "/online" -> {
                     Message message;
-                    for(int i = 0; i < 1000; i++) {
-                        clientMessageQueue.add("whatID");
-                    }
                     if (splitClientMessage.length == 1) {
                         message = new Message("whoOnline", new String[]{serverID + ""});
                     } else {
