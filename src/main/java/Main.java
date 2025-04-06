@@ -173,7 +173,7 @@ public class Main {
                 }
                 case "votingStarts" -> {
                     GUIApp.showBewertungView();
-                    print("You would see a picture");
+                    //print("You would see a picture");
                     game.plusOneVotedRound();
                     game.setStatus("voting");
                 }
@@ -357,7 +357,7 @@ public class Main {
                     Message message;
                     if (splitClientMessage.length == 1) {
                         if (inLobby) {
-                            print("This will start the game");
+                            //print("This will start the game");
                             message = new Message("startDrawing", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
                         } else {
@@ -375,7 +375,7 @@ public class Main {
                             sendImage(GameView.getCanvasAsBufferedImage());
                             //message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
                             //clientMessageQueue.add(message.toString());
-                            print("Your picture was uploaded");
+                            //print("Your picture was uploaded");
                         } else {
                             print("You're not in a lobby");
                         }
@@ -420,7 +420,7 @@ public class Main {
                         if(inLobby) {
                             message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
-                            print("You are ready to vote");
+                            //print("You are ready to vote");
                         } else {
                             print("You're not in a lobby");
                         }
