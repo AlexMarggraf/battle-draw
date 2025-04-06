@@ -1,3 +1,10 @@
+/**
+ * The Game class represents the state and progression of a game session
+ * within a lobby. It tracks the game's status, associated lobby, number
+ * of players, the current round, and the number of rounds voted on.
+ * It also maintains the maximum number of rounds allowed in a game.
+ */
+
 public class Game {
     private String status;
     private String lobbyName;
@@ -6,7 +13,12 @@ public class Game {
     private Integer numberOfRoundsVoted;
     private Integer maxNumberOfRounds;
 
-    
+    /**
+     * This method is the constructor and sets status, lobbyName and
+     * values for the gamestate.
+     *
+     * @param lobbyName The name of the lobby
+     */
     public Game(String lobbyName) {
         this.status = "open";
         this.lobbyName = lobbyName;

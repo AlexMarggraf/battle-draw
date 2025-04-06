@@ -713,6 +713,7 @@ public class Main {
                     e.printStackTrace();
                 }
             }
+
             GUIApp.showHomeView();
             /*
 
