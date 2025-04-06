@@ -83,9 +83,8 @@ public class Client implements Runnable {
                 String clientMessage = clientMessageQueue.remove();
                 oStream.write(clientMessage.getBytes());
                 oStream.write('\n');
-            } catch (
-                    IOException ioException) {
-                System.out.println("IOException in class Client in method sendMessage");
+            } catch (IOException ioException) {
+                    System.out.println("IOException in class Client in method sendMessage");
             }
         }
     }
