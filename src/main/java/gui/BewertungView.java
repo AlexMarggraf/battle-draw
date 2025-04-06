@@ -84,9 +84,8 @@ public class BewertungView {
     }
 
     /**
-     * Creates the "Next" button for lobby leaders to proceed.
+     * Creates the "Next" button for player with own Image displayed to proceed.
      * Automatically sets the next indicator when created.
-     * (for the player whose picture is voted on to get to the next round.)
      *
      *
      * @return the configured Button for navigation
@@ -100,6 +99,13 @@ public class BewertungView {
         });
         return btn;
     }
+
+    /**
+     * Creates the "send Vote" button for the players to send their Vote.
+     *
+     *
+     * @return the configured Button for navigation
+     */
 
     private Button createSendVoteButton(){
         Button btn = new Button("send Vote");

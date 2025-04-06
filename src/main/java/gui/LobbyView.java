@@ -79,6 +79,13 @@ public class LobbyView {
         return btn;
     }
 
+    /**
+     * Creates and configures the Force start button that the lobby leader can use.
+     * When pressed, the game starts.
+     *
+     * @return the configured Button instance for starting the Game
+     */
+
     public Button createLeaderButton() {
         Button btn = new Button("Force start");
         btn.setOnAction(event -> {

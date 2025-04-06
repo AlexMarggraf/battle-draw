@@ -20,6 +20,11 @@ public class LoginSignupView {
     static String usernameText;
     String passwordText;
 
+    /**
+     * Constructs the login/signup view with a labeled input form containing
+     * username and password fields, along with login and signup buttons.
+     */
+
     public LoginSignupView() {
 
         TextField username = createUsernameField();
@@ -36,6 +41,13 @@ public class LoginSignupView {
 
     }
 
+    /**
+     * Creates and returns a pre-filled TextField for entering the username.
+     * Adds a listener to update the static {@code usernameText} whenever the field changes.
+     *
+     * @return the configured TextField for username input
+     */
+
     public TextField createUsernameField() {
         TextField field = new TextField();
         field.setPromptText("Username");
@@ -46,6 +58,13 @@ public class LoginSignupView {
         return field;
     }
 
+    /**
+     * Creates and returns a PasswordField for entering the user's password.
+     * Adds a listener to update the {@code passwordText} whenever the field changes.
+     *
+     * @return the configured PasswordField for password input
+     */
+
     public PasswordField createPasswordField() {
         PasswordField field = new PasswordField();
         field.setPromptText("Password");
@@ -54,6 +73,15 @@ public class LoginSignupView {
 
         return field;
     }
+
+    /**
+     * Creates and returns a Button configured to handle user login.
+     * Adds entered credentials to the input queue and clears the fields after submission.
+     *
+     * @param username the TextField containing the username
+     * @param password the TextField containing the password
+     * @return the configured login Button
+     */
 
 
     public Button createLoginButton(TextField username, TextField password) {
@@ -74,6 +102,15 @@ public class LoginSignupView {
         });
         return btn;
     }
+
+    /**
+     * Creates and returns a Button configured to handle user signup.
+     * Adds entered credentials to the input queue and clears the fields after submission.
+     *
+     * @param username the TextField containing the username
+     * @param password the TextField containing the password
+     * @return the configured signup Button
+     */
 
     public Button createSignUpButton(TextField username, TextField password) {
         Button btn = new Button("SignUp?");
