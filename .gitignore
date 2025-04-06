@@ -5,9 +5,6 @@
 # Ignore build files
 .build/
 
-# Ignore updates to our database
-Thema.db
-
 # Ignore linux trash and swap files
 *.swp
 *.swo
