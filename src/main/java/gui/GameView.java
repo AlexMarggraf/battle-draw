@@ -54,7 +54,7 @@ public class GameView {
 
         Button proceedBtn = createNextBtn();
 
-        TextField countdownField = createCountdown(5, proceedBtn);
+        TextField countdownField = createCountdown(30, proceedBtn);
         Label themeLabel = createThemeLabel();
 
         setupCanvas();
@@ -144,7 +144,7 @@ public class GameView {
                         canvas.setDisable(true);
                         timeline.stop();
                         GUIApp.addUserInputQueue("/timeIsUp");
-                        //GUIApp.addUserInputQueue("/readyToVote");
+                        GUIApp.addUserInputQueue("/readyToVote");
                         isTimeUp = true;
                         proceedBtn.setDisable(false);
                     }

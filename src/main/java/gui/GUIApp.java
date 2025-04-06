@@ -329,6 +329,9 @@ public class GUIApp extends Application {
 
     public static void addPointsPlayer(String username, Double points) {
         //players.merge(username, points, Double::sum);
+        if (points.isNaN()) {
+            points = 0.0;
+        }
         players.put(username, points);
     }
 
