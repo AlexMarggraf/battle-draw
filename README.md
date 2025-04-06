@@ -45,11 +45,11 @@ A competitive drawing game where players create artwork based on themes and vote
    ```
 4. Start the server (run this once):
    ```sh
-   java Server
+   java Server <port>
    ```
 5. Start a new player instance for each player:
    ```sh
-   java Main
+   java Main <ip> <port> <username>
    ```
 6. Have fun! 🎨🎮🖌️
 
