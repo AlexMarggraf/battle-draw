@@ -1,4 +1,3 @@
-package game;
 /**
  * This class serves as the main class that coordinates everything.
  * It connects the client to the server, starts the GUI and runs the
@@ -7,6 +6,8 @@ package game;
  * @author Alexander Marggraf
  * @author Frederic Weyssow
  */
+
+package game;
 
 import client.Client;
 import gui.BewertungView;
