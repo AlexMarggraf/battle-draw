@@ -1,7 +1,10 @@
+package game;
 /**
  * This class represents a game lobby where players can join, leave, and interact.
  * It manages the list of players, tracks readiness, voting mechanics, and maintains a leaderboard.
  */
+
+import server.DatabaseHelper;
 
 import java.util.ArrayList;
 import java.util.Map;

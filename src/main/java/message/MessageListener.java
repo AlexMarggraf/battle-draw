@@ -1,3 +1,5 @@
+package message;
+
 /**
  * This class listen continuously for any incoming messages.
  */

@@ -1,3 +1,4 @@
+package client;
 /**
  * This class is the client which connects to the server and serves
  * as the communication point between users. Furthermore, all game updates
@@ -6,6 +7,9 @@
  * @author Alexander Marggraf
  * @author Frederic Weyssow
  */
+
+import message.Message;
+import message.MessageListener;
 
 import java.io.*;
 import java.net.*;

@@ -1,3 +1,5 @@
+package message;
+
 /**
  * This class is used to structure messages according to the network protocol.
  *

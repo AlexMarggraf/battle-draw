@@ -1,3 +1,4 @@
+package game;
 /**
  * This class serves as the main class that coordinates everything.
  * It connects the client to the server, starts the GUI and runs the
@@ -7,6 +8,7 @@
  * @author Frederic Weyssow
  */
 
+import client.Client;
 import gui.BewertungView;
 import gui.GUIApp;
 import gui.GameView;
@@ -21,9 +23,12 @@ import java.util.LinkedList;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import message.Message;
+import message.MessageListener;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.config.Configurator;
+import server.Server;
 
 import javax.imageio.ImageIO;
 

@@ -1,3 +1,5 @@
+package server;
+
 /**
  * This class serves as the server for our game. It accepts any clients that want to connect to the server and initializes
  * the server threads.
@@ -5,6 +7,10 @@
  * @author Frederic Weyssow
  * @author Alexander Maggraf
  */
+
+import game.Game;
+import game.Lobby;
+import message.Message;
 
 import java.util.*;
 

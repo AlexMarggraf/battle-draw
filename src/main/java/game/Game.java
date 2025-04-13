@@ -1,3 +1,5 @@
+package game;
+
 /**
  * The Game class represents the state and progression of a game session
  * within a lobby. It tracks the game's status, associated lobby, number

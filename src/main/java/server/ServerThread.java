@@ -1,9 +1,14 @@
+package server;
+
 /**
  * This class acts as the server thread. It connects to the client and sends and receives messages.
  *
  * @author Frederic Weyssow
  * @author Alexander Maggraf
  */
+
+import message.Message;
+import message.MessageListener;
 
 import java.io.*;
 import java.net.*;
