@@ -10,10 +10,26 @@ import java.util.stream.Stream;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.params.provider.Arguments.arguments;
 
+/**
+ * Unit tests for the {@link Message} class.
+ * This class tests both constructors of the Message class:
+ * - One using a message type and parameter array
+ * - One using a full message string
+ *
+ * It verifies the proper parsing, storage, and string reconstruction for all valid protocol messages.
+ */
 class MessageTest {
 
     // ------------------- FIRST CONSTRUCTOR TESTS: Message(String type, String[] params) -------------------
 
+    /**
+     * Tests the {@link Message#Message(String, String[])} constructor with various valid protocol messages.
+     * Ensures that the type and parameters are correctly stored and the full message string is reconstructed accurately.
+     *
+     * @param type     the message type
+     * @param params   the message parameters
+     * @param expected the expected string representation of the message
+     */
     @ParameterizedTest(name = "Test type-param constructor: {0}")
     @MethodSource("allValidMessageTypeParams")
     @DisplayName("Message(String, String[]) constructor – full protocol coverage")
@@ -24,6 +40,11 @@ class MessageTest {
         assertEquals(expected, msg.toString());
     }
 
+    /**
+     * Provides a stream of valid message types and parameters used to test the type-param constructor.
+     *
+     * @return a stream of test arguments for valid messages
+     */
     static Stream<org.junit.jupiter.params.provider.Arguments> allValidMessageTypeParams() {
         return Stream.of(
                 arguments("chatAll", new String[]{"37", "Alex", "Willkommen bei BattleDraw"}, "chatAll 37 Alex Willkommen bei BattleDraw"),
@@ -71,6 +92,15 @@ class MessageTest {
 
     // ------------------- SECOND CONSTRUCTOR TESTS: Message(String fullMessage) -------------------
 
+    /**
+     * Tests the {@link Message#Message(String)} constructor using full message strings.
+     * Ensures the message is correctly parsed into its type and parameters and re-serialized accurately.
+     *
+     * @param fullMessage     the input string to parse
+     * @param expectedType    the expected message type
+     * @param expectedParams  the expected parameters array
+     * @param expectedString  the expected string output from toString()
+     */
     @ParameterizedTest(name = "Test full-message constructor: {0}")
     @MethodSource("allValidMessageStringInputs")
     @DisplayName("Message(String fullMessage) constructor – full protocol coverage")
@@ -81,6 +111,11 @@ class MessageTest {
         assertEquals(expectedString, msg.toString());
     }
 
+    /**
+     * Provides a stream of valid full message strings and their expected components.
+     *
+     * @return a stream of test arguments for full message parsing
+     */
     static Stream<org.junit.jupiter.params.provider.Arguments> allValidMessageStringInputs() {
         return Stream.of(
                 arguments("chatAll 37 Alex Willkommen bei BattleDraw", "chatAll", new String[]{"37", "Alex", "Willkommen bei BattleDraw"}, "chatAll 37 Alex Willkommen bei BattleDraw"),
