@@ -13,7 +13,6 @@ import javafx.scene.layout.VBox;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.testfx.framework.junit5.ApplicationTest;
-import javafx.stage.Stage;
 
 import static org.junit.jupiter.api.Assertions.*;
 import gui.EndingView;
@@ -21,16 +20,6 @@ import gui.EndingView;
 public class EndingViewTest extends ApplicationTest {
 
     private EndingView endingView;
-
-    /**
-     * Initializes the application for testing. This method is called before each test case.
-     *
-     * @param stage the JavaFX stage
-     */
-    @Override
-    public void start(Stage stage) {
-        // No specific implementation needed for this test class
-    }
 
     /**
      * Initializes the EndingView instance and sets the 'Again' flag to false before each test.
