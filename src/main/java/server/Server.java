@@ -440,4 +440,8 @@ public class Server {
             server.handleSendMessage();
         }
     }
+
+    public ArrayList<ServerThread> getServerThreadList() {
+        return serverThreadList;
+    }
 }

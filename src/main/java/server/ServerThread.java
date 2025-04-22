@@ -186,4 +186,20 @@ public class ServerThread implements Runnable {
             System.out.println("IOException in ServerThread in method run");
         }
     }
+
+    public Queue<String> getServerMessageQueue() {
+        return serverMessageQueue;
+    }
+
+    public Queue<String> getClientMessageQueue() {
+        return clientMessageQueue;
+    }
+
+    public PrintWriter getPrintWriter() {
+        return pWriter;
+    }
+
+    public void setPrintWriter(PrintWriter writer) {
+        this.pWriter = writer;
+    }
 }

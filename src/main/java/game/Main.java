@@ -746,4 +746,48 @@ public class Main {
             }
         }
     }
+
+    public void setSendPing(boolean value) {
+        this.sendPing = value;
+    }
+
+    public Boolean getSendPing() {
+        return sendPing;
+    }
+
+    public void setReceivedPong(boolean value) {
+        this.receivedPong = value;
+    }
+
+    public Queue<String> getClientMessageQueue() {
+        return clientMessageQueue;
+    }
+
+    public Client getClient(Client client) {
+        return client;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public int getServerID() {
+        return serverID;
+    }
+
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    public boolean isInLobby() {
+        return inLobby;
+    }
+
+    public String getMessageType() {
+        return messageType;
+    }
+
+    public Queue<String> getServerMessageQueue() {
+        return serverMessageQueue;
+    }
 }

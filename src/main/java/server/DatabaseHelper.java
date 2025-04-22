@@ -9,7 +9,15 @@ import java.util.List;
  * Uses SQLite database located at resources/Thema.db.
  */
 public class DatabaseHelper {
-    private static final String PATH = "jdbc:sqlite:database/Thema.db";
+    private static String dbPath  = "jdbc:sqlite:database/Thema.db";
+
+    private static Connection getConnection() throws SQLException {
+        return DriverManager.getConnection(dbPath);
+    }
+
+    public static void setDatabasePath(String path) {
+        dbPath = path;
+    }
 
     /**
      * Fetches random theme words from the database.
@@ -21,7 +29,7 @@ public class DatabaseHelper {
         String query = "SELECT thema FROM Thema ORDER BY RANDOM() LIMIT " + amount;
         List<String> themaList = new ArrayList<>();
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(query)) {
 
@@ -46,7 +54,7 @@ public class DatabaseHelper {
         String query = "SELECT id FROM players WHERE username = ?";
         int id = -1;
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, username);
@@ -73,7 +81,7 @@ public class DatabaseHelper {
         String query = "SELECT username FROM players WHERE id = ?";
         String username = null;
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setInt(1, id);
@@ -99,7 +107,7 @@ public class DatabaseHelper {
     public static void setStatus(int id, int status) {
         String update = "UPDATE Players SET online = " + status + " WHERE id = " + id;
 
-        try (Connection conn = DriverManager.getConnection(PATH)) {
+        try (Connection conn = getConnection()) {
             PreparedStatement pstmt = conn.prepareStatement(update);
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -116,7 +124,7 @@ public class DatabaseHelper {
     public static Boolean getStatus(int id) {
         String query = "SELECT online FROM Players WHERE id = " + id;
 
-        try (Connection con = DriverManager.getConnection(PATH)) {
+        try (Connection con = getConnection()) {
             PreparedStatement pstmt = con.prepareStatement(query);
             ResultSet rs = pstmt.executeQuery();
             return rs.getInt("online") == 1;
@@ -138,7 +146,7 @@ public class DatabaseHelper {
         String query = "SELECT id FROM Players WHERE username = ? AND password = ?";
         int userId = -1;
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, username);
@@ -165,7 +173,7 @@ public class DatabaseHelper {
     public static void insertPlayer(String username, String password) {
         String query = "INSERT INTO Players (username, password) VALUES (?, ?)";
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
 
             pstmt.setString(1, username);
@@ -198,7 +206,7 @@ public class DatabaseHelper {
     public static Boolean checkUsername(String username) {
         String query = "SELECT EXISTS(SELECT 1 FROM Players WHERE username = ?)";
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(query)) {
 
             pstmt.setString(1, username);
@@ -224,7 +232,7 @@ public class DatabaseHelper {
     public static void changeUsername(String username, int id) {
         String update = "UPDATE Players SET username = ? WHERE id = ?";
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(update)) {
 
             pstmt.setString(1, username);
@@ -245,7 +253,7 @@ public class DatabaseHelper {
     public static void changePassword(String password, int id) {
         String update = "UPDATE Players SET password = ? WHERE id = ?";
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              PreparedStatement pstmt = conn.prepareStatement(update)) {
 
             pstmt.setString(1, password);
@@ -264,7 +272,7 @@ public class DatabaseHelper {
     public static void setOffline() {
         String update = "UPDATE Players SET online = 0";
 
-        try (Connection conn = DriverManager.getConnection(PATH);
+        try (Connection conn = getConnection();
              Statement stmt = conn.createStatement()) {
             stmt.executeUpdate(update);
         } catch (SQLException e) {
