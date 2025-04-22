@@ -10,6 +10,7 @@ A competitive drawing game where players create artwork based on themes and vote
 - [Features](#-features)
 - [Installation](#-installation)
 - [How to Play](#-how-to-play)
+- [Important Note](#important-note)
 - [Authors](#-authors)
 
 ## ✨ Features
@@ -35,23 +36,32 @@ A competitive drawing game where players create artwork based on themes and vote
 ### 🛠️ Compile and Run the Project
 
 1. Open a terminal or command prompt.
-2. Navigate to the `src/main/java` directory:
+2. Navigate to the project directory:
+3. create the jar file using gradle:
    ```sh
-   cd src/main/java
+   ./gradlew build
    ```
-3. Compile the Java files (if not using an IDE):
+4. Navigate to the `build/libs` directory:
    ```sh
-   javac Server.java Main.java
+   cd build/libs
    ```
-4. Start the server (run this once):
+5. Start the server (run this once):
    ```sh
-   java Server <port>
+   java -jar Battle_Draw-v1.jar server <port>
    ```
-5. Start a new player instance for each player:
+6. Start a new player instance for each player:
    ```sh
-   java Main <ip> <port> <username>
+   java -jar Battle_Draw-v1.jar client <ip>:<port> [username]
    ```
-6. Have fun! 🎨🎮🖌️
+7. Have fun! 🎨🎮🖌️
+
+## ❗Important Note❗
+The database file must be located in the same directory as the JAR file, inside a folder named database. 
+By default, this setup is already configured after running "./gradlew build-cs108".
+
+If you wish to use the JAR file outside of the project directory, simply copy the libs folder to your 
+desired location and rename it to reflect its contents. For example, you can rename the folder to something 
+like Battle Draw to clearly indicate its purpose.
 
 ## 💻 Authors
 * Frédéric Weyssow
