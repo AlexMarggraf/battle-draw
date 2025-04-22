@@ -144,4 +144,20 @@ public class Client implements Runnable {
             System.out.println("IOException in class Client in method run");
         }
     }
+
+    public Queue<String> getClientMessageQueue() {
+        return clientMessageQueue;
+    }
+
+    public Queue<String> getServerMessageQueue() {
+        return serverMessageQueue;
+    }
+
+    public int getServerID() {
+        return serverID;
+    }
+
+    public void setPrintWriter(PrintWriter writer) {
+        this.pWriter = writer;
+    }
 }

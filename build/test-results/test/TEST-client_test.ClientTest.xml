@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="client_test.ClientTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-04-22T11:49:15" hostname="DRIKSON_COMPI" time="0.064">
+  <properties/>
+  <testcase name="testSetServerID()" classname="client_test.ClientTest" time="0.021"/>
+  <testcase name="testReceiveMessageHandlesDisconnectMessage()" classname="client_test.ClientTest" time="0.014"/>
+  <testcase name="testQueueClientMessage()" classname="client_test.ClientTest" time="0.001"/>
+  <testcase name="testDisconnect()" classname="client_test.ClientTest" time="0.006"/>
+  <testcase name="testGetServerMessageWhenNotEmpty()" classname="client_test.ClientTest" time="0.002"/>
+  <testcase name="testReceiveMessageHandlesRegularMessages()" classname="client_test.ClientTest" time="0.002"/>
+  <testcase name="testGetServerMessageWhenEmpty()" classname="client_test.ClientTest" time="0.002"/>
+  <testcase name="testSendMessageSendsAllMessages()" classname="client_test.ClientTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
