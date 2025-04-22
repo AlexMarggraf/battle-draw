@@ -1,4 +1,4 @@
-package client_test;
+package unit_test.client_test;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

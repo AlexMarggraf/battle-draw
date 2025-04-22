@@ -1,4 +1,4 @@
-package server_test;
+package unit_test.server_test;
 
 import org.junit.jupiter.api.*;
 import server.DatabaseHelper;

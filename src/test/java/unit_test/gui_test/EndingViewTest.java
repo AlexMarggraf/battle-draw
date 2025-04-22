@@ -5,7 +5,7 @@
  * @author Alexander Marggraf
  */
 
-package gui_test;
+package unit_test.gui_test;
 
 import javafx.scene.Parent;
 import javafx.scene.control.Button;

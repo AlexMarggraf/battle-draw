@@ -1,4 +1,4 @@
-package server_test;
+package unit_test.server_test;
 
 import message.MessageListener;
 import org.junit.jupiter.api.BeforeEach;

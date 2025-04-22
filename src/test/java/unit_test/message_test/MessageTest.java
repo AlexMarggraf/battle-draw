@@ -1,4 +1,4 @@
-package message_test;
+package unit_test.message_test;
 
 import message.Message;
 import org.junit.jupiter.api.DisplayName;

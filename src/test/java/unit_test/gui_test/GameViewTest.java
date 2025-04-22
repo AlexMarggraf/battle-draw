@@ -1,4 +1,4 @@
-package gui_test;
+package unit_test.gui_test;
 
 import javafx.scene.Node;
 import javafx.scene.canvas.Canvas;
