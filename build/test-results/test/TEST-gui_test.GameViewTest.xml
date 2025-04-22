@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="gui_test.GameViewTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2025-04-13T12:42:14" hostname="ALEX-PC" time="0.6">
-  <properties/>
-  <testcase name="testThemeLabelInitialization()" classname="gui_test.GameViewTest" time="0.6"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[Apr. 13, 2025 2:42:14 PM com.sun.javafx.application.PlatformImpl startup
-WARNUNG: Unsupported JavaFX configuration: classes were loaded from 'unnamed module @5fbdfdcf'
-]]></system-err>
-</testsuite>

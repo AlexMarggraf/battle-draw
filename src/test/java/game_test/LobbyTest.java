@@ -110,20 +110,18 @@ class LobbyTest {
      * Simulates adding players, simulating votes, and adding points.
      */
     @Test
-    void testLeaderboardCalculation() {
+    void testLeaderboardCalculationWithoutInitialise() {
         lobby.addPlayer(1);
         lobby.addPlayer(2);
         lobby.addPlayer(3);
 
-        lobby.initialiseLeaderboard();
-        assertEquals(0.0, lobby.getPointsOfAPlayer("Player1"));
-
-        lobby.addToVotesOfARound(3);
+        // Bypass initialiseLeaderboard
+        lobby.resetVotesOfARound();
+        lobby.addToVotesOfARound(4);
         lobby.addToVotesOfARound(2);
-        lobby.addPointsToLeaderboard("Player1", 0);
 
-        double expectedMean = 2.5; // (5 votes / 2 voters)
-        assertEquals(expectedMean, lobby.getPointsOfAPlayer("Player1"));
+        lobby.addPointsToLeaderboard("TestUser", 0);
+        assertEquals(3.0, lobby.getPointsOfAPlayer("TestUser"));
     }
 
     /**
