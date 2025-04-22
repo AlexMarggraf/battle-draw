@@ -8,7 +8,6 @@ import message.MessageListener;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintWriter;
-import java.lang.reflect.Field;
 import java.util.Queue;
 
 /**
@@ -39,14 +38,11 @@ class ClientTest {
 
     /**
      * Tests whether the server ID can be set via a setter method.
-     *
-     * @throws Exception if reflection fails
      */
     @Test
-    void testSetServerID() throws Exception {
+    void testSetServerID() {
         client.setServerID(77);
-        int id = getPrivateInt("serverID");
-        assertEquals(77, id);
+        assertEquals(77, client.getServerID());
     }
 
     /**
@@ -55,7 +51,7 @@ class ClientTest {
     @Test
     void testQueueClientMessage() {
         client.queueClientMessage("Hello Server");
-        Queue<String> queue = getQueue("clientMessageQueue");
+        Queue<String> queue = client.getClientMessageQueue();
         assertEquals("Hello Server", queue.poll());
     }
 
@@ -72,21 +68,19 @@ class ClientTest {
      */
     @Test
     void testGetServerMessageWhenNotEmpty() {
-        getQueue("serverMessageQueue").add("Welcome Client");
+        client.getServerMessageQueue().add("Welcome Client");
         assertEquals("Welcome Client", client.getServerMessage());
     }
 
     /**
      * Tests if the sendMessage method correctly sends all queued client messages.
-     *
-     * @throws Exception if reflection fails
      */
     @Test
-    void testSendMessageSendsAllMessages() throws Exception {
+    void testSendMessageSendsAllMessages() {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         PrintWriter writer = new PrintWriter(outStream, true);
 
-        setPrivateField("pWriter", writer);
+        client.setPrintWriter(writer); // Assume you added this setter
         client.queueClientMessage("msg1");
         client.queueClientMessage("msg2");
 
@@ -120,8 +114,6 @@ class ClientTest {
         assertEquals("disconnect 10", client.getServerMessage());
     }
 
-    // ---------- HELPER METHODS ------------
-
     /**
      * Stub class that simulates the {@link MessageListener} for controlled message delivery.
      */
@@ -135,7 +127,7 @@ class ClientTest {
          * @param messages variable number of messages to simulate
          */
         public StubMessageListener(String... messages) {
-            super(null); // InputStream unused
+            super(null);
             this.messages = messages;
         }
 
@@ -146,48 +138,5 @@ class ClientTest {
         public String getMessage() {
             return index < messages.length ? messages[index++] : null;
         }
-    }
-
-    /**
-     * Uses reflection to retrieve a queue field from the {@link Client}.
-     *
-     * @param name the name of the queue field
-     * @return the {@link Queue} object
-     */
-    @SuppressWarnings("unchecked")
-    private Queue<String> getQueue(String name) {
-        try {
-            Field field = Client.class.getDeclaredField(name);
-            field.setAccessible(true);
-            return (Queue<String>) field.get(client);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Uses reflection to set a private field in the {@link Client}.
-     *
-     * @param name  the name of the field
-     * @param value the value to assign
-     * @throws Exception if reflection access fails
-     */
-    private void setPrivateField(String name, Object value) throws Exception {
-        Field field = Client.class.getDeclaredField(name);
-        field.setAccessible(true);
-        field.set(client, value);
-    }
-
-    /**
-     * Uses reflection to get a private integer field from the {@link Client}.
-     *
-     * @param name the name of the field
-     * @return the integer value of the field
-     * @throws Exception if reflection access fails
-     */
-    private int getPrivateInt(String name) throws Exception {
-        Field field = Client.class.getDeclaredField(name);
-        field.setAccessible(true);
-        return (int) field.get(client);
     }
 }
