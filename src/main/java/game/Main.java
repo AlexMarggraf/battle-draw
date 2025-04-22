@@ -691,16 +691,20 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        if (args[0].equals("server")) {
-            String[] args2 = Arrays.copyOfRange(args, 1, args.length);
+        String input = String.join(" ", args);
+        input = input.replaceAll(":", " ");
+        String[] newArgs = input.split(" ");
+
+        if (newArgs[0].equals("server")) {
+            String[] args2 = Arrays.copyOfRange(newArgs, 1, newArgs.length);
             Server.main(args2);
         } else {
             String[] args2;
 
-            if (args[0].equals("client")) {
-                args2 = Arrays.copyOfRange(args, 1, args.length);
+            if (newArgs[0].equals("client")) {
+                args2 = Arrays.copyOfRange(newArgs, 1, newArgs.length);
             } else {
-                args2 = args;
+                args2 = newArgs;
             }
 
             Main main = new Main();
