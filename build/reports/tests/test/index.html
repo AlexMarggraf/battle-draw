@@ -20,13 +20,13 @@
 <tr>
 <td>
 <div class="infoBox" id="tests">
-<div class="counter">8</div>
+<div class="counter">170</div>
 <p>tests</p>
 </div>
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">2</div>
+<div class="counter">3</div>
 <p>failures</p>
 </div>
 </td>
@@ -38,7 +38,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">0.640s</div>
+<div class="counter">7.801s</div>
 <p>duration</p>
 </div>
 </td>
@@ -48,7 +48,7 @@
 </td>
 <td>
 <div class="infoBox failures" id="successRate">
-<div class="percent">75%</div>
+<div class="percent">98%</div>
 <p>successful</p>
 </div>
 </td>
@@ -71,12 +71,16 @@
 <h2>Failed tests</h2>
 <ul class="linkList">
 <li>
-<a href="classes/game_test.MainTest.html">MainTest</a>.
-<a href="classes/game_test.MainTest.html#testHandlePingPong_DisconnectsIfNoPong()">testHandlePingPong_DisconnectsIfNoPong()</a>
+<a href="classes/unit_test.game_test.MainTest.html">MainTest</a>.
+<a href="classes/unit_test.game_test.MainTest.html#testHandlePingPong_DisconnectsIfNoPong()">testHandlePingPong_DisconnectsIfNoPong()</a>
 </li>
 <li>
-<a href="classes/game_test.MainTest.html">MainTest</a>.
-<a href="classes/game_test.MainTest.html#testHandleServerMessage_setsUsernameFromAcceptLogin()">testHandleServerMessage_setsUsernameFromAcceptLogin()</a>
+<a href="classes/unit_test.game_test.MainTest.html">MainTest</a>.
+<a href="classes/unit_test.game_test.MainTest.html#testHandleServerMessage_setsUsernameFromAcceptLogin()">testHandleServerMessage_setsUsernameFromAcceptLogin()</a>
+</li>
+<li>
+<a href="classes/unit_test.server_test.ServerThreadTest.html">ServerThreadTest</a>.
+<a href="classes/unit_test.server_test.ServerThreadTest.html#testReceiveMessageProcessesDisconnect()">testReceiveMessageProcessesDisconnect()</a>
 </li>
 </ul>
 </div>
@@ -95,14 +99,54 @@
 </thead>
 <tbody>
 <tr>
-<td class="failures">
-<a href="packages/game_test.html">game_test</a>
+<td class="success">
+<a href="packages/unit_test.client_test.html">unit_test.client_test</a>
 </td>
 <td>8</td>
+<td>0</td>
+<td>0</td>
+<td>0.045s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="failures">
+<a href="packages/unit_test.game_test.html">unit_test.game_test</a>
+</td>
+<td>26</td>
 <td>2</td>
 <td>0</td>
-<td>0.640s</td>
-<td class="failures">75%</td>
+<td>0.579s</td>
+<td class="failures">92%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="packages/unit_test.gui_test.html">unit_test.gui_test</a>
+</td>
+<td>26</td>
+<td>0</td>
+<td>0</td>
+<td>6.772s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="packages/unit_test.message_test.html">unit_test.message_test</a>
+</td>
+<td>85</td>
+<td>0</td>
+<td>0</td>
+<td>0.280s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="failures">
+<a href="packages/unit_test.server_test.html">unit_test.server_test</a>
+</td>
+<td>25</td>
+<td>1</td>
+<td>0</td>
+<td>0.125s</td>
+<td class="failures">96%</td>
 </tr>
 </tbody>
 </table>
@@ -122,14 +166,134 @@
 </thead>
 <tbody>
 <tr>
+<td class="success">
+<a href="classes/unit_test.client_test.ClientTest.html">unit_test.client_test.ClientTest</a>
+</td>
+<td>8</td>
+<td>0</td>
+<td>0</td>
+<td>0.045s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.game_test.GameTest.html">unit_test.game_test.GameTest</a>
+</td>
+<td>11</td>
+<td>0</td>
+<td>0</td>
+<td>0.006s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.game_test.LobbyTest.html">unit_test.game_test.LobbyTest</a>
+</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>0.008s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
 <td class="failures">
-<a href="classes/game_test.MainTest.html">game_test.MainTest</a>
+<a href="classes/unit_test.game_test.MainTest.html">unit_test.game_test.MainTest</a>
 </td>
 <td>8</td>
 <td>2</td>
 <td>0</td>
-<td>0.640s</td>
+<td>0.565s</td>
 <td class="failures">75%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.gui_test.BewertungViewTest.html">unit_test.gui_test.BewertungViewTest</a>
+</td>
+<td>13</td>
+<td>0</td>
+<td>0</td>
+<td>3.686s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.gui_test.EndingViewTest.html">unit_test.gui_test.EndingViewTest</a>
+</td>
+<td>6</td>
+<td>0</td>
+<td>0</td>
+<td>1.440s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.gui_test.GameViewTest.html">unit_test.gui_test.GameViewTest</a>
+</td>
+<td>7</td>
+<td>0</td>
+<td>0</td>
+<td>1.646s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.message_test.MessageListenerTest.html">unit_test.message_test.MessageListenerTest</a>
+</td>
+<td>4</td>
+<td>0</td>
+<td>0</td>
+<td>0.206s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.message_test.MessageTest.html">unit_test.message_test.MessageTest</a>
+</td>
+<td>81</td>
+<td>0</td>
+<td>0</td>
+<td>0.074s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.server_test.ConnectionListenerTest.html">unit_test.server_test.ConnectionListenerTest</a>
+</td>
+<td>2</td>
+<td>0</td>
+<td>0</td>
+<td>0.003s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.server_test.DatabaseHelperTest.html">unit_test.server_test.DatabaseHelperTest</a>
+</td>
+<td>9</td>
+<td>0</td>
+<td>0</td>
+<td>0.111s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="success">
+<a href="classes/unit_test.server_test.ServerTest.html">unit_test.server_test.ServerTest</a>
+</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0.004s</td>
+<td class="success">100%</td>
+</tr>
+<tr>
+<td class="failures">
+<a href="classes/unit_test.server_test.ServerThreadTest.html">unit_test.server_test.ServerThreadTest</a>
+</td>
+<td>9</td>
+<td>1</td>
+<td>0</td>
+<td>0.007s</td>
+<td class="failures">88%</td>
 </tr>
 </tbody>
 </table>
@@ -142,7 +306,7 @@
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.6</a> at 18 Apr 2025, 18:26:33</p>
+<a href="http://www.gradle.org">Gradle 8.6</a> at 22.04.2025, 14:48:38</p>
 </div>
 </div>
 </body>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.gui_test.EndingViewTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2025-04-22T12:48:34" hostname="LAPTOP-ALEX" time="1.443">
+  <properties/>
+  <testcase name="testSetAgainEnding()" classname="unit_test.gui_test.EndingViewTest" time="0.225"/>
+  <testcase name="testGetView()" classname="unit_test.gui_test.EndingViewTest" time="0.233"/>
+  <testcase name="testAgainFlagInitialization()" classname="unit_test.gui_test.EndingViewTest" time="0.228"/>
+  <testcase name="testCreateAgainBtn()" classname="unit_test.gui_test.EndingViewTest" time="0.292"/>
+  <testcase name="testGetAgainEnding()" classname="unit_test.gui_test.EndingViewTest" time="0.231"/>
+  <testcase name="testCreateLeaveBtn()" classname="unit_test.gui_test.EndingViewTest" time="0.231"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.server_test.ServerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-04-22T12:48:38" hostname="LAPTOP-ALEX" time="0.005">
+  <properties/>
+  <testcase name="testHandleReceiveMessageProcessesChatAll()" classname="unit_test.server_test.ServerTest" time="0.001"/>
+  <testcase name="testHandleSendMessageSendsToCorrectThread()" classname="unit_test.server_test.ServerTest" time="0.001"/>
+  <testcase name="testFillReceiveMessageQueueRetrievesMessages()" classname="unit_test.server_test.ServerTest" time="0.001"/>
+  <testcase name="testSendMessageAddsToCorrectServerThread()" classname="unit_test.server_test.ServerTest" time="0.001"/>
+  <testcase name="testConstructorInitializesFields()" classname="unit_test.server_test.ServerTest" time="0.0"/>
+  <system-out><![CDATA[chatAll -2 user Hello!
+chatAll 1 Alice Hi!
+test-msg
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

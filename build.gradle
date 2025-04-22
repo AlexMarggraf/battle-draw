@@ -11,7 +11,7 @@ javafx {
 
 group 'ART_FANS'
 version 'v1'
-mainClassName = 'Main'
+mainClassName = 'game.Main'
 
 java {
     toolchain {
@@ -53,6 +53,7 @@ jar {
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
+    dependsOn 'copyDatabase'
 }
 
 javadoc {
