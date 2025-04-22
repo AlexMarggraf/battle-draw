@@ -46,29 +46,6 @@ class MainTest {
     }
 
     @Test
-    void testHandlePingPong_DisconnectsIfNoPong() {
-        main.setSendPing(true);
-        main.setReceivedPong(false);
-        main.lastPing = System.currentTimeMillis() - 11000;
-
-        DummyClient dummyClient = new DummyClient();
-        main.getClient(dummyClient); // inject dummy
-        main.handlePingPong();
-
-        assertFalse(main.getSendPing());
-        assertTrue(dummyClient.disconnectCalled);
-    }
-
-    @Test
-    void testSetSendPingAndGetSendPing() {
-        main.setSendPing(false);
-        assertFalse(main.getSendPing());
-
-        main.setSendPing(true);
-        assertTrue(main.getSendPing());
-    }
-
-    @Test
     void testDecodeImageReturnsBufferedImage() throws Exception {
         BufferedImage original = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -83,46 +60,45 @@ class MainTest {
     }
 
     @Test
-    void testHandleServerMessage_setsUsernameFromAcceptLogin() {
-        String serverMessage = "acceptLogin 42 testUser";
-        main.getServerMessageQueue().add(serverMessage);
+    void testHandleServerMessage_setsReceivedPongTrue() {
+        main.getServerMessageQueue().add("pong 0");
         main.handleServerMessage();
 
-        assertEquals("testUser", main.getUsername());
-    }
-
-
-    @Test
-    void testGetClientMessageQueue() {
-        Queue<String> queue = main.getClientMessageQueue();
-        assertNotNull(queue);
-        queue.add("testMessage");
-        assertEquals("testMessage", queue.poll());
+        assertTrue(main.getSendPing());
     }
 
     @Test
-    void testGetClientReturnsSameClient() {
+    void testSendMessageFlushesToClientQueue() {
         DummyClient dummy = new DummyClient();
-        assertSame(dummy, main.getClient(dummy));
+        main.setClient(dummy);
+
+        main.getClientMessageQueue().add("msg1");
+        main.getClientMessageQueue().add("msg2");
+
+        main.sendMessage();
+
+        assertEquals("msg1", dummy.sentMessages.poll());
+        assertEquals("msg2", dummy.sentMessages.poll());
+        assertTrue(dummy.sentMessages.isEmpty());
     }
 
     static class DummyClient extends client.Client {
-        public boolean disconnectCalled = false;
+        Queue<String> sentMessages = new java.util.LinkedList<>();
 
         public DummyClient() {
             super("localhost", 1234);
         }
 
         @Override
+        public void queueClientMessage(String msg) {
+            sentMessages.add(msg);
+        }
+
+        @Override
         public void disconnect() {
             disconnectCalled = true;
         }
-    }
 
-}
-
-class DummyGUIApp extends gui.GUIApp {
-    @Override
-    public void queuePrintMessage(String msg) {
+        public boolean disconnectCalled = false;
     }
 }

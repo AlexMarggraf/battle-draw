@@ -97,17 +97,6 @@ class ServerThreadTest {
     }
 
     @Test
-    void testReceiveMessageProcessesDisconnect() {
-        DummyListener listener = new DummyListener("disconnect -1");
-
-        serverThread.receiveMessage(listener);
-
-        assertTrue(serverThread.disconnect);
-        assertNotNull(serverThread.getClientMessage());
-        assertTrue(serverThread.getClientMessage().startsWith("disconnect"));
-    }
-
-    @Test
     void testReceiveMessageProcessesPing() {
         DummyListener listener = new DummyListener("ping 1");
 

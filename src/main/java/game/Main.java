@@ -767,8 +767,8 @@ public class Main {
         return clientMessageQueue;
     }
 
-    public Client getClient(Client client) {
-        return client;
+    public void setClient(Client client) {
+        this.client = client;
     }
 
     public String getUsername() {

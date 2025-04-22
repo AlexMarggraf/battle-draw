@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.gui_test.GameViewTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-04-22T13:41:11" hostname="DRIKSON_COMPI" time="1.735">
+  <properties/>
+  <testcase name="testColorComboBoxInitialization()" classname="unit_test.gui_test.GameViewTest" time="0.309"/>
+  <testcase name="testThemeLabelInitialization()" classname="unit_test.gui_test.GameViewTest" time="0.234"/>
+  <testcase name="testCanvasInitialization()" classname="unit_test.gui_test.GameViewTest" time="0.238"/>
+  <testcase name="testCountdownInitialization()" classname="unit_test.gui_test.GameViewTest" time="0.236"/>
+  <testcase name="testClearButtonInitialization()" classname="unit_test.gui_test.GameViewTest" time="0.236"/>
+  <testcase name="testProceedButtonInitialization()" classname="unit_test.gui_test.GameViewTest" time="0.237"/>
+  <testcase name="testControlsInitialization()" classname="unit_test.gui_test.GameViewTest" time="0.237"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
