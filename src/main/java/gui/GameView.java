@@ -54,7 +54,7 @@ public class GameView {
 
         Button proceedBtn = createNextBtn();
 
-        TextField countdownField = createCountdown(30, proceedBtn);
+        TextField countdownField = createCountdown(60, proceedBtn);
         Label themeLabel = createThemeLabel();
 
         setupCanvas();
