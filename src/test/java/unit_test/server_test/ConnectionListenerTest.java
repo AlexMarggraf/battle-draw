@@ -29,29 +29,4 @@ class ConnectionListenerTest {
         assertFalse(queue.isEmpty());
         assertEquals(dummySocket, queue.poll());
     }
-
-    /*
-    integration test
-    @Test
-    void testRunAcceptsClientConnection() throws Exception {
-        int port = 12346;
-        ConnectionListener listener = new ConnectionListener(port);
-        Thread listenerThread = new Thread(listener);
-        listenerThread.start();
-
-        // Simulate a client connecting
-        Socket clientSocket = new Socket("localhost", port);
-
-        Thread.sleep(100); // Let the listener accept it
-
-        assertFalse(listener.socketQueue.isEmpty());
-        Socket accepted = listener.socketQueue.poll();
-        assertNotNull(accepted);
-
-        clientSocket.close();
-        accepted.close();
-        listenerThread.interrupt();
-    }
-
-     */
 }
