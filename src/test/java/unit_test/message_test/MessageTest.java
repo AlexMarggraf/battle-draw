@@ -14,8 +14,7 @@ import static org.junit.jupiter.params.provider.Arguments.arguments;
  * Unit tests for the {@link Message} class.
  * This class tests both constructors of the Message class:
  * - One using a message type and parameter array
- * - One using a full message string
- *
+ * - One using a full message string*
  * It verifies the proper parsing, storage, and string reconstruction for all valid protocol messages.
  */
 class MessageTest {
@@ -142,7 +141,7 @@ class MessageTest {
                 arguments("listLobbyPlayers 41 Lobby_von_Simon", "listLobbyPlayers", new String[]{"41", "Lobby_von_Simon"}, "listLobbyPlayers 41 Lobby_von_Simon"),
                 arguments("lobbyPlayers 30 Alex Simon Noah", "lobbyPlayers", new String[]{"30", "Alex", "Simon", "Noah"}, "lobbyPlayers 30 Alex Simon Noah"),
                 arguments("leaveLobby 37 Lobby_von_Alex", "leaveLobby", new String[]{"37", "Lobby_von_Alex"}, "leaveLobby 37 Lobby_von_Alex"),
-                arguments("lobbyLeft 37 Dirkson", "lobbyLeft", new String[]{"37", "Dirkson"}, "lobbyLeft 37 Dirkson"),
+                arguments("lobbyLeft 37 Drikson", "lobbyLeft", new String[]{"37", "Drikson"}, "lobbyLeft 37 Drikson"),
                 arguments("whoOnline 37", "whoOnline", new String[]{"37"}, "whoOnline 37"),
                 arguments("online 31 Alex Frederic", "online", new String[]{"31", "Alex", "Frederic"}, "online 31 Alex Frederic"),
                 arguments("whatGames 31", "whatGames", new String[]{"31"}, "whatGames 31"),

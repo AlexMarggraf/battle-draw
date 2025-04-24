@@ -111,8 +111,4 @@ class ServerTest {
         }
     }
 }
-/*handleReceiveMessage()	⚠️ Partially	Can simulate with test messages + stub DatabaseHelper
-handleSendMessage()	⚠️ Partially	Same — fakes or stubs needed
-startServerThread()	❌	Depends on real socket queue and threads
-main()	❌	Integration only */
 

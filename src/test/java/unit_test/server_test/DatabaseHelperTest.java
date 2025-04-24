@@ -50,7 +50,7 @@ public class DatabaseHelperTest {
             stmt.execute("INSERT INTO Players (username, password, online) VALUES ('testuser', 'pass123', 0)");
             stmt.execute("INSERT INTO Thema (thema) VALUES ('Tree'), ('Mountain'), ('Sky')");
 
-            conn.setAutoCommit(true); // just to be safe
+            conn.setAutoCommit(true);
 
             ResultSet rs = conn.createStatement().executeQuery("SELECT id, username FROM Players");
             while (rs.next()) {
@@ -98,10 +98,10 @@ public class DatabaseHelperTest {
     @Test
     void testInsertPlayerAndCheckUsername() {
         String username = "newUserTest";
-        assertTrue(DatabaseHelper.checkUsername(username)); // Available
+        assertTrue(DatabaseHelper.checkUsername(username));
 
         DatabaseHelper.insertPlayer(username, "secret");
-        assertFalse(DatabaseHelper.checkUsername(username)); // Now taken
+        assertFalse(DatabaseHelper.checkUsername(username));
 
         int id = DatabaseHelper.getPlayerId(username);
         assertTrue(id > 0);

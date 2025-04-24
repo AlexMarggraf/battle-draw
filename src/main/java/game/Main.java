@@ -67,7 +67,7 @@ public class Main {
 
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
-    private void setUsername(String username) {
+    public void setUsername(String username) {
         this.username = username;
     }
 
