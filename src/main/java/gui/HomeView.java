@@ -46,7 +46,7 @@ public class HomeView {
     public static Button createLobbyButton() {
         Button btn = new Button("Create Lobby");
         btn.setOnAction(event -> {
-            GUIApp.addUserInputQueue("/createLobby");
+            GUIApp.addClickedInput("/createLobby");
         });
         return btn;
     }
@@ -73,7 +73,7 @@ public class HomeView {
             joinButton.setOnAction(e -> {
                 String username = usernameField.getText().trim();
                 if (!username.isEmpty()) {
-                    GUIApp.addUserInputQueue("/joinLobby Lobby_von_" + username);
+                    GUIApp.addClickedInput("/joinLobby Lobby_von_" + username);
                     popup.close();
                 } else {
                     print("Username cannot be empty");

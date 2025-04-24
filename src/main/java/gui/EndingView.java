@@ -40,6 +40,7 @@ public class EndingView {
     public Button createAgainBtn() {
         Button btn = new Button("Again?");
         btn.setOnAction(event -> {
+            GUIApp.showLobbyView();
             again = true;
         });
         return btn;
@@ -54,7 +55,7 @@ public class EndingView {
     public Button createLeaveBtn() {
         Button btn = new Button("Leave");
         btn.setOnAction(event -> {
-            GUIApp.addUserInputQueue("/leaveLobby");
+            GUIApp.addClickedInput("/leaveLobby");
             GUIApp.showHomeView();
         });
         return btn;

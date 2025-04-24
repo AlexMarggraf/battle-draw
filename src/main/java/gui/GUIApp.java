@@ -41,9 +41,11 @@ public class GUIApp extends Application {
     private static volatile Queue<String> userInputQueue;
     private volatile Queue<String> printMessageQueue;
     private volatile Queue<String> clientMessageQueue;
+    private static volatile Queue<String> clickedInputQueue;
     private static boolean lobbyLeader = false;
     private static String theme;
     private static Map<String, Double> players;
+    private static int time;
 
     /**
      * The main entry point for the JavaFX application.
@@ -57,6 +59,7 @@ public class GUIApp extends Application {
         userInputQueue = new LinkedList<>();
         printMessageQueue = new LinkedList<>();
         clientMessageQueue = new LinkedList<>();
+        clickedInputQueue = new LinkedList<>();
         players = new HashMap<>();
 
         primaryStage.setResizable(false);
@@ -367,4 +370,16 @@ public class GUIApp extends Application {
     public static GUIApp getGuiApp() {
         return guiApp;
     }
+
+    public String getClickedInput() {
+        return clickedInputQueue.poll();
+    }
+
+    public static void addClickedInput(String input) {
+        clickedInputQueue.add(input);
+    }
+
+    public static void setTime(int timeInSeconds) { time = timeInSeconds;}
+
+    public static int getTime() {return time;}
 }

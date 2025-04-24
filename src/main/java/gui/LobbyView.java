@@ -90,7 +90,7 @@ public class LobbyView {
         Button btn = new Button("Force start");
         btn.setOnAction(event -> {
             ready = true;
-            GUIApp.addUserInputQueue("/startGame");
+            GUIApp.addClickedInput("/startGame");
         });
         return btn;
     }
