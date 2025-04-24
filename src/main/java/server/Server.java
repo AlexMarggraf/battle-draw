@@ -280,9 +280,12 @@ public class Server {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobbyGameMap.get(lobby).setStatus("ongoing");
                             String theme = DatabaseHelper.getRandomWords(1).toString();
+                            String numberOfRounds = message.getParams()[2];
+                            lobbyGameMap.get(lobby).setMaxNumberOfRounds(Integer.parseInt(numberOfRounds));
+                            String time = message.getParams()[3];
                             Integer[] players = lobby.getPlayers();
                             for (int id : players) {
-                                Message responseToLobby = new Message("drawingStarts", new String[]{id + "", theme});
+                                Message responseToLobby = new Message("drawingStarts", new String[]{id + "", theme, numberOfRounds, time});
                                 sendMessageQueue.add(responseToLobby.toString());
                             }
                             if(lobbyGameMap.get(lobby).getRoundNumber() == 0) {
