@@ -11,9 +11,23 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link DatabaseHelper} class.
+ * These tests validate database operations such as:
+ * - Player account creation and authentication
+ * - Username/password updates
+ * - Online/offline status tracking
+ * - Thema (topic) retrieval
+ * - Utility methods like list clearing
+ */
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class DatabaseHelperTest {
 
+    /**
+     * Ensures that the test user exists before each test.
+     *
+     * @throws Exception if database interaction fails
+     */
     @BeforeEach
     void ensureTestUserExists() throws Exception {
         try (Connection conn = DriverManager.getConnection("jdbc:sqlite:database/ThemaTest.db");
@@ -22,6 +36,14 @@ public class DatabaseHelperTest {
         }
     }
 
+    /**
+     * Initializes the test database before all tests by:
+     * - Dropping existing tables
+     * - Creating schema
+     * - Inserting default test records
+     *
+     * @throws Exception if database interaction fails
+     */
     @BeforeAll
     void setupTestDatabase() throws Exception {
         DatabaseHelper.setDatabasePath("jdbc:sqlite:database/ThemaTest.db");
@@ -59,6 +81,9 @@ public class DatabaseHelperTest {
         }
     }
 
+    /**
+     * Tests whether {@link DatabaseHelper#getRandomWords(int)} returns the requested number of words.
+     */
     @Test
     void testGetRandomWords() {
         List<String> words = DatabaseHelper.getRandomWords(2);
@@ -66,19 +91,21 @@ public class DatabaseHelperTest {
         assertEquals(2, words.size());
     }
 
+    /**
+     * Tests retrieving a player’s ID and name from the database using {@code getPlayerId} and {@code getPlayerName}.
+     */
     @Test
     void testGetPlayerIdAndName() {
         int id = DatabaseHelper.getPlayerId("testuser");
-        if (id <= 0) {
-            System.out.println("No user found for 'testuser'.");
-        }
-        assertTrue(id > 0);
-
+        assertTrue(id > 0, "ID should be greater than 0");
 
         String name = DatabaseHelper.getPlayerName(id);
         assertEquals("testuser", name);
     }
 
+    /**
+     * Tests setting a user's online status and retrieving it.
+     */
     @Test
     void testSetAndGetStatus() {
         int id = DatabaseHelper.getPlayerId("testuser");
@@ -89,12 +116,18 @@ public class DatabaseHelperTest {
         assertFalse(DatabaseHelper.getStatus(id));
     }
 
+    /**
+     * Tests credential validation using correct and incorrect passwords.
+     */
     @Test
     void testCheckCredentials() {
         assertTrue(DatabaseHelper.checkCredentials("testuser", "pass123"));
         assertFalse(DatabaseHelper.checkCredentials("testuser", "wrongpass"));
     }
 
+    /**
+     * Tests inserting a new player and checking if the username becomes unavailable afterward.
+     */
     @Test
     void testInsertPlayerAndCheckUsername() {
         String username = "newUserTest";
@@ -107,6 +140,9 @@ public class DatabaseHelperTest {
         assertTrue(id > 0);
     }
 
+    /**
+     * Tests updating a player’s username and verifying the change.
+     */
     @Test
     void testChangeUsername() {
         int id = DatabaseHelper.getPlayerId("testuser");
@@ -117,6 +153,9 @@ public class DatabaseHelperTest {
         assertEquals(newUsername, updatedName);
     }
 
+    /**
+     * Tests updating a player’s password and validating login using the new credentials.
+     */
     @Test
     void testChangePassword() {
         int id = DatabaseHelper.getPlayerId("updatedUser");
@@ -125,6 +164,9 @@ public class DatabaseHelperTest {
         assertTrue(DatabaseHelper.checkCredentials("updatedUser", "newPass123"));
     }
 
+    /**
+     * Tests setting all users offline and ensures the test user is also set offline.
+     */
     @Test
     void testSetOffline() {
         DatabaseHelper.setOffline();
@@ -132,6 +174,9 @@ public class DatabaseHelperTest {
         assertFalse(DatabaseHelper.getStatus(id));
     }
 
+    /**
+     * Tests that {@link DatabaseHelper#clearList(List)} empties a list.
+     */
     @Test
     void testClearList() {
         List<String> list = new java.util.ArrayList<>();
