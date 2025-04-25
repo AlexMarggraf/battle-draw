@@ -32,7 +32,9 @@ public class HomeView {
         Button joinButton = createJoinButton();
         Button createLobbyButton = createLobbyButton();
         Button tutorialButton = createTutorialButton();
-        view = new VBox(20, new Label("Willkommen bei Battle Draw!"), new Label("Home"), createLobbyButton, joinButton, tutorialButton);
+        Button lobbyListButton = createListLobby();
+        Button lobbyPlayersButton = createListPlayers();
+        view = new VBox(20, new Label("Willkommen bei Battle Draw!"), new Label("Home"), createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, tutorialButton);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -46,7 +48,7 @@ public class HomeView {
     public static Button createLobbyButton() {
         Button btn = new Button("Create Lobby");
         btn.setOnAction(event -> {
-            GUIApp.addUserInputQueue("/createLobby");
+            GUIApp.addClickedInput("/createLobby");
         });
         return btn;
     }
@@ -73,7 +75,7 @@ public class HomeView {
             joinButton.setOnAction(e -> {
                 String username = usernameField.getText().trim();
                 if (!username.isEmpty()) {
-                    GUIApp.addUserInputQueue("/joinLobby Lobby_von_" + username);
+                    GUIApp.addClickedInput("/joinLobby Lobby_von_" + username);
                     popup.close();
                 } else {
                     print("Username cannot be empty");
@@ -101,6 +103,35 @@ public class HomeView {
     public static Button createTutorialButton() {
         Button btn = new Button("Tutorial");
         //todo later
+        return btn;
+    }
+
+    /**
+     * Creates and configures the "List Lobbys" button.
+     * When pressed, this button will list all available lobbies (functionality pending).
+     *
+     * @return the configured Button instance for listing lobbies
+     */
+    public Button createListLobby() {
+        Button btn = new Button("List Lobbys");
+        btn.setOnAction(event -> {
+            //todo
+        });
+        return btn;
+    }
+
+
+    /**
+     * Creates and configures the "List Online Players" button.
+     * When pressed, this button will list all online players (functionality pending).
+     *
+     * @return the configured Button instance for listing online players
+     */
+    public Button createListPlayers() {
+        Button btn = new Button("List Online Players");
+        btn.setOnAction(event -> {
+            //todo
+        });
         return btn;
     }
 

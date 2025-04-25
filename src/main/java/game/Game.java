@@ -56,5 +56,7 @@ public class Game {
 
     public Integer getMaxNumberOfRounds() {return maxNumberOfRounds;}
 
+    public void setMaxNumberOfRounds(Integer maxNumberOfRounds) {this.maxNumberOfRounds = maxNumberOfRounds;}
+
     public Integer getRoundNumber() {return roundNumber;}
 }

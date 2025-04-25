@@ -80,7 +80,7 @@ public class LeaderboardView {
         Button btn = new Button("Force next round (leader)");
         btn.setOnAction(event -> {
             ready = true;
-            GUIApp.addUserInputQueue("/nextRound");
+            GUIApp.addClickedInput("/nextRound");
 
         });
         return btn;

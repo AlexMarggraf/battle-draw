@@ -157,6 +157,7 @@ public class Main {
                         inLobby = false;
                         messageType = "chatAll";
                         GUIApp.clearPlayers();
+                        GUIApp.setLobbyLeader(false);
                         print("You left the Lobby"); //: " + message.getParams()[1]);
                     } else {
                         GUIApp.removePlayer(message.getParams()[1]);
@@ -174,14 +175,13 @@ public class Main {
                 }
                 case "drawingStarts" -> {
                     GUIApp.setTheme(message.getParams()[1]);
+                    GUIApp.setTime(Integer.parseInt(message.getParams()[3]));
+                    game.setMaxNumberOfRounds(Integer.parseInt(message.getParams()[2]));
                     GUIApp.showGameView();
-                    game.setStatus("drawing");
                 }
                 case "votingStarts" -> {
                     GUIApp.showBewertungView();
-                    //print("You would see a picture");
                     game.plusOneVotedRound();
-                    game.setStatus("voting");
                 }
                 case "updatePoints" -> {
                     GUIApp.addPointsPlayer(message.getParams()[1], Double.parseDouble(message.getParams()[2]));
@@ -294,139 +294,12 @@ public class Main {
                     }
                     clientMessageQueue.add(message.toString());
                 }
-                case "/joinLobby" -> {
-                    Message message;
-                    if (splitClientMessage.length == 2) {
-                        if (!inLobby) {
-                            message = new Message("joinLobby", new String[]{serverID + "", splitClientMessage[1]});
-                            clientMessageQueue.add(message.toString());
-                        } else {
-                            print("You're already in a lobby");
-                        }
-                    } else {
-                        if (messageType.equals("chatAll")) {
-                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
-                        } else {
-                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
-                        }
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
-                case "/createLobby" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if (!inLobby) {
-                            message = new Message("createLobby", new String[]{serverID + ""});
-                            clientMessageQueue.add(message.toString());
-                            GUIApp.setLobbyLeader(true);
-                        } else {
-                            print("You're already in a lobby");
-                        }
-                    } else {
-                        if (messageType.equals("chatAll")) {
-                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
-                        } else {
-                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
-                        }
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
-                case "/leaveLobby" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if (inLobby) {
-                            message = new Message("leaveLobby", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message.toString());
-                        } else {
-                            print("You're not in a lobby");
-                        }
-                    } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
                 case "/listPlayers" -> {
                     Message message;
                     if (splitClientMessage.length == 1) {
                         if (inLobby) {
                             message = new Message("listLobbyPlayers", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
-                        } else {
-                            print("You're not in a lobby");
-                        }
-                    } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
-                case "/startGame" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if (inLobby) {
-                            //print("This will start the game");
-                            message = new Message("startDrawing", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message.toString());
-                        } else {
-                            print("You're not in a lobby");
-                        }
-                    } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
-                case "/timeIsUp" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if (inLobby) {
-                            sendImage(GameView.getCanvasAsBufferedImage());
-                            //message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
-                            //clientMessageQueue.add(message.toString());
-                            //print("Your picture was uploaded");
-                        } else {
-                            print("You're not in a lobby");
-                        }
-                    } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
-                case "/sendVote" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if (inLobby) {
-                            message = new Message("sendVote", new String[]{serverID + "", lobbyName, BewertungView.getVote() + ""});
-                            clientMessageQueue.add(message.toString());
-                            Message message2 = new Message("readyToVote", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message2.toString());
-                        } else {
-                            print("You're not in a lobby");
-                        }
-                    } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
-                case "/nextRound" ->  {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if (inLobby) {
-                            message = new Message("nextRound", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message.toString());
-                        } else {
-                            print("You're not in a lobby");
-                        }
-                    } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
-                case "/readyToVote" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if(inLobby) {
-                            message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message.toString());
-                            //print("You are ready to vote");
                         } else {
                             print("You're not in a lobby");
                         }
@@ -447,6 +320,148 @@ public class Main {
             }
 
             clientMessage = guiApp.getUserInput();
+        }
+    }
+
+    /**
+     * This method handles all inputs from buttons in the GUI
+     */
+
+    public void handleGUIInput() {
+        String input = guiApp.getClickedInput();
+
+        while (input != null) {
+            String[] splitInput = input.split("\\s+");
+
+            switch (splitInput[0]) {
+                case "/createLobby" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (!inLobby) {
+                            message = new Message("createLobby", new String[]{serverID + ""});
+                            clientMessageQueue.add(message.toString());
+                            GUIApp.setLobbyLeader(true);
+                        } else {
+                            print("You're already in a lobby");
+                        }
+                    } else {
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, input});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, input});
+                        }
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/joinLobby" -> {
+                    Message message;
+                    if (splitInput.length == 2) {
+                        if (!inLobby) {
+                            message = new Message("joinLobby", new String[]{serverID + "", splitInput[1]});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            print("You're already in a lobby");
+                        }
+                    } else {
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, input});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, input});
+                        }
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/leaveLobby" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (inLobby) {
+                            message = new Message("leaveLobby", new String[]{serverID + "", lobbyName});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/startGame" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (inLobby) {
+                            //print("This will start the game");
+                            message = new Message("startDrawing", new String[]{serverID + "", lobbyName, 1 + "", 60 + ""});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/timeIsUp" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (inLobby) {
+                            sendImage(GameView.getCanvasAsBufferedImage());
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/sendVote" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (inLobby) {
+                            message = new Message("sendVote", new String[]{serverID + "", lobbyName, BewertungView.getVote() + ""});
+                            clientMessageQueue.add(message.toString());
+                            Message message2 = new Message("readyToVote", new String[]{serverID + "", lobbyName});
+                            clientMessageQueue.add(message2.toString());
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/nextRound" ->  {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (inLobby) {
+                            message = new Message("nextRound", new String[]{serverID + "", lobbyName});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/readyToVote" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if(inLobby) {
+                            message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
+                            clientMessageQueue.add(message.toString());
+                            //print("You are ready to vote");
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+
+            }
+
+            input = guiApp.getClickedInput();
         }
     }
 
@@ -744,6 +759,7 @@ public class Main {
             while (true) {
                 main.handlePingPong();
                 main.handleClientMessage();
+                main.handleGUIInput();
                 main.receiveMessage();
                 main.sendMessage();
                 main.handleServerMessage();

@@ -12,6 +12,7 @@ import javafx.animation.Timeline;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
@@ -23,6 +24,8 @@ public class LobbyView {
     private final VBox view;
     private VBox vboxUsers;
     public static boolean ready = false;
+    public int rounds;
+    public int timer;
 
     /**
      * Constructs a new LobbyView with player listing and ready functionality.
@@ -32,6 +35,9 @@ public class LobbyView {
         this.vboxUsers = new VBox(10);
         Button readyBtn = createReadyButton();
         Button leaderBtn = createLeaderButton();
+        Button leaveBtn = createLeaveButton();
+        ComboBox<Integer> roundsBox = createRoundsCombo();
+        ComboBox<Integer> timerBox = createTimerCombo();
 
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), e -> createLobbyListing())
@@ -40,12 +46,13 @@ public class LobbyView {
         timeline.play();
 
 
-        view = new VBox(20, new Label("Lobby"), vboxUsers);
+        view = new VBox(20, new Label("Lobby"), vboxUsers, leaveBtn);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
-
         if (GUIApp.getLobbyLeader()) {
             view.getChildren().add(leaderBtn);
+            view.getChildren().add(roundsBox);
+            view.getChildren().add(timerBox);
         } /* else {
             view.getChildren().add(readyBtn);
         }
@@ -90,9 +97,50 @@ public class LobbyView {
         Button btn = new Button("Force start");
         btn.setOnAction(event -> {
             ready = true;
-            GUIApp.addUserInputQueue("/startGame");
+            GUIApp.addClickedInput("/startGame");
         });
         return btn;
+    }
+
+
+    /**
+     * Creates and configures the "Leave Lobby" button.
+     * When pressed, this button will leave the current lobby (functionality pending).
+     *
+     * @return the configured Button instance for leaving the lobby
+     */
+    public Button createLeaveButton() {
+        Button btn = new Button("Leave Lobby");
+        btn.setOnAction(event -> {
+            //todo
+        });
+        return btn;
+    }
+
+    /**
+     * Creates a ComboBox for selecting the number of rounds in the game.
+     *
+     * @return the configured ComboBox with round options
+     */
+    private ComboBox<Integer> createRoundsCombo() {
+        ComboBox<Integer> combo = new ComboBox<>();
+        combo.getItems().addAll(1, 2, 3, 5, 8, 100);
+        combo.setValue(3);
+        combo.setOnAction(e -> rounds = combo.getValue());
+        return combo;
+    }
+
+    /**
+     * Creates a ComboBox for selecting the game timer duration.
+     *
+     * @return the configured ComboBox with timer options
+     */
+    private ComboBox<Integer> createTimerCombo() {
+        ComboBox<Integer> combo = new ComboBox<>();
+        combo.getItems().addAll(10, 30, 45, 60, 90);
+        combo.setValue(45);
+        combo.setOnAction(e -> timer = combo.getValue());
+        return combo;
     }
 
     public static void setReadyFalse() {
@@ -105,5 +153,13 @@ public class LobbyView {
 
     public Parent getView() {
         return view;
+    }
+
+    public int getRounds() {
+        return rounds;
+    }
+
+    public int getTimer() {
+        return timer;
     }
 }

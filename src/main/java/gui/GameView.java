@@ -52,9 +52,7 @@ public class GameView {
         canvas = new Canvas(canvasWidth, canvasHeight);
         gc = canvas.getGraphicsContext2D();
 
-        Button proceedBtn = createNextBtn();
-
-        TextField countdownField = createCountdown(60, proceedBtn);
+        TextField countdownField = createCountdown(GUIApp.getTime());
         Label themeLabel = createThemeLabel();
 
         setupCanvas();
@@ -66,7 +64,7 @@ public class GameView {
         ComboBox<Integer> widthCombo = createWidthCombo();
         Button clearBtn = createClearButton();
 
-        HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn, proceedBtn);
+        HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn);
         controls.setTranslateY(-15);
         controls.setTranslateX(-15);
         view = new VBox(20, controls, countdownField, themeLabel, canvas);
@@ -126,7 +124,7 @@ public class GameView {
      * @param initialTime the starting time in seconds for the countdown
      * @return the configured TextField displaying the countdown
      */
-    public TextField createCountdown(int initialTime, Button proceedBtn) {
+    public TextField createCountdown(int initialTime) {
         TextField countdownField = new TextField(String.valueOf(initialTime));
         countdownField.setEditable(false);
 
@@ -143,10 +141,9 @@ public class GameView {
                         countdownField.setText("Time's up!");
                         canvas.setDisable(true);
                         timeline.stop();
-                        GUIApp.addUserInputQueue("/timeIsUp");
-                        GUIApp.addUserInputQueue("/readyToVote");
+                        GUIApp.addClickedInput("/timeIsUp");
+                        GUIApp.addClickedInput("/readyToVote");
                         isTimeUp = true;
-                        proceedBtn.setDisable(false);
                     }
                 })
         );
@@ -220,7 +217,7 @@ public class GameView {
         Button btn = new Button("Proceed");
         btn.setDisable(true);
         btn.setOnAction(e -> {
-            GUIApp.addUserInputQueue("/readyToVote");
+            GUIApp.addClickedInput("/readyToVote");
             btn.setDisable(true);
         });
         return btn;

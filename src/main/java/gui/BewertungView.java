@@ -94,7 +94,7 @@ public class BewertungView {
         Button btn = new Button("Next");
         next = true;
         btn.setOnAction(e -> {
-            GUIApp.addUserInputQueue("/readyToVote");
+            GUIApp.addClickedInput("/readyToVote");
             btn.setDisable(true);
         });
         return btn;
@@ -110,7 +110,7 @@ public class BewertungView {
     private Button createSendVoteButton(){
         Button btn = new Button("send Vote");
         btn.setOnAction( e -> {
-            GUIApp.addUserInputQueue("/sendVote");
+            GUIApp.addClickedInput("/sendVote");
             btn.setDisable(true);
         });
         return btn;
