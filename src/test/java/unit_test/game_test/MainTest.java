@@ -12,15 +12,30 @@ import java.util.Queue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link Main} class.
+ * This suite verifies:
+ * - Initial state setup
+ * - Ping/pong handling
+ * - Server message parsing
+ * - Image decoding
+ * - Message queue flushing via client interaction
+ */
 class MainTest {
 
     private Main main;
 
+    /**
+     * Initializes a new {@link Main} instance before each test.
+     */
     @BeforeEach
     void setUp() {
         main = new Main();
     }
 
+    /**
+     * Verifies that the constructor initializes the state and queues properly.
+     */
     @Test
     void testConstructorInitialState() {
         assertNotNull(main.getClientMessageQueue());
@@ -32,6 +47,9 @@ class MainTest {
         assertTrue(main.getSendPing());
     }
 
+    /**
+     * Tests that a ping message is queued if enough time has passed and a pong was received.
+     */
     @Test
     void testSetReceivedPongAndAffectsPingHandling() {
         main.setSendPing(true);
@@ -45,6 +63,11 @@ class MainTest {
         assertTrue(queued.startsWith("ping"));
     }
 
+    /**
+     * Tests that a Base64-encoded string is correctly decoded into a {@link BufferedImage}.
+     *
+     * @throws Exception if encoding/decoding or IO fails
+     */
     @Test
     void testDecodeImageReturnsBufferedImage() throws Exception {
         BufferedImage original = new BufferedImage(5, 5, BufferedImage.TYPE_INT_RGB);
@@ -59,6 +82,9 @@ class MainTest {
         assertEquals(5, decoded.getHeight());
     }
 
+    /**
+     * Tests that receiving a "pong" message sets the flag to allow sending ping again.
+     */
     @Test
     void testHandleServerMessage_setsReceivedPongTrue() {
         main.getServerMessageQueue().add("pong 0");
@@ -67,6 +93,9 @@ class MainTest {
         assertTrue(main.getSendPing());
     }
 
+    /**
+     * Tests that messages in the client message queue are passed to the client for sending.
+     */
     @Test
     void testSendMessageFlushesToClientQueue() {
         DummyClient dummy = new DummyClient();
@@ -82,23 +111,37 @@ class MainTest {
         assertTrue(dummy.sentMessages.isEmpty());
     }
 
+    /**
+     * Dummy implementation of {@link client.Client} for testing message sending behavior
+     * without requiring real network communication.
+     */
     static class DummyClient extends client.Client {
         Queue<String> sentMessages = new java.util.LinkedList<>();
+        public boolean disconnectCalled = false;
 
+        /**
+         * Constructs a dummy client with no actual network target.
+         */
         public DummyClient() {
             super("localhost", 1234);
         }
 
+        /**
+         * Captures the message instead of sending it.
+         *
+         * @param msg the message to queue
+         */
         @Override
         public void queueClientMessage(String msg) {
             sentMessages.add(msg);
         }
 
+        /**
+         * Flags that disconnect was called.
+         */
         @Override
         public void disconnect() {
             disconnectCalled = true;
         }
-
-        public boolean disconnectCalled = false;
     }
 }

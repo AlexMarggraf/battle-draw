@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="game_test.GameTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2025-04-13T12:45:52" hostname="ALEX-PC" time="0.019">
+  <properties/>
+  <testcase name="testSetAndGetStatus()" classname="game_test.GameTest" time="0.012"/>
+  <testcase name="testPlusOnePlayerIncrements()" classname="game_test.GameTest" time="0.001"/>
+  <testcase name="testGetLobbyName()" classname="game_test.GameTest" time="0.0"/>
+  <testcase name="testGetNumberOfPlayers()" classname="game_test.GameTest" time="0.0"/>
+  <testcase name="testConstructorSetsDefaults()" classname="game_test.GameTest" time="0.001"/>
+  <testcase name="testMinusOnePlayerDecrements()" classname="game_test.GameTest" time="0.0"/>
+  <testcase name="testMaxNumberOfRoundsDefault()" classname="game_test.GameTest" time="0.001"/>
+  <testcase name="testResetNumberOfRoundsVoted()" classname="game_test.GameTest" time="0.001"/>
+  <testcase name="testNextRoundIncrementsRoundNumber()" classname="game_test.GameTest" time="0.0"/>
+  <testcase name="testPlusOneVotedRoundIncrements()" classname="game_test.GameTest" time="0.0"/>
+  <testcase name="testGetNumberOfRoundsVoted()" classname="game_test.GameTest" time="0.0"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

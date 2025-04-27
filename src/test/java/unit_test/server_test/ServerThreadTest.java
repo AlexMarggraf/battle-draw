@@ -11,18 +11,32 @@ import java.net.Socket;
 import java.util.Queue;
 import java.util.Arrays;
 
-
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Unit tests for the {@link ServerThread} class.
+ * These tests verify server thread functionality such as:
+ * - Message queuing
+ * - Ping/Pong handling
+ * - PrintWriter communication
+ * - Message listening and client-server interaction
+ */
 class ServerThreadTest {
 
     private ServerThread serverThread;
 
+    /**
+     * Initializes a {@link ServerThread} instance before each test with a dummy socket.
+     */
     @BeforeEach
     void setUp() {
         serverThread = new ServerThread(1, new DummySocket());
     }
 
+    /**
+     * Tests that the constructor correctly initializes the thread fields,
+     * including message queues and connection status flags.
+     */
     @Test
     void testConstructorInitializesFields() {
         assertEquals(1, serverThread.getId());
@@ -34,17 +48,27 @@ class ServerThreadTest {
         assertFalse(serverThread.disconnect);
     }
 
+    /**
+     * Tests the ID setter and getter methods.
+     */
     @Test
     void testIdSetterGetter() {
         serverThread.setId(42);
         assertEquals(42, serverThread.getId());
     }
 
+    /**
+     * Tests setting the client username.
+     * (No assertion because it sets an internal field — test for exception-free behavior.)
+     */
     @Test
     void testSetClientUsername() {
         serverThread.setClientUsername("user123");
     }
 
+    /**
+     * Tests adding server messages to the queue and retrieving a client message.
+     */
     @Test
     void testQueueServerMessageAndGetClientMessage() {
         serverThread.queueServerMessage("msg1");
@@ -57,6 +81,9 @@ class ServerThreadTest {
         assertEquals("client-msg", serverThread.getClientMessage());
     }
 
+    /**
+     * Tests that the {@link ServerThread#sendMessage()} method correctly writes queued messages to the output stream.
+     */
     @Test
     void testSendMessageWritesToWriter() {
         StringWriter writer = new StringWriter();
@@ -73,6 +100,9 @@ class ServerThreadTest {
         assertTrue(output.contains("world"));
     }
 
+    /**
+     * Tests that the ping/pong mechanism sends a ping when the last ping was too long ago.
+     */
     @Test
     void testHandlePingPongSendsPing() {
         serverThread.lastPing = System.currentTimeMillis() - 11000;
@@ -85,6 +115,9 @@ class ServerThreadTest {
         assertTrue(msg.startsWith("ping"));
     }
 
+    /**
+     * Tests that the thread disconnects the client if no pong was received in time.
+     */
     @Test
     void testHandlePingPongDisconnectsIfNoPong() {
         serverThread.lastPing = System.currentTimeMillis() - 11000;
@@ -96,6 +129,9 @@ class ServerThreadTest {
         assertTrue(serverThread.getClientMessageQueue().peek().startsWith("disconnect"));
     }
 
+    /**
+     * Tests that receiving a "ping" message results in a "pong" message being queued to the server.
+     */
     @Test
     void testReceiveMessageProcessesPing() {
         DummyListener listener = new DummyListener("ping 1");
@@ -107,26 +143,36 @@ class ServerThreadTest {
         assertTrue(response.startsWith("pong"));
     }
 
-    // --- Dummy classes ---
-
+    /**
+     * A dummy implementation of {@link Socket} used to bypass real networking in tests.
+     */
     static class DummySocket extends Socket {
     }
 
+    /**
+     * A stub for {@link MessageListener} that simulates incoming messages using a predefined queue.
+     */
     static class DummyListener extends MessageListener {
         private final Queue<String> messages = new java.util.LinkedList<>();
 
+        /**
+         * Constructs the dummy listener with predefined messages.
+         *
+         * @param initialMessages the messages to queue
+         */
         public DummyListener(String... initialMessages) {
-            super(System.in);
+            super(System.in); // Stream not used
             messages.addAll(Arrays.asList(initialMessages));
         }
 
+        /**
+         * Returns the next message in the queue, or null if empty.
+         *
+         * @return a message string or null
+         */
         @Override
         public String getMessage() {
             return messages.poll();
         }
     }
 }
-    //receiveMessage
-    //run();
-    //get set method in serverThread
-
