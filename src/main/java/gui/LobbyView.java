@@ -24,8 +24,8 @@ public class LobbyView {
     private final VBox view;
     private VBox vboxUsers;
     public static boolean ready = false;
-    public int rounds;
-    public int timer;
+    public static int rounds = 3;
+    public static int timer = 45;
 
     /**
      * Constructs a new LobbyView with player listing and ready functionality.
@@ -36,6 +36,7 @@ public class LobbyView {
         Button readyBtn = createReadyButton();
         Button leaderBtn = createLeaderButton();
         Button leaveBtn = createLeaveButton();
+        Button listBtn = creatListPlayerButton();
         ComboBox<Integer> roundsBox = createRoundsCombo();
         ComboBox<Integer> timerBox = createTimerCombo();
 
@@ -46,7 +47,7 @@ public class LobbyView {
         timeline.play();
 
 
-        view = new VBox(20, new Label("Lobby"), vboxUsers, leaveBtn);
+        view = new VBox(20, new Label("Lobby"), vboxUsers, leaveBtn, listBtn);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
         if (GUIApp.getLobbyLeader()) {
@@ -112,7 +113,8 @@ public class LobbyView {
     public Button createLeaveButton() {
         Button btn = new Button("Leave Lobby");
         btn.setOnAction(event -> {
-            //todo
+            GUIApp.addClickedInput("/leaveLobby");
+            GUIApp.showHomeView();
         });
         return btn;
     }
@@ -143,6 +145,14 @@ public class LobbyView {
         return combo;
     }
 
+    public Button creatListPlayerButton() {
+        Button btn = new Button("List Players");
+        btn.setOnAction(event -> {
+            GUIApp.addClickedInput("/listPlayers");
+        });
+        return btn;
+    }
+
     public static void setReadyFalse() {
         ready = false;
     }
@@ -155,11 +165,11 @@ public class LobbyView {
         return view;
     }
 
-    public int getRounds() {
+    public static int getRounds() {
         return rounds;
     }
 
-    public int getTimer() {
+    public static int getTimer() {
         return timer;
     }
 }

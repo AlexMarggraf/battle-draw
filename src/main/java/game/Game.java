@@ -14,6 +14,7 @@ public class Game {
     private Integer roundNumber;
     private Integer numberOfRoundsVoted;
     private Integer maxNumberOfRounds;
+    private Integer timer;
 
     /**
      * This method is the constructor and sets status, lobbyName and
@@ -24,10 +25,8 @@ public class Game {
     public Game(String lobbyName) {
         this.status = "open";
         this.lobbyName = lobbyName;
-        this.roundNumber = 0;
         this.numberOfPlayers = 0;
         this.numberOfRoundsVoted = 0;
-        this.maxNumberOfRounds = 1;
     }
 
     public String getStatus() {
@@ -59,4 +58,10 @@ public class Game {
     public void setMaxNumberOfRounds(Integer maxNumberOfRounds) {this.maxNumberOfRounds = maxNumberOfRounds;}
 
     public Integer getRoundNumber() {return roundNumber;}
+
+    public void resetRoundNumber() {this.roundNumber = 0;}
+
+    public void setTimer(int timer) {this.timer = timer;}
+
+    public int getTimer() {return timer;}
 }

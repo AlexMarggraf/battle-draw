@@ -115,7 +115,7 @@ public class HomeView {
     public Button createListLobby() {
         Button btn = new Button("List Lobbys");
         btn.setOnAction(event -> {
-            //todo
+            GUIApp.addClickedInput("/games");
         });
         return btn;
     }
@@ -130,7 +130,7 @@ public class HomeView {
     public Button createListPlayers() {
         Button btn = new Button("List Online Players");
         btn.setOnAction(event -> {
-            //todo
+            GUIApp.addClickedInput("/online");
         });
         return btn;
     }

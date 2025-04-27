@@ -10,9 +10,7 @@
 package game;
 
 import client.Client;
-import gui.BewertungView;
-import gui.GUIApp;
-import gui.GameView;
+import gui.*;
 import javafx.application.Application;
 
 import java.awt.image.BufferedImage;
@@ -49,6 +47,7 @@ public class Main {
     private String lobbyName;
     private String messageType;
     private Game game;
+    private String password;
 
     /**
      * This method is the constructor and initializes the queues.
@@ -101,11 +100,13 @@ public class Main {
                     username = message.getParams()[1];
                     serverID = message.getID();
                     loggedIn = true;
+                    GUIApp.showHomeView();
                     print("You're logged in as " + username);
                 }
                 case "rejectLogin" -> {
-                    print("Username or password is wrong");
-                    signInLogIn();
+                    LoginSignupView.setErrorText("Username or password is wrong");
+                    GUIApp.showLoginSignupView();
+                    //signInLogIn();
                 }
                 case "broadcast" -> {
                     print("(Broadcast) " + message.getParams()[0]);
@@ -268,46 +269,6 @@ public class Main {
                     }
                     clientMessageQueue.add(message.toString());
                 }
-                case "/online" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        message = new Message("whoOnline", new String[]{serverID + ""});
-                    } else {
-                        if (messageType.equals("chatAll")) {
-                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
-                        } else {
-                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
-                        }
-                    }
-                    clientMessageQueue.add(message.toString());
-                }
-                case "/games" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        message = new Message("whatGames", new String[]{serverID + ""});
-                    } else {
-                        if (messageType.equals("chatAll")) {
-                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
-                        } else {
-                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
-                        }
-                    }
-                    clientMessageQueue.add(message.toString());
-                }
-                case "/listPlayers" -> {
-                    Message message;
-                    if (splitClientMessage.length == 1) {
-                        if (inLobby) {
-                            message = new Message("listLobbyPlayers", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message.toString());
-                        } else {
-                            print("You're not in a lobby");
-                        }
-                    } else {
-                        message = new Message("chatAll", new String[]{serverID + "", username, clientMessage});
-                        clientMessageQueue.add(message.toString());
-                    }
-                }
                 default -> {
                     Message message;
                     if (messageType.equals("chatAll")) {
@@ -334,6 +295,92 @@ public class Main {
             String[] splitInput = input.split("\\s+");
 
             switch (splitInput[0]) {
+                case "/setUsername" -> {
+                    String currentUsername = input.replaceFirst(splitInput[0] + " ", "");
+                    if (currentUsername.contains(" ") || currentUsername.equals("null")) {
+                            LoginSignupView.setErrorText("Whitespaces or an empty Username or Password are not allowed!");
+                            GUIApp.showLoginSignupView();
+                    } else {
+                        setUsername(currentUsername);
+                    }
+                }
+                case "/setPassword" -> {
+                    String currentPassword = input.replaceFirst(splitInput[0] + " ", "");
+                    if (currentPassword.contains(" ") || currentPassword.equals("null")) {
+                        LoginSignupView.setErrorText("Whitespaces or an empty Username or Password are not allowed!");
+                        GUIApp.showLoginSignupView();
+                    } else {
+                        setPassword(currentPassword);
+                    }
+                }
+                case "/logIn" -> {
+                    Message message;
+                    if (splitInput.length >= 3) {
+                        if (splitInput.length == 3 && splitInput[1].equals(username) && splitInput[2].equals(password)) {
+                            String username = splitInput[1];
+                            String password = splitInput[2];
+                            message = new Message("logIn", new String[]{serverID + "", username, password});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            LoginSignupView.setErrorText("Whitespaces or an empty Username or Password are not allowed!");
+                            GUIApp.showLoginSignupView();
+                        }
+                    }
+                }
+                case "/signUp" -> {
+                    Message message;
+                    if (splitInput.length >= 3) {
+                        if (splitInput.length == 3 && splitInput[1].equals(username) && splitInput[2].equals(password)) {
+                            String username = splitInput[1];
+                            String password = splitInput[2];
+                            message = new Message("signUp", new String[]{serverID + "", username, password});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            LoginSignupView.setErrorText("Whitespaces or an empty Username or Password are not allowed!");
+                            GUIApp.showLoginSignupView();
+                        }
+                    }
+                }
+                case "/listPlayers" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (inLobby) {
+                            message = new Message("listLobbyPlayers", new String[]{serverID + "", lobbyName});
+                            clientMessageQueue.add(message.toString());
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/online" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        message = new Message("whoOnline", new String[]{serverID + ""});
+                    } else {
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, input});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, input});
+                        }
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
+                case "/games" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        message = new Message("whatGames", new String[]{serverID + ""});
+                    } else {
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, input});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, input});
+                        }
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
                 case "/createLobby" -> {
                     Message message;
                     if (splitInput.length == 1) {
@@ -390,7 +437,7 @@ public class Main {
                     if (splitInput.length == 1) {
                         if (inLobby) {
                             //print("This will start the game");
-                            message = new Message("startDrawing", new String[]{serverID + "", lobbyName, 1 + "", 60 + ""});
+                            message = new Message("startDrawing", new String[]{serverID + "", lobbyName, LobbyView.getRounds() + "", LobbyView.getTimer() + ""});
                             clientMessageQueue.add(message.toString());
                         } else {
                             print("You're not in a lobby");
@@ -735,8 +782,9 @@ public class Main {
                     e.printStackTrace();
                 }
             }
+            GUIApp.setUsername(args2[2]);
 
-            GUIApp.showHomeView();
+            GUIApp.showLoginSignupView();
             /*
 
             //bsp code
@@ -750,7 +798,7 @@ public class Main {
 
             main.setChatGui();
             main.initClient(args2[0], Integer.parseInt(args2[1]));
-            main.signInLogIn();
+            //main.signInLogIn();
 
             MessageListener msgListener = new MessageListener(System.in);
             Thread msgListenerThread = new Thread(msgListener);
@@ -810,4 +858,6 @@ public class Main {
     public Queue<String> getServerMessageQueue() {
         return serverMessageQueue;
     }
+
+    public void setPassword(String password) {this.password = password;}
 }

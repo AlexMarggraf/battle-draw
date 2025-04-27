@@ -282,7 +282,9 @@ public class Server {
                             String theme = DatabaseHelper.getRandomWords(1).toString();
                             String numberOfRounds = message.getParams()[2];
                             lobbyGameMap.get(lobby).setMaxNumberOfRounds(Integer.parseInt(numberOfRounds));
+                            lobbyGameMap.get(lobby).resetRoundNumber();
                             String time = message.getParams()[3];
+                            lobbyGameMap.get(lobby).setTimer(Integer.parseInt(time));
                             Integer[] players = lobby.getPlayers();
                             for (int id : players) {
                                 Message responseToLobby = new Message("drawingStarts", new String[]{id + "", theme, numberOfRounds, time});
@@ -363,8 +365,11 @@ public class Server {
                                      sendMessageQueue.add(response.toString());
                                 }
                             } else {
+                                String theme = DatabaseHelper.getRandomWords(1).toString();
+                                Integer maxRounds = lobbyGameMap.get(lobby).getMaxNumberOfRounds();
+                                Integer timer = lobbyGameMap.get(lobby).getTimer();
                                 for (int id : players) {
-                                    Message response = new Message("startNextRound", new String[]{id + ""});
+                                    Message response = new Message("drawingStarts", new String[]{id + "", theme, maxRounds + "", timer + ""});
                                     sendMessageQueue.add(response.toString());
                                 }
                             }

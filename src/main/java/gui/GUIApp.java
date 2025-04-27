@@ -46,6 +46,7 @@ public class GUIApp extends Application {
     private static String theme;
     private static Map<String, Double> players;
     private static int time;
+    private static String username;
 
     /**
      * The main entry point for the JavaFX application.
@@ -382,4 +383,8 @@ public class GUIApp extends Application {
     public static void setTime(int timeInSeconds) { time = timeInSeconds;}
 
     public static int getTime() {return time;}
+
+    public static void setUsername(String newUsername) {username = newUsername;}
+
+    public static String getUsername() {return username;}
 }

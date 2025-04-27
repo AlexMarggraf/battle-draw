@@ -141,6 +141,7 @@ public class GameView {
                         countdownField.setText("Time's up!");
                         canvas.setDisable(true);
                         timeline.stop();
+
                         GUIApp.addClickedInput("/timeIsUp");
                         GUIApp.addClickedInput("/readyToVote");
                         isTimeUp = true;
