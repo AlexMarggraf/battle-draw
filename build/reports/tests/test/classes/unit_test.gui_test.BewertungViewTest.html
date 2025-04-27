@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+<meta http-equiv="x-ua-compatible" content="IE=edge"/>
+<title>Test results - BewertungViewTest</title>
+<link href="../css/base-style.css" rel="stylesheet" type="text/css"/>
+<link href="../css/style.css" rel="stylesheet" type="text/css"/>
+<script src="../js/report.js" type="text/javascript"></script>
+</head>
+<body>
+<div id="content">
+<h1>BewertungViewTest</h1>
+<div class="breadcrumbs">
+<a href="../index.html">all</a> &gt; 
+<a href="../packages/unit_test.gui_test.html">unit_test.gui_test</a> &gt; BewertungViewTest</div>
+<div id="summary">
+<table>
+<tr>
+<td>
+<div class="summaryGroup">
+<table>
+<tr>
+<td>
+<div class="infoBox" id="tests">
+<div class="counter">13</div>
+<p>tests</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="failures">
+<div class="counter">6</div>
+<p>failures</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="ignored">
+<div class="counter">0</div>
+<p>ignored</p>
+</div>
+</td>
+<td>
+<div class="infoBox" id="duration">
+<div class="counter">2.559s</div>
+<p>duration</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+</td>
+<td>
+<div class="infoBox failures" id="successRate">
+<div class="percent">53%</div>
+<p>successful</p>
+</div>
+</td>
+</tr>
+</table>
+</div>
+<div id="tabs">
+<ul class="tabLinks">
+<li>
+<a href="#tab0">Failed tests</a>
+</li>
+<li>
+<a href="#tab1">Tests</a>
+</li>
+<li>
+<a href="#tab2">Standard error</a>
+</li>
+</ul>
+<div id="tab0" class="tab">
+<h2>Failed tests</h2>
+<div class="test">
+<a name="testGetVote()"></a>
+<h3 class="failures">testGetVote()</h3>
+<span class="code">
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	at gui.GUIApp.addClickedInput(GUIApp.java:385)
+	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+</span>
+</div>
+<div class="test">
+<a name="testNextButtonPresenceNotOwnPicture()"></a>
+<h3 class="failures">testNextButtonPresenceNotOwnPicture()</h3>
+<span class="code">
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	at gui.GUIApp.addClickedInput(GUIApp.java:385)
+	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+</span>
+</div>
+<div class="test">
+<a name="testNextButtonPresenceOwnPicture()"></a>
+<h3 class="failures">testNextButtonPresenceOwnPicture()</h3>
+<span class="code">
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	at gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+</span>
+</div>
+<div class="test">
+<a name="testVoteComboBoxPresenceOwnPicture()"></a>
+<h3 class="failures">testVoteComboBoxPresenceOwnPicture()</h3>
+<span class="code">
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	at gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+</span>
+</div>
+<div class="test">
+<a name="testVoteInitializationNotOwnPicture()"></a>
+<h3 class="failures">testVoteInitializationNotOwnPicture()</h3>
+<span class="code">
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+	Suppressed: java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+		... 1 more
+	Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+		at gui.GUIApp.addClickedInput(GUIApp.java:385)
+		at gui.GameView.lambda$createCountdown$2(GameView.java:152)
+		at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+		at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+		at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+		at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+		at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+		at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+		at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+		at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+		at javafx.animation.Animation$1.timePulse(Animation.java:206)
+		at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+		at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+		at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+		at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+		at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+		at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+		at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+		at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+		at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+		at java.base/java.lang.Thread.run(Thread.java:1583)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	at gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+</span>
+</div>
+<div class="test">
+<a name="testVoteInitializationOwnPicture()"></a>
+<h3 class="failures">testVoteInitializationOwnPicture()</h3>
+<span class="code">
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	at gui.GUIApp.addClickedInput(GUIApp.java:385)
+	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+</span>
+</div>
+</div>
+<div id="tab1" class="tab">
+<h2>Tests</h2>
+<table>
+<thead>
+<tr>
+<th>Test</th>
+<th>Duration</th>
+<th>Result</th>
+</tr>
+</thead>
+<tr>
+<td class="failures">testGetVote()</td>
+<td class="failures">0.119s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
+<td class="failures">testNextButtonPresenceNotOwnPicture()</td>
+<td class="failures">0.130s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
+<td class="failures">testNextButtonPresenceOwnPicture()</td>
+<td class="failures">0.184s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
+<td class="success">testNextFlagInitializationNotOwnPicture()</td>
+<td class="success">0.236s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testNextFlagInitializationOwnPicture()</td>
+<td class="success">0.226s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testSendVoteButtonPresenceNotOwnPicture()</td>
+<td class="success">0.232s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testSendVoteButtonPresenceOwnPicture()</td>
+<td class="success">0.224s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testSetImage()</td>
+<td class="success">0.343s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testSetVote()</td>
+<td class="success">0.237s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="success">testVoteComboBoxPresenceNotOwnPicture()</td>
+<td class="success">0.232s</td>
+<td class="success">passed</td>
+</tr>
+<tr>
+<td class="failures">testVoteComboBoxPresenceOwnPicture()</td>
+<td class="failures">0.172s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
+<td class="failures">testVoteInitializationNotOwnPicture()</td>
+<td class="failures">0.055s</td>
+<td class="failures">failed</td>
+</tr>
+<tr>
+<td class="failures">testVoteInitializationOwnPicture()</td>
+<td class="failures">0.169s</td>
+<td class="failures">failed</td>
+</tr>
+</table>
+</div>
+<div id="tab2" class="tab">
+<h2>Standard error</h2>
+<span class="code">
+<pre>--- Exception in Async Thread ---
+java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	gui.GUIApp.addClickedInput(GUIApp.java:385)
+	gui.GameView.lambda$createCountdown$2(GameView.java:152)
+	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	javafx.animation.Animation$1.timePulse(Animation.java:206)
+	com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	java.base/java.lang.Thread.run(Thread.java:1583)
+
+--- Exception in Async Thread ---
+java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	gui.GUIApp.addClickedInput(GUIApp.java:385)
+	gui.GameView.lambda$createCountdown$2(GameView.java:152)
+	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	javafx.animation.Animation$1.timePulse(Animation.java:206)
+	com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	java.base/java.lang.Thread.run(Thread.java:1583)
+
+--- Exception in Async Thread ---
+java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	gui.GUIApp.addClickedInput(GUIApp.java:385)
+	gui.GameView.lambda$createCountdown$2(GameView.java:152)
+	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	javafx.animation.Animation$1.timePulse(Animation.java:206)
+	com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	java.base/java.lang.Thread.run(Thread.java:1583)
+
+--- Exception in Async Thread ---
+java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	javafx.animation.Animation$1.timePulse(Animation.java:206)
+	com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	java.base/java.lang.Thread.run(Thread.java:1583)
+
+--- Exception in Async Thread ---
+java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	javafx.animation.Animation$1.timePulse(Animation.java:206)
+	com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	java.base/java.lang.Thread.run(Thread.java:1583)
+
+</pre>
+</span>
+</div>
+</div>
+<div id="footer">
+<p>
+<div>
+<label class="hidden" id="label-for-line-wrapping-toggle" for="line-wrapping-toggle">Wrap lines
+<input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
+</label>
+</div>Generated by 
+<a href="http://www.gradle.org">Gradle 8.6</a> at 27 Apr 2025, 22:02:49</p>
+</div>
+</div>
+</body>
+</html>

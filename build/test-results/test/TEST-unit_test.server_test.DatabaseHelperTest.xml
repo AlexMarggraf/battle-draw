@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.server_test.DatabaseHelperTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-04-27T20:02:49" hostname="DESKTOP-LR584BK" time="0.091">
+  <properties/>
+  <testcase name="testCheckCredentials()" classname="unit_test.server_test.DatabaseHelperTest" time="0.01"/>
+  <testcase name="testSetAndGetStatus()" classname="unit_test.server_test.DatabaseHelperTest" time="0.017"/>
+  <testcase name="testChangeUsername()" classname="unit_test.server_test.DatabaseHelperTest" time="0.011"/>
+  <testcase name="testGetPlayerIdAndName()" classname="unit_test.server_test.DatabaseHelperTest" time="0.006"/>
+  <testcase name="testInsertPlayerAndCheckUsername()" classname="unit_test.server_test.DatabaseHelperTest" time="0.017"/>
+  <testcase name="testClearList()" classname="unit_test.server_test.DatabaseHelperTest" time="0.005"/>
+  <testcase name="testChangePassword()" classname="unit_test.server_test.DatabaseHelperTest" time="0.009"/>
+  <testcase name="testSetOffline()" classname="unit_test.server_test.DatabaseHelperTest" time="0.01"/>
+  <testcase name="testGetRandomWords()" classname="unit_test.server_test.DatabaseHelperTest" time="0.005"/>
+  <system-out><![CDATA[Player: 1 - testuser
+Inserted user with ID: 7
+List cleared
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

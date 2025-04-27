@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.game_test.GameTest" tests="11" skipped="0" failures="0" errors="0" timestamp="2025-04-27T20:02:41" hostname="DESKTOP-LR584BK" time="0.045">
+  <properties/>
+  <testcase name="testSetAndGetStatus()" classname="unit_test.game_test.GameTest" time="0.024"/>
+  <testcase name="testPlusOnePlayerIncrements()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testGetLobbyName()" classname="unit_test.game_test.GameTest" time="0.002"/>
+  <testcase name="testGetNumberOfPlayers()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testConstructorSetsDefaults()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testMinusOnePlayerDecrements()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testMaxNumberOfRoundsDefault()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testResetNumberOfRoundsVoted()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testNextRoundIncrementsRoundNumber()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testPlusOneVotedRoundIncrements()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <testcase name="testGetNumberOfRoundsVoted()" classname="unit_test.game_test.GameTest" time="0.001"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

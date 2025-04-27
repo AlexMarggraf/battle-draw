@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.game_test.LobbyTest" tests="7" skipped="0" failures="0" errors="0" timestamp="2025-04-27T20:02:46" hostname="DESKTOP-LR584BK" time="0.007">
+  <properties/>
+  <testcase name="testConstructorAndLobbyName()" classname="unit_test.game_test.LobbyTest" time="0.001"/>
+  <testcase name="testAddAndRemovePlayer()" classname="unit_test.game_test.LobbyTest" time="0.0"/>
+  <testcase name="testLeaderboardCalculationWithoutInitialise()" classname="unit_test.game_test.LobbyTest" time="0.0"/>
+  <testcase name="testPlayerReadinessTracking()" classname="unit_test.game_test.LobbyTest" time="0.0"/>
+  <testcase name="testImageStorageAndRetrieval()" classname="unit_test.game_test.LobbyTest" time="0.0"/>
+  <testcase name="testVotesOfARoundAccumulationAndReset()" classname="unit_test.game_test.LobbyTest" time="0.001"/>
+  <testcase name="testVotingQueueAndCurrentVoteTarget()" classname="unit_test.game_test.LobbyTest" time="0.002"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
