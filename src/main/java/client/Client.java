@@ -8,12 +8,16 @@ package client;
  * @author Frederic Weyssow
  */
 
+import game.Main;
 import message.Message;
 import message.MessageListener;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class Client implements Runnable {
 
@@ -42,6 +46,8 @@ public class Client implements Runnable {
         disconnect = false;
         serverID = -1;
     }
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     /**
      * This method causes the client to disconnect.
@@ -86,6 +92,7 @@ public class Client implements Runnable {
         while (clientMessageQueue.peek() != null) {
             try {
                 String clientMessage = clientMessageQueue.remove();
+                LOGGER.info("send message {}", clientMessage);
                 //oStream.write(clientMessage.getBytes());
                 //oStream.write('\n');
                 pWriter.println(clientMessage);
@@ -109,6 +116,8 @@ public class Client implements Runnable {
                 Message response = new Message("disconnect " + serverID);
                 serverMessageQueue.add(response.toString());
             } else {
+                //System.out.println("Message received in client: " + message);
+                LOGGER.info("receive message {}", message);
                 serverMessageQueue.add(message);
             }
             message = msgListener.getMessage();

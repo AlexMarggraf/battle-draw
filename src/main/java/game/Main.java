@@ -279,7 +279,7 @@ public class Main {
                     clientMessageQueue.add(message.toString());
                 }
             }
-
+            LOGGER.info("handled input {}", clientMessage);
             clientMessage = guiApp.getUserInput();
         }
     }
@@ -507,7 +507,7 @@ public class Main {
                 }
 
             }
-
+            LOGGER.info("handled input {}", input);
             input = guiApp.getClickedInput();
         }
     }
@@ -517,7 +517,7 @@ public class Main {
      */
     public void sendMessage() {
         while (clientMessageQueue.peek() != null) {
-            System.out.println(clientMessageQueue.peek());
+            LOGGER.info("send message {}" , clientMessageQueue.peek());
             client.queueClientMessage(clientMessageQueue.remove());
         }
     }

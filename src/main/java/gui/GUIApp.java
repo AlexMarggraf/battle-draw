@@ -7,6 +7,7 @@
 
 package gui;
 
+import game.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
@@ -23,6 +24,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -72,6 +75,8 @@ public class GUIApp extends Application {
 
         setupMessageHandler();
     }
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     /**
      * Initializes the root layout of the application.
@@ -378,6 +383,7 @@ public class GUIApp extends Application {
 
     public static void addClickedInput(String input) {
         clickedInputQueue.add(input);
+        LOGGER.info("added input {}", input);
     }
 
     public static void setTime(int timeInSeconds) { time = timeInSeconds;}

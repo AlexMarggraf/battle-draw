@@ -6,6 +6,10 @@ package message;
 
 import java.io.*;
 import java.util.*;
+import game.Main;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class MessageListener implements Runnable {
 
@@ -21,6 +25,8 @@ public class MessageListener implements Runnable {
         this.iStream = iStream;
         this.messageQueue = new LinkedList<>();
     }
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     /**
      * This method gets and removes the first element from the message queue.
@@ -43,7 +49,8 @@ public class MessageListener implements Runnable {
             while (true) {
                 message = MessageReader.readLine();
                 if (message != null && !message.isEmpty()) {
-                    System.out.println(message);
+                    LOGGER.info("heard message {}", message);
+                    //System.out.println(message);
                     messageQueue.add(message);
                 }
             }

@@ -7,6 +7,7 @@
 
 package gui;
 
+import game.Main;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
@@ -22,6 +23,8 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.util.Duration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.util.Optional;
@@ -41,6 +44,8 @@ public class GameView {
     private double lastY;
     private final GraphicsContext gc;
     private static boolean isTimeUp = false;
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     /**
      * Constructs a new GameView with all drawing components and controls.
@@ -70,6 +75,8 @@ public class GameView {
         view = new VBox(20, controls, countdownField, themeLabel, canvas);
         view.setPadding(new Insets(30));
     }
+
+
 
     /**
      * Initializes the canvas with default settings.
@@ -144,6 +151,7 @@ public class GameView {
 
                         GUIApp.addClickedInput("/timeIsUp");
                         GUIApp.addClickedInput("/readyToVote");
+                        LOGGER.info("added timeIsUp and readyToVote to queue");
                         isTimeUp = true;
                     }
                 })

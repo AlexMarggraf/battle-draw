@@ -7,8 +7,11 @@ package server;
  * @author Alexander Maggraf
  */
 
+import game.Main;
 import message.Message;
 import message.MessageListener;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.net.*;
@@ -44,6 +47,8 @@ public class ServerThread implements Runnable {
         this.receivedPong = true;
         this.lastPing = 0;
     }
+
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     /**
      * This method provides identification to other objects.
@@ -90,6 +95,7 @@ public class ServerThread implements Runnable {
                 //oStream.write(serverMessage.getBytes());
                 //oStream.write('\n');
                 pWriter.println(serverMessage);
+                LOGGER.info("sent message {}", serverMessage);
             } catch (Exception e) {
                 System.out.println("IOException in class ServerThread in method sendMessage");
             }
@@ -133,6 +139,7 @@ public class ServerThread implements Runnable {
                 }
                 clientMessage = msgListener.getMessage();
             }
+            LOGGER.info("received message {}", clientMessage);
         }
     }
 

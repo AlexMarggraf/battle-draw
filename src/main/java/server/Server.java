@@ -10,7 +10,10 @@ package server;
 
 import game.Game;
 import game.Lobby;
+import game.Main;
 import message.Message;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.util.*;
 
@@ -38,6 +41,8 @@ public class Server {
         this.lobbyGameMap = new HashMap<>();
     }
 
+    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+
     /**
      * This method starts a new server thread.
      *
@@ -64,8 +69,8 @@ public class Server {
     public void sendMessage(String message, int id) {
         for (ServerThread st : serverThreadList) {
             if (st.getId() == id) {
-                System.out.println(message);
                 st.queueServerMessage(message);
+                LOGGER.info("Message sent {}", message);
             }
         }
     }
@@ -90,7 +95,6 @@ public class Server {
     public void handleReceiveMessage() {
         while (receiveMessageQueue.peek() != null) {
             String clientMessage = receiveMessageQueue.remove();
-            System.out.println(clientMessage);
 
             Message message = new Message(clientMessage);
 
@@ -384,6 +388,8 @@ public class Server {
                     }
                 }
             }
+
+            LOGGER.info("handled and received message {}", clientMessage);
         }
     }
 
@@ -425,6 +431,7 @@ public class Server {
                 }
                 default -> sendMessage(message.toString(), message.getID());
             }
+            LOGGER.info("handled and sent message {}", serverMessage);
         }
     }
 
