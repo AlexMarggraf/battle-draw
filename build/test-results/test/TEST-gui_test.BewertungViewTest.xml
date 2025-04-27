@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="gui_test.BewertungViewTest" tests="13" skipped="0" failures="0" errors="0" timestamp="2025-04-13T12:45:52" hostname="ALEX-PC" time="3.336">
+  <properties/>
+  <testcase name="testVoteInitializationNotOwnPicture()" classname="gui_test.BewertungViewTest" time="0.552"/>
+  <testcase name="testVoteInitializationOwnPicture()" classname="gui_test.BewertungViewTest" time="0.227"/>
+  <testcase name="testNextButtonPresenceNotOwnPicture()" classname="gui_test.BewertungViewTest" time="0.228"/>
+  <testcase name="testSendVoteButtonPresenceOwnPicture()" classname="gui_test.BewertungViewTest" time="0.23"/>
+  <testcase name="testGetVote()" classname="gui_test.BewertungViewTest" time="0.224"/>
+  <testcase name="testVoteComboBoxPresenceOwnPicture()" classname="gui_test.BewertungViewTest" time="0.224"/>
+  <testcase name="testNextFlagInitializationNotOwnPicture()" classname="gui_test.BewertungViewTest" time="0.224"/>
+  <testcase name="testNextFlagInitializationOwnPicture()" classname="gui_test.BewertungViewTest" time="0.229"/>
+  <testcase name="testSendVoteButtonPresenceNotOwnPicture()" classname="gui_test.BewertungViewTest" time="0.223"/>
+  <testcase name="testNextButtonPresenceOwnPicture()" classname="gui_test.BewertungViewTest" time="0.222"/>
+  <testcase name="testSetVote()" classname="gui_test.BewertungViewTest" time="0.224"/>
+  <testcase name="testVoteComboBoxPresenceNotOwnPicture()" classname="gui_test.BewertungViewTest" time="0.228"/>
+  <testcase name="testSetImage()" classname="gui_test.BewertungViewTest" time="0.298"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[Apr. 13, 2025 2:45:52 PM com.sun.javafx.application.PlatformImpl startup
+WARNUNG: Unsupported JavaFX configuration: classes were loaded from 'unnamed module @d6e7bab'
+]]></system-err>
+</testsuite>
