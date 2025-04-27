@@ -128,6 +128,7 @@ public class LobbyView {
         ComboBox<Integer> combo = new ComboBox<>();
         combo.getItems().addAll(1, 2, 3, 5, 8, 100);
         combo.setValue(3);
+        rounds = 3;
         combo.setOnAction(e -> rounds = combo.getValue());
         return combo;
     }
@@ -141,6 +142,7 @@ public class LobbyView {
         ComboBox<Integer> combo = new ComboBox<>();
         combo.getItems().addAll(10, 30, 45, 60, 90);
         combo.setValue(45);
+        timer = 45;
         combo.setOnAction(e -> timer = combo.getValue());
         return combo;
     }
