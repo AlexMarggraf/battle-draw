@@ -230,7 +230,7 @@ public class BewertungViewTest extends ApplicationTest {
 
         assertEquals(3, BewertungView.getVote());
 
-        BewertungView.setVoteZero();
+        BewertungView.resetVote();
         assertEquals(0, BewertungView.getVote());
     }
 
