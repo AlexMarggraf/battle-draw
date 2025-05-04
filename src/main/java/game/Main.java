@@ -23,6 +23,7 @@ import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import jdk.jfr.MemoryAddress;
 import message.Message;
 import message.MessageListener;
 import org.apache.logging.log4j.LogManager;
@@ -198,7 +199,7 @@ public class Main {
                     GUIApp.showEndingView();
                 }
                 case "startNextRound" -> {
-                    if(GUIApp.getLobbyLeader()) {
+                    if (GUIApp.getLobbyLeader()) {
                         Message response = new Message("startDrawing", new String[]{serverID + "", lobbyName});
                         clientMessageQueue.add(response.toString());
                     }
@@ -210,6 +211,16 @@ public class Main {
                 }
                 case "highscore" -> {
                     print(String.format("Your highscore is %.2f", Double.parseDouble(message.getParams()[1])));
+                }
+                case "newHost" -> {
+                    if (message.getParams()[0].equals(message.getParams()[2])) {
+                        GUIApp.setLobbyLeader(true);
+                        GUIApp.showLobbyView();
+                        print("You are now the Host");
+                    }
+                    lobbyName = message.getParams()[1];
+                    game.setLobbyName(lobbyName);
+                    print("The host has left, the lobby has a new name: " + lobbyName);
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
@@ -444,6 +455,10 @@ public class Main {
                         if (inLobby) {
                             message = new Message("leaveLobby", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
+                            if (GUIApp.getLobbyLeader()) {
+                                message = new Message("changeHost", new String[]{serverID + "", lobbyName});
+                                clientMessageQueue.add(message.toString());
+                            }
                         } else {
                             print("You're not in a lobby");
                         }

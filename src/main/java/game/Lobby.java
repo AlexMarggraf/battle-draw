@@ -42,6 +42,8 @@ public class Lobby {
         return lobbyName;
     }
 
+    public void setLobbyName(String newName) {this.lobbyName = newName;}
+
     public Integer[] getPlayers() {
         return players.toArray(new Integer[0]);
     }

@@ -39,6 +39,8 @@ public class Game {
         return lobbyName;
     }
 
+    public void setLobbyName(String newLobbyName) {this.lobbyName = newLobbyName;}
+
     public void plusOnePlayer() {this.numberOfPlayers++;}
 
     public void minusOnePlayer() {this.numberOfPlayers--;}

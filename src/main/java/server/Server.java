@@ -273,8 +273,10 @@ public class Server {
                             lobby.removePlayer(message.getID());
                             lobbyGameMap.get(lobby).minusOnePlayer();
                             if(lobby.isEmpty()) {
+                                Game game = lobbyGameMap.get(lobby);
                                 lobbyGameMap.remove(lobby);
                                 lobbyList.remove(lobby);
+                                gameList.remove(game);
                             }
                         }
                     }
@@ -398,6 +400,22 @@ public class Server {
                     Double highscore = 5.00;
                     Message response = new Message("highscore", new String[]{message.getID() + "", highscore + ""});
                     sendMessageQueue.add(response.toString());
+                }
+                case "changeHost" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            Integer[] players = lobby.getPlayers();
+                            String name = DatabaseHelper.getPlayerName(players[0]);
+                            String newLobbyName = "Lobby_von_" + name;
+                            Game game = lobbyGameMap.get(lobby);
+                            lobby.setLobbyName(newLobbyName);
+                            game.setLobbyName(newLobbyName);
+                            for (int id : players) {
+                                Message response = new Message("newHost", new String[]{id + "", newLobbyName, players[0] + ""});
+                                sendMessageQueue.add(response.toString());
+                            }
+                        }
+                    }
                 }
             }
 

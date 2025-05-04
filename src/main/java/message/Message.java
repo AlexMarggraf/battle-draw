@@ -102,7 +102,7 @@ public class Message {
                     }
                 }
             }
-            case "listLobbyPlayers", "joinLobby", "lobbyJoined", "startVoting", "readyToVote", "nextRound" -> {
+            case "listLobbyPlayers", "joinLobby", "lobbyJoined", "startVoting", "readyToVote", "nextRound", "changeHost" -> {
                 if (params.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (params[1] == null) {
@@ -177,7 +177,7 @@ public class Message {
             }
             case "playerJoined" -> {
                 if (params.length != 3) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameter.");
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
                 } else if(params[2] == null) {
                     throw new IllegalArgumentException("The username of the new player has to be a string");
                 }
@@ -243,7 +243,7 @@ public class Message {
             }
             case "votingStarts" -> {
                 if (params.length != 2) {
-                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else {
                     try {
                         Integer.parseInt(params[0]);
@@ -298,6 +298,22 @@ public class Message {
                         this.params = params;
                     } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("The id has to be an integer and the highscore a double.");
+                    }
+                }
+            }
+            case "newHost" -> {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        Integer.parseInt(params[2]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and id of new host have to be an integers.");
                     }
                 }
             }
@@ -486,7 +502,7 @@ public class Message {
                     }
                 }
             }
-            case "joinLobby", "lobbyJoined", "listLobbyPlayers", "startVoting", "readyToVote", "nextRound" -> {
+            case "joinLobby", "lobbyJoined", "listLobbyPlayers", "startVoting", "readyToVote", "nextRound", "changeHost" -> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {
@@ -625,6 +641,22 @@ public class Message {
                         this.params = new String[]{content[1], content[2]};
                     } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("The id has to be an integer and the highscore a double.");
+                    }
+                }
+            }
+            case "newHost" -> {
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+                        Integer.parseInt(content[3]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2], content[3]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id and id of new host have to be an integers.");
                     }
                 }
             }
