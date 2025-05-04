@@ -1,13 +1,15 @@
 .root {
-    -fx-font-family: "Segoe UI Emoji", "Arial", sans-serif;
+    -fx-font-family: "Comic Sans MS";
     -fx-font-size: 16px;
     -fx-background-color: linear-gradient(to bottom, #fffbe6, #ffecd1);
 }
 
-.label {
+Label {
     -fx-text-fill: #444;
     -fx-font-weight: bold;
+    -fx-font-size: 24px;
 }
+
 
 .button {
     -fx-background-color: linear-gradient(to bottom, #ffcc70, #ffae42);
@@ -172,6 +174,7 @@
     -fx-border-width: 1;
     -fx-text-fill: black;
 }
+
 
 
 
