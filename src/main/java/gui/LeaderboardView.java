@@ -61,11 +61,19 @@ public class LeaderboardView {
                         LinkedHashMap::new
                 ));
 
-        int rank = 1;
+        int rank = 0;
+        double lastPoints = -1;
+        int numberOfSamePoints = 1;
         for (Map.Entry<String, Double> player : playersSorted.entrySet()) {
+            if (lastPoints != player.getValue()) {
+                rank += numberOfSamePoints;
+                numberOfSamePoints = 1;
+            } else {
+                numberOfSamePoints++;
+            }
             String leaderboardEntry = String.format("%d. %s with %.2f points", rank, player.getKey(), player.getValue());
             vboxLeaderboard.getChildren().add(new Text(leaderboardEntry));
-            rank++;
+            lastPoints = player.getValue();
         }
 
     }

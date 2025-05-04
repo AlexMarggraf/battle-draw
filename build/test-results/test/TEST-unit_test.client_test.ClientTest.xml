@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="unit_test.client_test.ClientTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-04-27T20:02:46" hostname="DESKTOP-LR584BK" time="0.025">
+<testsuite name="unit_test.client_test.ClientTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-04-30T12:30:14" hostname="DESKTOP-LR584BK" time="0.063">
   <properties/>
   <testcase name="testSetServerID()" classname="unit_test.client_test.ClientTest" time="0.001"/>
-  <testcase name="testReceiveMessageHandlesDisconnectMessage()" classname="unit_test.client_test.ClientTest" time="0.001"/>
-  <testcase name="testQueueClientMessage()" classname="unit_test.client_test.ClientTest" time="0.001"/>
-  <testcase name="testDisconnect()" classname="unit_test.client_test.ClientTest" time="0.0"/>
-  <testcase name="testGetServerMessageWhenNotEmpty()" classname="unit_test.client_test.ClientTest" time="0.0"/>
-  <testcase name="testReceiveMessageHandlesRegularMessages()" classname="unit_test.client_test.ClientTest" time="0.018"/>
-  <testcase name="testGetServerMessageWhenEmpty()" classname="unit_test.client_test.ClientTest" time="0.001"/>
-  <testcase name="testSendMessageSendsAllMessages()" classname="unit_test.client_test.ClientTest" time="0.001"/>
-  <system-out><![CDATA[[04-27 22:02:46.032][INFO ][Test worker] Client - receive message hi there
-[04-27 22:02:46.037][INFO ][Test worker] Client - send message msg1
-[04-27 22:02:46.038][INFO ][Test worker] Client - send message msg2
+  <testcase name="testReceiveMessageHandlesDisconnectMessage()" classname="unit_test.client_test.ClientTest" time="0.009"/>
+  <testcase name="testQueueClientMessage()" classname="unit_test.client_test.ClientTest" time="0.002"/>
+  <testcase name="testDisconnect()" classname="unit_test.client_test.ClientTest" time="0.001"/>
+  <testcase name="testGetServerMessageWhenNotEmpty()" classname="unit_test.client_test.ClientTest" time="0.001"/>
+  <testcase name="testReceiveMessageHandlesRegularMessages()" classname="unit_test.client_test.ClientTest" time="0.029"/>
+  <testcase name="testGetServerMessageWhenEmpty()" classname="unit_test.client_test.ClientTest" time="0.003"/>
+  <testcase name="testSendMessageSendsAllMessages()" classname="unit_test.client_test.ClientTest" time="0.004"/>
+  <system-out><![CDATA[[04-30 14:30:14.045][INFO ][Test worker] Client - receive message hi there
+[04-30 14:30:14.061][INFO ][Test worker] Client - send message msg1
+[04-30 14:30:14.062][INFO ][Test worker] Client - send message msg2
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

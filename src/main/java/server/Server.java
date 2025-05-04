@@ -367,6 +367,12 @@ public class Server {
                                 for (int id : players) {
                                      Message response = new Message("showEnding", new String[]{id + ""});
                                      sendMessageQueue.add(response.toString());
+                                    //double highscore = DatabaseHelper.getHighscore(id);
+                                    //String playerName = DatabaseHelper.getPlayerName(id);
+                                    //double currentScore = lobby.getPointsOfAPlayer(playerName);
+                                    //if (highscore < currentScore) {
+                                    //DatabaseHelper.setHighscore(id, currentScore)
+                                    //}
                                 }
                             } else {
                                 String theme = DatabaseHelper.getRandomWords(1).toString();
@@ -386,6 +392,12 @@ public class Server {
                             lobby.setImageOfPlayer(message.getID(), message.getParams()[2]);
                         }
                     }
+                }
+                case "whatHighscore" -> {
+                    // Double highscore = DatabaseHelper.getHighscore(message.getID());
+                    Double highscore = 5.00;
+                    Message response = new Message("highscore", new String[]{message.getID() + "", highscore + ""});
+                    sendMessageQueue.add(response.toString());
                 }
             }
 

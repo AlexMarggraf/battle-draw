@@ -175,7 +175,11 @@ public class Main {
                     }
                 }
                 case "drawingStarts" -> {
-                    GUIApp.setTheme(message.getParams()[1]);
+                    String theme = message.getParams()[1];
+                    if (theme.startsWith("[") && theme.endsWith("]")) {
+                        theme = theme.substring(1, theme.length() - 1);
+                    }
+                    GUIApp.setTheme(theme);
                     GUIApp.setTime(Integer.parseInt(message.getParams()[3]));
                     game.setMaxNumberOfRounds(Integer.parseInt(message.getParams()[2]));
                     GUIApp.showGameView();
@@ -203,6 +207,9 @@ public class Main {
                     BufferedImage image = decodeImage(message.getParams()[2]);
                     BewertungView.setIsOwnPicture(username, message.getParams()[1]);
                     BewertungView.setImage(image);
+                }
+                case "highscore" -> {
+                    print(String.format("Your highscore is %.2f", Double.parseDouble(message.getParams()[1])));
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
@@ -236,20 +243,6 @@ public class Main {
             String[] splitClientMessage = clientMessage.split("\\s+");
 
             switch (splitClientMessage[0]) {
-                case "/nick" -> {
-                    Message message;
-                    if (splitClientMessage.length == 2) {
-                        String username = splitClientMessage[1];
-                        message = new Message("changeUsername", new String[]{serverID + "", username});
-                    } else {
-                        if (messageType.equals("chatAll")) {
-                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
-                        } else {
-                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
-                        }
-                    }
-                    clientMessageQueue.add(message.toString());
-                }
                 case "/whisper" -> {
                     Message message;
                     if (splitClientMessage.length > 2) {
@@ -341,6 +334,20 @@ public class Main {
                         }
                     }
                 }
+                case "/nick" -> {
+                    Message message;
+                    if (splitInput.length == 2) {
+                        String username = splitInput[1];
+                        message = new Message("changeUsername", new String[]{serverID + "", username});
+                    } else {
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, input});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, input});
+                        }
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
                 case "/listPlayers" -> {
                     Message message;
                     if (splitInput.length == 1) {
@@ -372,6 +379,19 @@ public class Main {
                     Message message;
                     if (splitInput.length == 1) {
                         message = new Message("whatGames", new String[]{serverID + ""});
+                    } else {
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, input});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, input});
+                        }
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
+                case "/myHighscore" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        message = new Message("whatHighscore", new String[]{serverID + ""});
                     } else {
                         if (messageType.equals("chatAll")) {
                             message = new Message(messageType, new String[]{serverID + "", username, input});

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="unit_test.gui_test.BewertungViewTest" tests="13" skipped="0" failures="6" errors="0" timestamp="2025-04-27T20:02:46" hostname="DESKTOP-LR584BK" time="2.57">
+<testsuite name="unit_test.gui_test.BewertungViewTest" tests="13" skipped="0" failures="5" errors="0" timestamp="2025-04-30T12:30:14" hostname="DESKTOP-LR584BK" time="2.892">
   <properties/>
-  <testcase name="testVoteInitializationNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.055">
-    <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+  <testcase name="testVoteInitializationNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.059">
+    <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
 	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
 	Suppressed: java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
 		... 1 more
@@ -28,9 +28,9 @@
 		at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
 		at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
 		at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
-	at gui.LobbyView.createLobbyListing(LobbyView.java:70)
-	at gui.LobbyView.lambda$new$0(LobbyView.java:44)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
+	at gui.GUIApp.addClickedInput(GUIApp.java:385)
+	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
 	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
 	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
 	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
@@ -52,7 +52,8 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.key
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 </failure>
   </testcase>
-  <testcase name="testVoteInitializationOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.169">
+  <testcase name="testVoteInitializationOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.249"/>
+  <testcase name="testNextButtonPresenceNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.178">
     <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
 	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
 Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
@@ -79,62 +80,7 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.a
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 </failure>
   </testcase>
-  <testcase name="testNextButtonPresenceNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.13">
-    <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
-Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	at gui.GUIApp.addClickedInput(GUIApp.java:385)
-	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
-	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
-	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
-	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
-	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
-	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
-	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
-	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
-	at javafx.animation.Animation$1.timePulse(Animation.java:206)
-	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
-	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
-	at java.base/java.lang.Thread.run(Thread.java:1583)
-</failure>
-  </testcase>
-  <testcase name="testSendVoteButtonPresenceOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.224"/>
-  <testcase name="testGetVote()" classname="unit_test.gui_test.BewertungViewTest" time="0.119">
-    <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
-Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	at gui.GUIApp.addClickedInput(GUIApp.java:385)
-	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
-	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
-	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
-	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
-	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
-	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
-	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
-	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
-	at javafx.animation.Animation$1.timePulse(Animation.java:206)
-	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
-	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
-	at java.base/java.lang.Thread.run(Thread.java:1583)
-</failure>
-  </testcase>
-  <testcase name="testVoteComboBoxPresenceOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.172">
+  <testcase name="testSendVoteButtonPresenceOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.181">
     <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
 	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
 Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
@@ -161,10 +107,11 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.key
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 </failure>
   </testcase>
-  <testcase name="testNextFlagInitializationNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.236"/>
-  <testcase name="testNextFlagInitializationOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.226"/>
-  <testcase name="testSendVoteButtonPresenceNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.232"/>
-  <testcase name="testNextButtonPresenceOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.184">
+  <testcase name="testGetVote()" classname="unit_test.gui_test.BewertungViewTest" time="0.273"/>
+  <testcase name="testVoteComboBoxPresenceOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.241"/>
+  <testcase name="testNextFlagInitializationNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.243"/>
+  <testcase name="testNextFlagInitializationOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.238"/>
+  <testcase name="testSendVoteButtonPresenceNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.174">
     <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
 	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
 Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
@@ -191,9 +138,36 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.key
 	at java.base/java.lang.Thread.run(Thread.java:1583)
 </failure>
   </testcase>
-  <testcase name="testSetVote()" classname="unit_test.gui_test.BewertungViewTest" time="0.237"/>
-  <testcase name="testVoteComboBoxPresenceNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.232"/>
-  <testcase name="testSetImage()" classname="unit_test.gui_test.BewertungViewTest" time="0.343"/>
+  <testcase name="testNextButtonPresenceOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.233"/>
+  <testcase name="testSetVote()" classname="unit_test.gui_test.BewertungViewTest" time="0.24"/>
+  <testcase name="testVoteComboBoxPresenceNotOwnPicture()" classname="unit_test.gui_test.BewertungViewTest" time="0.242"/>
+  <testcase name="testSetImage()" classname="unit_test.gui_test.BewertungViewTest" time="0.323">
+    <failure message="java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null" type="java.lang.RuntimeException">java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	at gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</failure>
+  </testcase>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[--- Exception in Async Thread ---
 java.lang.NullPointerException: Cannot invoke "java.util.Queue.add(Object)" because "gui.GUIApp.clickedInputQueue" is null
@@ -244,9 +218,9 @@ java.lang.NullPointerException: Cannot invoke "java.util.Queue.add(Object)" beca
 	java.base/java.lang.Thread.run(Thread.java:1583)
 
 --- Exception in Async Thread ---
-java.lang.NullPointerException: Cannot invoke "java.util.Queue.add(Object)" because "gui.GUIApp.clickedInputQueue" is null
-	gui.GUIApp.addClickedInput(GUIApp.java:385)
-	gui.GameView.lambda$createCountdown$2(GameView.java:152)
+java.lang.NullPointerException: Cannot invoke "java.util.Map.keySet()" because "players" is null
+	gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	gui.LobbyView.lambda$new$0(LobbyView.java:44)
 	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
 	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
 	javafx.animation.Timeline.doPlayTo(Timeline.java:172)

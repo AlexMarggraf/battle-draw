@@ -89,7 +89,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby", "showLeaderboard", "showEnding", "startNextRound" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby", "showLeaderboard", "showEnding", "startNextRound", "whatHighscore" -> {
                 if(params.length != 1) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -287,6 +287,20 @@ public class Message {
                     }
                 }
             }
+            case "highscore" -> {
+                if (params.length != 2) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        Double.parseDouble(params[1]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer and the highscore a double.");
+                    }
+                }
+            }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
@@ -393,7 +407,7 @@ public class Message {
                     }
                 }
             }
-            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby", "showLeaderboard", "showEnding", "startNextRound" -> {
+            case "ping", "pong", "disconnect", "id", "whoOnline", "whatGames", "createLobby", "showLeaderboard", "showEnding", "startNextRound", "whatHighscore" -> {
                 if (content.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 1 parameters.");
                 } else {
@@ -597,6 +611,20 @@ public class Message {
                         this.params = new String[]{content[1], content[2], content[3]};
                     } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("The id has to be an integer and points a double");
+                    }
+                }
+            }
+            case "highscore" -> {
+                if (content.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+                        Double.parseDouble(content[2]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer and the highscore a double.");
                     }
                 }
             }

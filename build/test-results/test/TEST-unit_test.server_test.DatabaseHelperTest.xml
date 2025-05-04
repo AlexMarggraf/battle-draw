@@ -1,18 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="unit_test.server_test.DatabaseHelperTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-04-27T20:02:49" hostname="DESKTOP-LR584BK" time="0.091">
+<testsuite name="unit_test.server_test.DatabaseHelperTest" tests="9" skipped="0" failures="0" errors="0" timestamp="2025-04-30T12:30:17" hostname="DESKTOP-LR584BK" time="0.369">
   <properties/>
-  <testcase name="testCheckCredentials()" classname="unit_test.server_test.DatabaseHelperTest" time="0.01"/>
-  <testcase name="testSetAndGetStatus()" classname="unit_test.server_test.DatabaseHelperTest" time="0.017"/>
-  <testcase name="testChangeUsername()" classname="unit_test.server_test.DatabaseHelperTest" time="0.011"/>
-  <testcase name="testGetPlayerIdAndName()" classname="unit_test.server_test.DatabaseHelperTest" time="0.006"/>
-  <testcase name="testInsertPlayerAndCheckUsername()" classname="unit_test.server_test.DatabaseHelperTest" time="0.017"/>
-  <testcase name="testClearList()" classname="unit_test.server_test.DatabaseHelperTest" time="0.005"/>
-  <testcase name="testChangePassword()" classname="unit_test.server_test.DatabaseHelperTest" time="0.009"/>
-  <testcase name="testSetOffline()" classname="unit_test.server_test.DatabaseHelperTest" time="0.01"/>
-  <testcase name="testGetRandomWords()" classname="unit_test.server_test.DatabaseHelperTest" time="0.005"/>
+  <testcase name="testCheckCredentials()" classname="unit_test.server_test.DatabaseHelperTest" time="0.038"/>
+  <testcase name="testSetAndGetStatus()" classname="unit_test.server_test.DatabaseHelperTest" time="0.166"/>
+  <testcase name="testChangeUsername()" classname="unit_test.server_test.DatabaseHelperTest" time="0.027"/>
+  <testcase name="testGetPlayerIdAndName()" classname="unit_test.server_test.DatabaseHelperTest" time="0.015"/>
+  <testcase name="testInsertPlayerAndCheckUsername()" classname="unit_test.server_test.DatabaseHelperTest" time="0.03"/>
+  <testcase name="testClearList()" classname="unit_test.server_test.DatabaseHelperTest" time="0.011"/>
+  <testcase name="testChangePassword()" classname="unit_test.server_test.DatabaseHelperTest" time="0.029"/>
+  <testcase name="testSetOffline()" classname="unit_test.server_test.DatabaseHelperTest" time="0.031"/>
+  <testcase name="testGetRandomWords()" classname="unit_test.server_test.DatabaseHelperTest" time="0.016"/>
   <system-out><![CDATA[Player: 1 - testuser
 Inserted user with ID: 7
 List cleared
 ]]></system-out>
-  <system-err><![CDATA[]]></system-err>
+  <system-err><![CDATA[--- Exception in Async Thread ---
+java.lang.NullPointerException: Cannot invoke "java.util.Map.keySet()" because "players" is null
+	gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	javafx.animation.Animation$1.timePulse(Animation.java:206)
+	com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	java.base/java.lang.Thread.run(Thread.java:1583)
+
+]]></system-err>
 </testsuite>

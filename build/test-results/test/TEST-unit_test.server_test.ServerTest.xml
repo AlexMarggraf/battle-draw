@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="unit_test.server_test.ServerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-04-27T20:02:49" hostname="DESKTOP-LR584BK" time="0.005">
+<testsuite name="unit_test.server_test.ServerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-04-30T12:30:18" hostname="DESKTOP-LR584BK" time="0.021">
   <properties/>
-  <testcase name="testHandleReceiveMessageProcessesChatAll()" classname="unit_test.server_test.ServerTest" time="0.001"/>
-  <testcase name="testHandleSendMessageSendsToCorrectThread()" classname="unit_test.server_test.ServerTest" time="0.001"/>
-  <testcase name="testFillReceiveMessageQueueRetrievesMessages()" classname="unit_test.server_test.ServerTest" time="0.0"/>
-  <testcase name="testSendMessageAddsToCorrectServerThread()" classname="unit_test.server_test.ServerTest" time="0.0"/>
-  <testcase name="testConstructorInitializesFields()" classname="unit_test.server_test.ServerTest" time="0.0"/>
-  <system-out><![CDATA[[04-27 22:02:49.126][INFO ][Test worker] Server - handled and received message chatAll -2 user Hello!
-[04-27 22:02:49.126][INFO ][Test worker] Server - Message sent chatAll 1 Alice Hi!
-[04-27 22:02:49.128][INFO ][Test worker] Server - handled and sent message chatAll 1 Alice Hi!
-[04-27 22:02:49.129][INFO ][Test worker] Server - Message sent test-msg
+  <testcase name="testHandleReceiveMessageProcessesChatAll()" classname="unit_test.server_test.ServerTest" time="0.009"/>
+  <testcase name="testHandleSendMessageSendsToCorrectThread()" classname="unit_test.server_test.ServerTest" time="0.004"/>
+  <testcase name="testFillReceiveMessageQueueRetrievesMessages()" classname="unit_test.server_test.ServerTest" time="0.001"/>
+  <testcase name="testSendMessageAddsToCorrectServerThread()" classname="unit_test.server_test.ServerTest" time="0.002"/>
+  <testcase name="testConstructorInitializesFields()" classname="unit_test.server_test.ServerTest" time="0.001"/>
+  <system-out><![CDATA[[04-30 14:30:18.310][INFO ][Test worker] Server - handled and received message chatAll -2 user Hello!
+[04-30 14:30:18.315][INFO ][Test worker] Server - Message sent chatAll 1 Alice Hi!
+[04-30 14:30:18.316][INFO ][Test worker] Server - handled and sent message chatAll 1 Alice Hi!
+[04-30 14:30:18.321][INFO ][Test worker] Server - Message sent test-msg
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

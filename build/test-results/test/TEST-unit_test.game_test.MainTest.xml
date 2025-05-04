@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="unit_test.game_test.MainTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-04-27T20:02:46" hostname="DESKTOP-LR584BK" time="0.045">
+<testsuite name="unit_test.game_test.MainTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-04-30T12:30:14" hostname="DESKTOP-LR584BK" time="0.114">
   <properties/>
-  <testcase name="testConstructorInitialState()" classname="unit_test.game_test.MainTest" time="0.001"/>
-  <testcase name="testHandleServerMessage_setsReceivedPongTrue()" classname="unit_test.game_test.MainTest" time="0.001"/>
-  <testcase name="testSendMessageFlushesToClientQueue()" classname="unit_test.game_test.MainTest" time="0.002"/>
-  <testcase name="testDecodeImageReturnsBufferedImage()" classname="unit_test.game_test.MainTest" time="0.04"/>
-  <testcase name="testSetReceivedPongAndAffectsPingHandling()" classname="unit_test.game_test.MainTest" time="0.001"/>
-  <system-out><![CDATA[[04-27 22:02:46.051][INFO ][Test worker] Main - received and handled Message pong
-[04-27 22:02:46.052][INFO ][Test worker] Main - send message msg1
-[04-27 22:02:46.053][INFO ][Test worker] Main - send message msg2
+  <testcase name="testConstructorInitialState()" classname="unit_test.game_test.MainTest" time="0.003"/>
+  <testcase name="testHandleServerMessage_setsReceivedPongTrue()" classname="unit_test.game_test.MainTest" time="0.003"/>
+  <testcase name="testSendMessageFlushesToClientQueue()" classname="unit_test.game_test.MainTest" time="0.003"/>
+  <testcase name="testDecodeImageReturnsBufferedImage()" classname="unit_test.game_test.MainTest" time="0.099"/>
+  <testcase name="testSetReceivedPongAndAffectsPingHandling()" classname="unit_test.game_test.MainTest" time="0.002"/>
+  <system-out><![CDATA[[04-30 14:30:14.142][INFO ][Test worker] Main - received and handled Message pong
+[04-30 14:30:14.146][INFO ][Test worker] Main - send message msg1
+[04-30 14:30:14.146][INFO ][Test worker] Main - send message msg2
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

@@ -29,7 +29,7 @@
 </td>
 <td>
 <div class="infoBox" id="failures">
-<div class="counter">6</div>
+<div class="counter">5</div>
 <p>failures</p>
 </div>
 </td>
@@ -41,7 +41,7 @@
 </td>
 <td>
 <div class="infoBox" id="duration">
-<div class="counter">2.559s</div>
+<div class="counter">2.874s</div>
 <p>duration</p>
 </div>
 </td>
@@ -51,7 +51,7 @@
 </td>
 <td>
 <div class="infoBox failures" id="successRate">
-<div class="percent">53%</div>
+<div class="percent">61%</div>
 <p>successful</p>
 </div>
 </td>
@@ -72,37 +72,6 @@
 </ul>
 <div id="tab0" class="tab">
 <h2>Failed tests</h2>
-<div class="test">
-<a name="testGetVote()"></a>
-<h3 class="failures">testGetVote()</h3>
-<span class="code">
-<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
-Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	at gui.GUIApp.addClickedInput(GUIApp.java:385)
-	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
-	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
-	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
-	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
-	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
-	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
-	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
-	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
-	at javafx.animation.Animation$1.timePulse(Animation.java:206)
-	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
-	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
-	at java.base/java.lang.Thread.run(Thread.java:1583)
-</pre>
-</span>
-</div>
 <div class="test">
 <a name="testNextButtonPresenceNotOwnPicture()"></a>
 <h3 class="failures">testNextButtonPresenceNotOwnPicture()</h3>
@@ -135,8 +104,8 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.a
 </span>
 </div>
 <div class="test">
-<a name="testNextButtonPresenceOwnPicture()"></a>
-<h3 class="failures">testNextButtonPresenceOwnPicture()</h3>
+<a name="testSendVoteButtonPresenceNotOwnPicture()"></a>
+<h3 class="failures">testSendVoteButtonPresenceNotOwnPicture()</h3>
 <span class="code">
 <pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
 	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
@@ -166,8 +135,39 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.key
 </span>
 </div>
 <div class="test">
-<a name="testVoteComboBoxPresenceOwnPicture()"></a>
-<h3 class="failures">testVoteComboBoxPresenceOwnPicture()</h3>
+<a name="testSendVoteButtonPresenceOwnPicture()"></a>
+<h3 class="failures">testSendVoteButtonPresenceOwnPicture()</h3>
+<span class="code">
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
+Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	at gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	at gui.LobbyView.lambda$new$0(LobbyView.java:44)
+	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
+	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
+	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
+	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
+	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
+	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
+	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
+	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
+	at javafx.animation.Animation$1.timePulse(Animation.java:206)
+	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
+	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
+	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
+	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
+	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
+	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
+	at java.base/java.lang.Thread.run(Thread.java:1583)
+</pre>
+</span>
+</div>
+<div class="test">
+<a name="testSetImage()"></a>
+<h3 class="failures">testSetImage()</h3>
 <span class="code">
 <pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
 	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
@@ -200,7 +200,7 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.key
 <a name="testVoteInitializationNotOwnPicture()"></a>
 <h3 class="failures">testVoteInitializationNotOwnPicture()</h3>
 <span class="code">
-<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
 	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
 	Suppressed: java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
 		... 1 more
@@ -226,37 +226,6 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.key
 		at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
 		at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
 		at java.base/java.lang.Thread.run(Thread.java:1583)
-Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
-	at gui.LobbyView.createLobbyListing(LobbyView.java:70)
-	at gui.LobbyView.lambda$new$0(LobbyView.java:44)
-	at com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
-	at com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
-	at javafx.animation.Timeline.doPlayTo(Timeline.java:172)
-	at javafx.animation.AnimationAccessorImpl.playTo(AnimationAccessorImpl.java:39)
-	at com.sun.scenario.animation.shared.InfiniteClipEnvelope.timePulse(InfiniteClipEnvelope.java:104)
-	at javafx.animation.Animation.doTimePulse(Animation.java:1189)
-	at javafx.animation.Animation$1.lambda$timePulse$0(Animation.java:207)
-	at java.base/java.security.AccessController.doPrivileged(AccessController.java:400)
-	at javafx.animation.Animation$1.timePulse(Animation.java:206)
-	at com.sun.scenario.animation.AbstractPrimaryTimer.timePulseImpl(AbstractPrimaryTimer.java:343)
-	at com.sun.scenario.animation.AbstractPrimaryTimer$MainLoop.run(AbstractPrimaryTimer.java:266)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:588)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulse(QuantumToolkit.java:572)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.pulseFromQueue(QuantumToolkit.java:565)
-	at com.sun.javafx.tk.quantum.QuantumToolkit.lambda$runToolkit$11(QuantumToolkit.java:352)
-	at com.sun.glass.ui.InvokeLaterDispatcher$Future.run(InvokeLaterDispatcher.java:95)
-	at com.sun.glass.ui.win.WinApplication._runLoop(Native Method)
-	at com.sun.glass.ui.win.WinApplication.lambda$runLoop$3(WinApplication.java:185)
-	at java.base/java.lang.Thread.run(Thread.java:1583)
-</pre>
-</span>
-</div>
-<div class="test">
-<a name="testVoteInitializationOwnPicture()"></a>
-<h3 class="failures">testVoteInitializationOwnPicture()</h3>
-<span class="code">
-<pre>java.lang.RuntimeException: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	at org.testfx.util.WaitForAsyncUtils.---- Delayed Exception: (See Trace Below) ----(WaitForAsyncUtils.java:0)
 Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
 	at gui.GUIApp.addClickedInput(GUIApp.java:385)
 	at gui.GameView.lambda$createCountdown$2(GameView.java:152)
@@ -294,69 +263,69 @@ Caused by: java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.a
 </tr>
 </thead>
 <tr>
-<td class="failures">testGetVote()</td>
-<td class="failures">0.119s</td>
-<td class="failures">failed</td>
+<td class="success">testGetVote()</td>
+<td class="success">0.273s</td>
+<td class="success">passed</td>
 </tr>
 <tr>
 <td class="failures">testNextButtonPresenceNotOwnPicture()</td>
-<td class="failures">0.130s</td>
+<td class="failures">0.178s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
-<td class="failures">testNextButtonPresenceOwnPicture()</td>
-<td class="failures">0.184s</td>
-<td class="failures">failed</td>
+<td class="success">testNextButtonPresenceOwnPicture()</td>
+<td class="success">0.233s</td>
+<td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testNextFlagInitializationNotOwnPicture()</td>
-<td class="success">0.236s</td>
+<td class="success">0.243s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testNextFlagInitializationOwnPicture()</td>
-<td class="success">0.226s</td>
+<td class="success">0.238s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="success">testSendVoteButtonPresenceNotOwnPicture()</td>
-<td class="success">0.232s</td>
-<td class="success">passed</td>
+<td class="failures">testSendVoteButtonPresenceNotOwnPicture()</td>
+<td class="failures">0.174s</td>
+<td class="failures">failed</td>
 </tr>
 <tr>
-<td class="success">testSendVoteButtonPresenceOwnPicture()</td>
-<td class="success">0.224s</td>
-<td class="success">passed</td>
+<td class="failures">testSendVoteButtonPresenceOwnPicture()</td>
+<td class="failures">0.181s</td>
+<td class="failures">failed</td>
 </tr>
 <tr>
-<td class="success">testSetImage()</td>
-<td class="success">0.343s</td>
-<td class="success">passed</td>
+<td class="failures">testSetImage()</td>
+<td class="failures">0.323s</td>
+<td class="failures">failed</td>
 </tr>
 <tr>
 <td class="success">testSetVote()</td>
-<td class="success">0.237s</td>
+<td class="success">0.240s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
 <td class="success">testVoteComboBoxPresenceNotOwnPicture()</td>
-<td class="success">0.232s</td>
+<td class="success">0.242s</td>
 <td class="success">passed</td>
 </tr>
 <tr>
-<td class="failures">testVoteComboBoxPresenceOwnPicture()</td>
-<td class="failures">0.172s</td>
-<td class="failures">failed</td>
+<td class="success">testVoteComboBoxPresenceOwnPicture()</td>
+<td class="success">0.241s</td>
+<td class="success">passed</td>
 </tr>
 <tr>
 <td class="failures">testVoteInitializationNotOwnPicture()</td>
-<td class="failures">0.055s</td>
+<td class="failures">0.059s</td>
 <td class="failures">failed</td>
 </tr>
 <tr>
-<td class="failures">testVoteInitializationOwnPicture()</td>
-<td class="failures">0.169s</td>
-<td class="failures">failed</td>
+<td class="success">testVoteInitializationOwnPicture()</td>
+<td class="success">0.249s</td>
+<td class="success">passed</td>
 </tr>
 </table>
 </div>
@@ -412,9 +381,9 @@ java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&
 	java.base/java.lang.Thread.run(Thread.java:1583)
 
 --- Exception in Async Thread ---
-java.lang.NullPointerException: Cannot invoke &quot;java.util.Queue.add(Object)&quot; because &quot;gui.GUIApp.clickedInputQueue&quot; is null
-	gui.GUIApp.addClickedInput(GUIApp.java:385)
-	gui.GameView.lambda$createCountdown$2(GameView.java:152)
+java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot; because &quot;players&quot; is null
+	gui.LobbyView.createLobbyListing(LobbyView.java:70)
+	gui.LobbyView.lambda$new$0(LobbyView.java:44)
 	com.sun.scenario.animation.shared.TimelineClipCore.visitKeyFrame(TimelineClipCore.java:239)
 	com.sun.scenario.animation.shared.TimelineClipCore.playTo(TimelineClipCore.java:180)
 	javafx.animation.Timeline.doPlayTo(Timeline.java:172)
@@ -494,7 +463,7 @@ java.lang.NullPointerException: Cannot invoke &quot;java.util.Map.keySet()&quot;
 <input id="line-wrapping-toggle" type="checkbox" autocomplete="off"/>
 </label>
 </div>Generated by 
-<a href="http://www.gradle.org">Gradle 8.6</a> at 27 Apr 2025, 22:02:49</p>
+<a href="http://www.gradle.org">Gradle 8.6</a> at 30 Apr 2025, 14:30:19</p>
 </div>
 </div>
 </body>

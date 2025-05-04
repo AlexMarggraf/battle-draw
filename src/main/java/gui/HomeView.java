@@ -34,7 +34,9 @@ public class HomeView {
         Button tutorialButton = createTutorialButton();
         Button lobbyListButton = createListLobby();
         Button lobbyPlayersButton = createListPlayers();
-        view = new VBox(20, new Label("Willkommen bei Battle Draw!"), new Label("Home"), createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, tutorialButton);
+        Button changeUsernameButton = createChangeUsernameButton();
+        Button myHighscoreButton = createMyHighscoreButton();
+        view = new VBox(20, new Label("Willkommen bei Battle Draw!"), new Label("Home"), createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, changeUsernameButton, myHighscoreButton, tutorialButton);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -78,9 +80,11 @@ public class HomeView {
                     GUIApp.addClickedInput("/joinLobby Lobby_von_" + username);
                     popup.close();
                 } else {
-                    print("Username cannot be empty");
+                    usernameField.setPromptText("Username cannot be empty");
                 }
             });
+
+            usernameField.setOnAction(e -> joinButton.fire());
 
             VBox layout = new VBox(10);
             layout.getChildren().addAll(usernameField, joinButton);
@@ -91,6 +95,60 @@ public class HomeView {
             popup.showAndWait();
         });
 
+        return btn;
+    }
+
+    /**
+     * Creates and configures the "Change username" button.
+     * When pressed, this button opens a popup dialog for entering a new Username
+     * and initiates the process.
+     *
+     * @return the configured Button instance for changing the username
+     */
+    public static Button createChangeUsernameButton() {
+        Button btn = new Button("Change username");
+
+        btn.setOnAction(event -> {
+            Stage popup = new Stage();
+            popup.initModality(Modality.APPLICATION_MODAL);
+            popup.setTitle("Change Username");
+
+            TextField usernameField = new TextField();
+            usernameField.setPromptText("New username");
+
+            Button confirmButton = new Button("Confirm");
+            confirmButton.setOnAction(e -> {
+                String newUsername = usernameField.getText().trim();
+                if (!newUsername.isEmpty()) {
+                    GUIApp.addClickedInput("/nick " + newUsername);
+                    popup.close();
+                } else {
+                    System.out.println("Username cannot be empty");
+                }
+            });
+
+            usernameField.setOnAction(e -> confirmButton.fire());
+
+            VBox layout = new VBox(10);
+            layout.getChildren().addAll(usernameField, confirmButton);
+
+            Scene scene = new Scene(layout, 300, 150);
+            popup.setScene(scene);
+
+            popup.showAndWait();
+        });
+
+        return btn;
+    }
+
+    /**
+     * Creates and configures the "My Highscore" Button
+     */
+    public static Button createMyHighscoreButton() {
+        Button btn = new Button("My Highscore");
+        btn.setOnAction(event -> {
+            GUIApp.addClickedInput("/myHighscore");
+        });
         return btn;
     }
 
