@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="unit_test.server_test.ConnectionListenerTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-04-30T12:30:17" hostname="DESKTOP-LR584BK" time="0.01">
-  <properties/>
-  <testcase name="testConstructorInitializesFields()" classname="unit_test.server_test.ConnectionListenerTest" time="0.002"/>
-  <testcase name="testQueueAcceptsSocketManually()" classname="unit_test.server_test.ConnectionListenerTest" time="0.007"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>
