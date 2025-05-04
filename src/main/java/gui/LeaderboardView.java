@@ -7,12 +7,13 @@
 
 package gui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
+
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -34,9 +35,10 @@ public class LeaderboardView {
         setReadyFalse();
         Button rdy = createRdyBtn();
         updateLeaderboard();
+        vboxLeaderboard.setAlignment(Pos.CENTER);
 
         view = new VBox(30, new Label("Leaderboard"), vboxLeaderboard);
-        if(GUIApp.getLobbyLeader()){
+        if (GUIApp.getLobbyLeader()) {
             view.getChildren().add(rdy);
         }
         view.setAlignment(Pos.CENTER);
@@ -64,19 +66,41 @@ public class LeaderboardView {
         int rank = 0;
         double lastPoints = -1;
         int numberOfSamePoints = 1;
+
         for (Map.Entry<String, Double> player : playersSorted.entrySet()) {
-            if (lastPoints != player.getValue()) {
+            double points = player.getValue();
+            if (Double.compare(lastPoints, points) != 0) {
                 rank += numberOfSamePoints;
                 numberOfSamePoints = 1;
             } else {
                 numberOfSamePoints++;
             }
-            String leaderboardEntry = String.format("%d. %s with %.2f points", rank, player.getKey(), player.getValue());
-            vboxLeaderboard.getChildren().add(new Text(leaderboardEntry));
-            lastPoints = player.getValue();
-        }
 
+            String emoji = switch (rank) {
+                case 1 -> "\uD83E\uDD47";
+                case 2 -> "\uD83E\uDD48";
+                case 3 -> "\uD83E\uDD49";
+                default -> "";
+            };
+
+            String leaderboardEntry = String.format("%s %d. %s with %.2f points",
+                    emoji, rank, player.getKey(), points);
+
+            Label bubble = new Label(leaderboardEntry);
+            bubble.getStyleClass().add("leaderboard-bubble");
+
+            switch (rank) {
+                case 1 -> bubble.getStyleClass().add("first-place");
+                case 2 -> bubble.getStyleClass().add("second-place");
+                case 3 -> bubble.getStyleClass().add("third-place");
+            }
+
+            VBox.setMargin(bubble, new Insets(5));
+            vboxLeaderboard.getChildren().add(bubble);
+            lastPoints = points;
+        }
     }
+
 
     /**
      * Creates and configures the ready button for proceeding to the next round.

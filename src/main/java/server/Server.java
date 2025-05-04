@@ -98,14 +98,14 @@ public class Server {
 
             Message message = new Message(clientMessage);
 
-            switch(message.getType()) {
+            switch (message.getType()) {
                 case "disconnect" -> {
                     int id = message.getID();
 
                     for (Lobby lobby : lobbyList) {
                         Integer[] players = lobby.getPlayers();
                         for (int player : players) {
-                            if(player == id) {
+                            if (player == id) {
                                 lobby.removePlayer(player);
                             }
                         }
@@ -114,7 +114,7 @@ public class Server {
                     serverThreadList.removeIf(st -> st.getId() == id);
                     DatabaseHelper.setStatus(id, 0);
 
-                    Message broadcast = new Message ("broadcast User " + DatabaseHelper.getPlayerName(message.getID()) + " disconnected");
+                    Message broadcast = new Message("broadcast User " + DatabaseHelper.getPlayerName(message.getID()) + " disconnected");
                     sendMessageQueue.add(broadcast.toString());
                 }
                 case "chatAll", "chatLobby" -> sendMessageQueue.add(message.toString());
@@ -136,7 +136,7 @@ public class Server {
                         Message response = new Message("username", new String[]{message.getID() + "", message.getParams()[1]});
                         sendMessageQueue.add(response.toString());
                     } else {
-                        Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Username is already in use"});
+                        Message response = new Message("chatTo", new String[]{0 + "", "Server", DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Username is already in use"});
                         sendMessageQueue.add(response.toString());
                     }
                 }
@@ -159,7 +159,7 @@ public class Server {
                             }
                         }
 
-                        Message broadcast = new Message ("broadcast User " + username + " is online");
+                        Message broadcast = new Message("broadcast User " + username + " is online");
                         sendMessageQueue.add(broadcast.toString());
                     }
                 }
@@ -190,7 +190,7 @@ public class Server {
                     sendMessageQueue.add(response.toString());
                     connection++;
 
-                    Message broadcast = new Message ("broadcast User " + username + " is online");
+                    Message broadcast = new Message("broadcast User " + username + " is online");
                     sendMessageQueue.add(broadcast.toString());
                 }
                 case "whoOnline" -> {
@@ -215,14 +215,14 @@ public class Server {
                     sendMessageQueue.add(response.toString());
                 }
                 case "listLobbyPlayers" -> {
-                    for(Lobby lobby : lobbyList) {
+                    for (Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             Integer[] players = lobby.getPlayers();
                             List<String> playerList = new ArrayList<>();
                             playerList.add(message.getID() + "");
 
                             for (int id : players) {
-                                if(DatabaseHelper.getStatus(id)) {
+                                if (DatabaseHelper.getStatus(id)) {
                                     playerList.add(DatabaseHelper.getPlayerName(id));
                                 }
                             }
@@ -247,8 +247,8 @@ public class Server {
                     sendMessageQueue.add(response2.toString());
                 }
                 case "joinLobby" -> {
-                    Message response = new Message("chatTo", new String[]{0 + "", "Server",  DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
-                    for(Lobby lobby : lobbyList) {
+                    Message response = new Message("chatTo", new String[]{0 + "", "Server", DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
+                    for (Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobby.addPlayer(message.getID());
                             response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});
@@ -263,7 +263,7 @@ public class Server {
                     sendMessageQueue.add(response.toString());
                 }
                 case "leaveLobby" -> {
-                    for(Lobby lobby : lobbyList) {
+                    for (Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             Integer[] players = lobby.getPlayers();
                             for (int id : players) {
@@ -272,7 +272,7 @@ public class Server {
                             }
                             lobby.removePlayer(message.getID());
                             lobbyGameMap.get(lobby).minusOnePlayer();
-                            if(lobby.isEmpty()) {
+                            if (lobby.isEmpty()) {
                                 Game game = lobbyGameMap.get(lobby);
                                 lobbyGameMap.remove(lobby);
                                 lobbyList.remove(lobby);
@@ -282,7 +282,7 @@ public class Server {
                     }
                 }
                 case "startDrawing" -> {
-                    for(Lobby lobby : lobbyList) {
+                    for (Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobbyGameMap.get(lobby).setStatus("ongoing");
                             String theme = DatabaseHelper.getRandomWords(1).toString();
@@ -296,7 +296,7 @@ public class Server {
                                 Message responseToLobby = new Message("drawingStarts", new String[]{id + "", theme, numberOfRounds, time});
                                 sendMessageQueue.add(responseToLobby.toString());
                             }
-                            if(lobbyGameMap.get(lobby).getRoundNumber() == 0) {
+                            if (lobbyGameMap.get(lobby).getRoundNumber() == 0) {
                                 lobby.initialiseLeaderboard();
                             }
                         }
@@ -367,14 +367,14 @@ public class Server {
                             if (lobbyGameMap.get(lobby).getRoundNumber() == lobbyGameMap.get(lobby).getMaxNumberOfRounds()) {
                                 lobbyGameMap.get(lobby).setStatus("ended");
                                 for (int id : players) {
-                                     Message response = new Message("showEnding", new String[]{id + ""});
-                                     sendMessageQueue.add(response.toString());
-                                    //double highscore = DatabaseHelper.getHighscore(id);
-                                    //String playerName = DatabaseHelper.getPlayerName(id);
-                                    //double currentScore = lobby.getPointsOfAPlayer(playerName);
-                                    //if (highscore < currentScore) {
-                                    //DatabaseHelper.setHighscore(id, currentScore)
-                                    //}
+                                    Message response = new Message("showEnding", new String[]{id + ""});
+                                    sendMessageQueue.add(response.toString());
+                                    double highscore = DatabaseHelper.getHighscore(id);
+                                    String playerName = DatabaseHelper.getPlayerName(id);
+                                    double currentScore = lobby.getPointsOfAPlayer(playerName);
+                                    if (highscore < currentScore) {
+                                        DatabaseHelper.setHighscore(id, currentScore);
+                                    }
                                 }
                             } else {
                                 String theme = DatabaseHelper.getRandomWords(1).toString();
@@ -396,8 +396,7 @@ public class Server {
                     }
                 }
                 case "whatHighscore" -> {
-                    // Double highscore = DatabaseHelper.getHighscore(message.getID());
-                    Double highscore = 5.00;
+                    Double highscore = DatabaseHelper.getHighscore(message.getID());
                     Message response = new Message("highscore", new String[]{message.getID() + "", highscore + ""});
                     sendMessageQueue.add(response.toString());
                 }
@@ -444,7 +443,7 @@ public class Server {
                         if (lobby.getLobbyName().equals(message.getParams()[2])) {
                             Integer[] playerId = lobby.getPlayers();
                             for (Integer id : playerId) {
-                                if(id != message.getID()) {
+                                if (id != message.getID()) {
                                     sendMessage(message.toString(), id);
                                 }
                             }

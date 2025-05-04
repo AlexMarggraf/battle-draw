@@ -54,10 +54,7 @@ public class LobbyView {
             view.getChildren().add(leaderBtn);
             view.getChildren().add(roundsBox);
             view.getChildren().add(timerBox);
-        } /* else {
-            view.getChildren().add(readyBtn);
         }
-        */
     }
 
     /**
@@ -69,6 +66,7 @@ public class LobbyView {
         vboxUsers.getChildren().clear();
         for (String username : players.keySet()) {
             Label label = new Label(username);
+            label.getStyleClass().add("leaderboard-bubble");
             vboxUsers.getChildren().add(label);
         }
     }

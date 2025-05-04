@@ -13,13 +13,13 @@ import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
 import javafx.util.Duration;
@@ -27,6 +27,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -36,8 +37,8 @@ public class GameView {
 
     private final VBox view;
     private static Canvas canvas;
-    private static final int canvasHeight = 500;
-    private static final int canvasWidth = 500;
+    private static final int canvasHeight = 600;
+    private static final int canvasWidth = 600;
     private Color selectedColor = Color.BLACK;
     private int selectedLineWidth = 8;
     private double lastX;
@@ -55,37 +56,30 @@ public class GameView {
         isTimeUp = false;
 
         canvas = new Canvas(canvasWidth, canvasHeight);
+
+        canvas.getStyleClass().add("canvas");
+
         gc = canvas.getGraphicsContext2D();
 
         TextField countdownField = createCountdown(GUIApp.getTime());
         Label themeLabel = createThemeLabel();
 
-        setupCanvas();
-        setupEventHandlers();
-        canvas.setTranslateY(-15);
-        canvas.setTranslateX(-15);
+        HBox countdownBox = new HBox(10, new Label("Time left:"), countdownField);
+        countdownBox.setAlignment(Pos.CENTER);
 
-        ComboBox<String> colorCombo = createColorCombo();
+        clearCanvas();
+        setupEventHandlers();
+
+        ColorPicker colorPicker = createColorPicker();
         ComboBox<Integer> widthCombo = createWidthCombo();
         Button clearBtn = createClearButton();
 
-        HBox controls = new HBox(10, colorCombo, widthCombo, clearBtn);
-        controls.setTranslateY(-15);
-        controls.setTranslateX(-15);
-        view = new VBox(20, controls, countdownField, themeLabel, canvas);
+        HBox controls = new HBox(10, colorPicker, widthCombo, clearBtn);
+        controls.setAlignment(Pos.CENTER);
+
+        view = new VBox(20, controls, countdownBox, themeLabel, canvas);
+        view.setAlignment(Pos.CENTER);
         view.setPadding(new Insets(30));
-    }
-
-
-
-    /**
-     * Initializes the canvas with default settings.
-     * Clears the canvas and draws a border around it.
-     */
-    private void setupCanvas() {
-        clearCanvas();
-        gc.setStroke(Color.BLACK);
-        gc.strokeRect(0, 0, (canvas.getWidth()) + 5.0, (canvas.getHeight()) + 5.0);
     }
 
     /**
@@ -159,23 +153,23 @@ public class GameView {
 
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        countdownField.setPrefWidth(100);
 
         return countdownField;
     }
 
     /**
-     * Creates a color selection combo box.
-     * Allows users to choose between different drawing colors.
+     * Creates a color picker for selecting drawing color.
      *
-     * @return the configured ComboBox for color selection
+     * @return the configured ColorPicker
      */
-    private ComboBox<String> createColorCombo() {
-        ComboBox<String> combo = new ComboBox<>();
-        combo.getItems().addAll("BLACK", "RED", "BLUE", "GREEN", "WHITE");
-        combo.setValue("BLACK");
-        combo.setOnAction(e -> selectedColor = Color.valueOf(combo.getValue()));
-        return combo;
+    private ColorPicker createColorPicker() {
+        Locale.setDefault(Locale.ENGLISH);
+        ColorPicker colorPicker = new ColorPicker(Color.BLACK);
+        colorPicker.setOnAction(e -> selectedColor = colorPicker.getValue());
+        return colorPicker;
     }
+
 
     /**
      * Creates a line width selection combo box.
@@ -207,18 +201,19 @@ public class GameView {
             alert.setTitle("Confirm Action");
             alert.setHeaderText("Clear Canvas");
             alert.setContentText("Are you sure you want to clear the canvas?");
+            alert.getDialogPane().getStyleClass().add("dialog-pane");
 
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                setupCanvas();
+                clearCanvas();
             }
         });
         return button;
     }
 
+
     /**
      * Creates the "Proceed to Vote" button for players to proceed.
-     *
      *
      * @return the configured Button for navigation
      */
@@ -268,7 +263,7 @@ public class GameView {
 
 
     private Label createThemeLabel() {
-        Label label = new Label("Thema: " + GUIApp.getTheme());
+        Label label = new Label("Theme: " + GUIApp.getTheme());
         return label;
     }
 

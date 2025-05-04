@@ -5,6 +5,7 @@
  */
 package gui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -38,11 +39,16 @@ public class LoginSignupView {
         Button loginBtn = createLoginButton(username, password);
         Button signupBtn = createSignUpButton(username, password);
 
-        HBox hbox = new HBox(10, username, password, loginBtn, signupBtn);
 
-        view = new VBox(20, new Label("LogIn/Signup"), hbox, textPrompted);
+        VBox inputBox = new VBox(10, username, password);
+        inputBox.setAlignment(Pos.CENTER);
+
+        HBox buttonBox = new HBox(20, loginBtn, signupBtn);
+        buttonBox.setAlignment(Pos.CENTER);
+
+        view = new VBox(20, new Label("Please Login or Signup"), textPrompted, inputBox, buttonBox);
         view.setAlignment(Pos.CENTER);
-        view.setPadding(new javafx.geometry.Insets(50));
+        view.setPadding(new Insets(50));
 
     }
 
@@ -64,7 +70,7 @@ public class LoginSignupView {
         }
         usernameText = field.getText();
         field.textProperty().addListener((observable, oldValue, newValue) -> usernameText = newValue);
-
+        field.setMaxWidth(250);
         return field;
     }
 
@@ -78,6 +84,7 @@ public class LoginSignupView {
     public PasswordField createPasswordField() {
         PasswordField field = new PasswordField();
         field.setPromptText("Password");
+        field.setMaxWidth(250);
 
         field.textProperty().addListener((observable, oldValue, newValue) -> passwordText = newValue);
 
@@ -97,14 +104,6 @@ public class LoginSignupView {
     public Button createLoginButton(TextField username, TextField password) {
         Button btn = new Button("Login?");
         btn.setOnAction(event -> {
-            //GUIApp.print(usernameText);
-            //GUIApp.print(passwordText);
-
-
-            //tmp alarm wee woo
-            //GUIApp.addUserInputQueue("li");
-            //GUIApp.addUserInputQueue(usernameText);
-            //GUIApp.addUserInputQueue(passwordText);
             GUIApp.addClickedInput("/setUsername " + usernameText);
             GUIApp.addClickedInput("/setPassword " + passwordText);
             GUIApp.addClickedInput("/logIn " + usernameText + " " + passwordText);
@@ -126,16 +125,8 @@ public class LoginSignupView {
      */
 
     public Button createSignUpButton(TextField username, TextField password) {
-        Button btn = new Button("SignUp?");
+        Button btn = new Button("Signup?");
         btn.setOnAction(event -> {
-            //GUIApp.print(usernameText);
-            //GUIApp.print(passwordText);
-
-            //tmp alarm wee woo
-            //GUIApp.addUserInputQueue("su");
-            //GUIApp.addUserInputQueue("n");
-            //GUIApp.addUserInputQueue(usernameText);
-            //GUIApp.addUserInputQueue(passwordText);
             GUIApp.addClickedInput("/signUp " + usernameText + " " + passwordText);
 
             username.clear();
@@ -154,5 +145,7 @@ public class LoginSignupView {
         return view;
     }
 
-    public static void setErrorText(String error) {errorText = error;}
+    public static void setErrorText(String error) {
+        errorText = error;
+    }
 }

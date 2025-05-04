@@ -9,7 +9,7 @@ import java.util.List;
  * Uses SQLite database located at resources/Thema.db.
  */
 public class DatabaseHelper {
-    private static String dbPath  = "jdbc:sqlite:database/Thema.db";
+    private static String dbPath = "jdbc:sqlite:database/Thema.db";
 
     private static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(dbPath);
@@ -101,7 +101,7 @@ public class DatabaseHelper {
     /**
      * Updates a player's online status.
      *
-     * @param id Player ID to update
+     * @param id     Player ID to update
      * @param status New status (0 for offline, 1 for online)
      */
     public static void setStatus(int id, int status) {
@@ -227,7 +227,7 @@ public class DatabaseHelper {
      * Changes a player's username.
      *
      * @param username New username to set
-     * @param id Player ID to update
+     * @param id       Player ID to update
      */
     public static void changeUsername(String username, int id) {
         String update = "UPDATE Players SET username = ? WHERE id = ?";
@@ -248,7 +248,7 @@ public class DatabaseHelper {
      * Updates a player's password.
      *
      * @param password New password to set
-     * @param id Player ID to update
+     * @param id       Player ID to update
      */
     public static void changePassword(String password, int id) {
         String update = "UPDATE Players SET password = ? WHERE id = ?";
@@ -289,4 +289,41 @@ public class DatabaseHelper {
         list.clear();
         System.out.println("List cleared");
     }
+
+    public static void setHighscore(int id, double score) {
+        String update = "UPDATE Players SET score = ? WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(update)) {
+
+            pstmt.setDouble(1, score);
+            pstmt.setInt(2, id);
+
+
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+    }
+
+    public static Double getHighscore(int id) {
+        String query = "SELECT score FROM Players WHERE id = ?";
+
+        try (Connection conn = getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(query)) {
+
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+
+            if (rs.next()) {
+                return rs.getDouble("score");
+            }
+
+        } catch (SQLException e) {
+            System.out.println("SQL Error: " + e.getMessage());
+        }
+
+        return null;
+    }
+
 }

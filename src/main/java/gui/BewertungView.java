@@ -7,14 +7,19 @@
 package gui;
 
 import javafx.embed.swing.SwingFXUtils;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.beans.value.ChangeListener;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -24,7 +29,7 @@ public class BewertungView {
 
     private final VBox view;
     private static final ImageView imageView = new ImageView();
-    private static int vote = 0;
+    private static int vote = 1;
     private static boolean next = false;
     private static boolean isOwnPicture;
 
@@ -35,25 +40,45 @@ public class BewertungView {
      * @throws IOException if there's an error loading image resources
      */
     public BewertungView() throws IOException {
-        setVoteZero();
+        resetVote();
         setNextFalse();
 
-        ComboBox<Integer> voteBox = createVoteBox();
-        Button nextBtn = createNextBtn();
-        Button sendVoteBtn = createSendVoteButton();
+        StackPane picturePane = new StackPane(imageView);
+        picturePane.setMinSize(0, 0);
+        picturePane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        VBox.setVgrow(picturePane, Priority.ALWAYS);
 
-        Label label = new Label("Bewertung");
+        imageView.setPreserveRatio(true);
+
+        ChangeListener<Number> sizeListener = (obs, oldVal, newVal) -> {
+            double size = Math.min(picturePane.getWidth(), picturePane.getHeight());
+            imageView.setFitWidth(size);
+            imageView.setFitHeight(size);
+        };
+
+        picturePane.widthProperty().addListener(sizeListener);
+        picturePane.heightProperty().addListener(sizeListener);
+
+
+        Button nextBtn = createNextBtn();
+        HBox voteButtons = createVoteButtonsWithSend();
+        voteButtons.setAlignment(Pos.CENTER);
+
+        Label label = new Label("Please rate the pictures!");
 
         HBox controls = new HBox(10, label);
 
-        VBox view2 = new VBox(10, controls, imageView);
+        VBox view2 = new VBox(10, controls, picturePane);
+        VBox.setVgrow(view2, Priority.ALWAYS);
+
         if (isOwnPicture) {
             view = new VBox(10, view2, nextBtn);
-            view.setPadding(new javafx.geometry.Insets(50));
+            nextBtn.setMaxWidth(Double.MAX_VALUE);
         } else {
-            view = new VBox(10, view2, voteBox, sendVoteBtn);
-            view.setPadding(new javafx.geometry.Insets(50));
+            view = new VBox(10, view2, voteButtons);
         }
+        view.setAlignment(Pos.TOP_CENTER);
+        view.setPadding(new Insets(50));
     }
 
     /**
@@ -65,34 +90,27 @@ public class BewertungView {
     public static void setImage(BufferedImage bufferedImage) {
         Image image = SwingFXUtils.toFXImage(bufferedImage, null);
         imageView.setImage(image);
-        imageView.setFitHeight(GameView.getCanvasHeight());
-        imageView.setFitWidth(GameView.getCanvasWidth());
-    }
-
-    /**
-     * Creates and configures the rating combo box.
-     * Provides options for rating the displayed artwork (1-5).
-     *
-     * @return the configured ComboBox for rating selection
-     */
-    private ComboBox<Integer> createVoteBox() {
-        ComboBox<Integer> combo = new ComboBox<>();
-        combo.setAccessibleText("Bewertung");
-        combo.getItems().addAll(1, 2, 3, 4, 5);
-        combo.setOnAction(e -> vote = combo.getValue());
-        return combo;
     }
 
     /**
      * Creates the "Next" button for player with own Image displayed to proceed.
      * Automatically sets the next indicator when created.
      *
-     *
      * @return the configured Button for navigation
      */
     private Button createNextBtn() {
-        Button btn = new Button("Next");
-        next = true;
+        Image image = new Image(getClass().getResourceAsStream("/images/skip.png"));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(60);
+        imageView.setFitHeight(60);
+
+        Button btn = new Button();
+        btn.setGraphic(imageView);
+        btn.getStyleClass().add("skip-button");
+
+        Tooltip tooltip = new Tooltip("Skip to next");
+        Tooltip.install(btn, tooltip);
+
         btn.setOnAction(e -> {
             GUIApp.addClickedInput("/readyToVote");
             btn.setDisable(true);
@@ -101,27 +119,70 @@ public class BewertungView {
     }
 
     /**
-     * Creates the "send Vote" button for the players to send their Vote.
+     * Creates an HBox with five selectable star buttons 1–5 and a "Send Vote" button.
+     * Highlights the selected star and locks all buttons after voting.
      *
-     *
-     * @return the configured Button for navigation
+     * @return HBox containing the vote and send buttons
      */
+    private HBox createVoteButtonsWithSend() {
+        HBox voteButtons = new HBox(10);
+        voteButtons.setSpacing(10);
 
-    private Button createSendVoteButton(){
-        Button btn = new Button("send Vote");
-        btn.setOnAction( e -> {
+        Button[] starButtons = new Button[5];
+
+        for (int i = 1; i <= 5; i++) {
+            int value = i;
+            Button voteBtn = new Button(String.valueOf(i));
+            voteBtn.getStyleClass().add("star-button");
+
+            int index = i - 1;
+            starButtons[index] = voteBtn;
+
+            voteBtn.setOnAction(e -> {
+                vote = value;
+
+
+                for (int j = 0; j < 5; j++) {
+                    starButtons[j].getStyleClass().remove("selected-star");
+                }
+                voteBtn.getStyleClass().add("selected-star");
+            });
+
+            voteButtons.getChildren().add(voteBtn);
+        }
+
+        Image image = new Image(getClass().getResourceAsStream("/images/send.png"));
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(60);
+        imageView.setFitHeight(60);
+
+        Button sendVoteBtn = new Button();
+        sendVoteBtn.setGraphic(imageView);
+        sendVoteBtn.getStyleClass().add("send-button");
+
+        Tooltip tooltip = new Tooltip("Send Vote");
+        Tooltip.install(sendVoteBtn, tooltip);
+
+        sendVoteBtn.setOnAction(e -> {
             GUIApp.addClickedInput("/sendVote");
-            btn.setDisable(true);
+            sendVoteBtn.setDisable(true);
+
+            for (Button btn : starButtons) {
+                btn.setDisable(true);
+            }
         });
-        return btn;
+
+        voteButtons.getChildren().add(sendVoteBtn);
+
+        return voteButtons;
     }
 
     public static int getVote() {
         return vote;
     }
 
-    public static void setVoteZero() {
-        vote = 0;
+    public static void resetVote() {
+        vote = 1;
     }
 
     public static void setNextFalse() {

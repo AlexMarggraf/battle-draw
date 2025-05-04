@@ -14,9 +14,13 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+
+import javafx.scene.image.ImageView;
+
 
 import static gui.GUIApp.print;
 
@@ -34,9 +38,10 @@ public class HomeView {
         Button tutorialButton = createTutorialButton();
         Button lobbyListButton = createListLobby();
         Button lobbyPlayersButton = createListPlayers();
-        Button changeUsernameButton = createChangeUsernameButton();
         Button myHighscoreButton = createMyHighscoreButton();
-        view = new VBox(20, new Label("Willkommen bei Battle Draw!"), new Label("Home"), createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, changeUsernameButton, myHighscoreButton, tutorialButton);
+        ImageView logo = createLogo();
+
+        view = new VBox(20, new Label("Welcome to"), logo, createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, myHighscoreButton, tutorialButton);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -80,75 +85,22 @@ public class HomeView {
                     GUIApp.addClickedInput("/joinLobby Lobby_von_" + username);
                     popup.close();
                 } else {
-                    usernameField.setPromptText("Username cannot be empty");
+                    print("Username cannot be empty");
                 }
             });
 
-            usernameField.setOnAction(e -> joinButton.fire());
+            usernameField.setOnAction(joinButton.getOnAction());
 
             VBox layout = new VBox(10);
             layout.getChildren().addAll(usernameField, joinButton);
 
             Scene scene = new Scene(layout, 300, 150);
+            scene.getStylesheets().add(GUIApp.class.getResource("/style.css").toExternalForm());
             popup.setScene(scene);
 
             popup.showAndWait();
         });
 
-        return btn;
-    }
-
-    /**
-     * Creates and configures the "Change username" button.
-     * When pressed, this button opens a popup dialog for entering a new Username
-     * and initiates the process.
-     *
-     * @return the configured Button instance for changing the username
-     */
-    public static Button createChangeUsernameButton() {
-        Button btn = new Button("Change username");
-
-        btn.setOnAction(event -> {
-            Stage popup = new Stage();
-            popup.initModality(Modality.APPLICATION_MODAL);
-            popup.setTitle("Change Username");
-
-            TextField usernameField = new TextField();
-            usernameField.setPromptText("New username");
-
-            Button confirmButton = new Button("Confirm");
-            confirmButton.setOnAction(e -> {
-                String newUsername = usernameField.getText().trim();
-                if (!newUsername.isEmpty()) {
-                    GUIApp.addClickedInput("/nick " + newUsername);
-                    popup.close();
-                } else {
-                    System.out.println("Username cannot be empty");
-                }
-            });
-
-            usernameField.setOnAction(e -> confirmButton.fire());
-
-            VBox layout = new VBox(10);
-            layout.getChildren().addAll(usernameField, confirmButton);
-
-            Scene scene = new Scene(layout, 300, 150);
-            popup.setScene(scene);
-
-            popup.showAndWait();
-        });
-
-        return btn;
-    }
-
-    /**
-     * Creates and configures the "My Highscore" Button
-     */
-    public static Button createMyHighscoreButton() {
-        Button btn = new Button("My Highscore");
-        btn.setOnAction(event -> {
-            GUIApp.addClickedInput("/myHighscore");
-        });
         return btn;
     }
 
@@ -178,6 +130,17 @@ public class HomeView {
         return btn;
     }
 
+    /**
+     * Creates and configures the "My Highscore" Button
+     */
+    public static Button createMyHighscoreButton() {
+        Button btn = new Button("My Highscore");
+        btn.setOnAction(event -> {
+            GUIApp.addClickedInput("/myHighscore");
+        });
+        return btn;
+    }
+
 
     /**
      * Creates and configures the "List Online Players" button.
@@ -192,6 +155,16 @@ public class HomeView {
         });
         return btn;
     }
+
+    public ImageView createLogo() {
+        Image image = new Image("/logo.png");
+        ImageView imageView = new ImageView(image);
+        imageView.setFitWidth(400);
+        imageView.setFitHeight(400);
+        imageView.setPreserveRatio(true);
+        return imageView;
+    }
+
 
     public Parent getView() {
         return view;

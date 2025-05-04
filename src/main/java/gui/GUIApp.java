@@ -66,11 +66,14 @@ public class GUIApp extends Application {
         clickedInputQueue = new LinkedList<>();
         players = new HashMap<>();
 
-        primaryStage.setResizable(false);
+
+        primaryStage.setResizable(true);
         initializeRootLayout();
 
         primaryStage.setTitle("Battle Draw");
-        primaryStage.setScene(new Scene(rootLayout, 1000, 700));
+        Scene scene = new Scene(rootLayout, 1200, 900);
+        scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        primaryStage.setScene(scene);
         primaryStage.show();
 
         setupMessageHandler();
@@ -154,12 +157,12 @@ public class GUIApp extends Application {
         Button gameButton = GUIApp.createGameButton();
         Button bewertungButton = GUIApp.createBewertungButton();
         Button homeButton = GUIApp.createHomeButton();
-        //Button loSiButton = GUIApp.createLoSiButton();
+        Button loSiButton = GUIApp.createLoSiButton();
         Button lobbyBtn = GUIApp.createLobbyButton();
         Button endingBtn = GUIApp.createEndingButton();
         Button boardBtn = GUIApp.createLeaderboardButton();
 
-        return new HBox(10, new Label("DevButtons: "), homeButton, lobbyBtn, gameButton, bewertungButton, boardBtn, endingBtn);
+        return new HBox(10, new Label("DevButtons: "), loSiButton, homeButton, lobbyBtn, gameButton, bewertungButton, boardBtn, endingBtn);
     }
 
     //HomeView Methoden
@@ -189,7 +192,7 @@ public class GUIApp extends Application {
 
     // BewertungView Methoden
     public static void showBewertungView() {
-        BewertungView.setVoteZero();
+        BewertungView.resetVote();
         Platform.runLater(() -> {
             try {
                 rootLayout.setCenter(new BewertungView().getView());
@@ -386,11 +389,19 @@ public class GUIApp extends Application {
         LOGGER.info("added input {}", input);
     }
 
-    public static void setTime(int timeInSeconds) { time = timeInSeconds;}
+    public static void setTime(int timeInSeconds) {
+        time = timeInSeconds;
+    }
 
-    public static int getTime() {return time;}
+    public static int getTime() {
+        return time;
+    }
 
-    public static void setUsername(String newUsername) {username = newUsername;}
+    public static void setUsername(String newUsername) {
+        username = newUsername;
+    }
 
-    public static String getUsername() {return username;}
+    public static String getUsername() {
+        return username;
+    }
 }
