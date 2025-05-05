@@ -10,7 +10,6 @@ javafx {
 }
 
 group 'ART_FANS'
-version 'v1'
 mainClassName = 'game.Main'
 
 java {

@@ -204,8 +204,8 @@ public class HomeView {
     public ImageView createLogo() {
         Image image = new Image("/logo.png");
         ImageView imageView = new ImageView(image);
-        imageView.setFitWidth(400);
-        imageView.setFitHeight(400);
+        imageView.setFitWidth(600);
+        imageView.setFitHeight(600);
         imageView.setPreserveRatio(true);
         return imageView;
     }
