@@ -18,6 +18,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
@@ -73,6 +74,7 @@ public class GUIApp extends Application {
         primaryStage.setTitle("Battle Draw");
         Scene scene = new Scene(rootLayout, 1200, 900);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
+        primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
         primaryStage.setScene(scene);
         primaryStage.show();
 
@@ -91,8 +93,8 @@ public class GUIApp extends Application {
 
         VBox chatPanel = createChatPanel();
         rootLayout.setRight(chatPanel);
-        HBox devButtons = createDevButtons();
-        rootLayout.setTop(devButtons);
+//        HBox devButtons = createDevButtons();
+//        rootLayout.setTop(devButtons);
     }
 
     /**
