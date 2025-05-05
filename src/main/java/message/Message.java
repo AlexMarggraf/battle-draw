@@ -74,7 +74,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft" -> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft", "rejectLobby" -> {
                 if (params.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if(params[1] == null) {
@@ -317,6 +317,40 @@ public class Message {
                     }
                 }
             }
+            case "newUsername" -> {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The old username has to be a string");
+                } else if (params[2] == null) {
+                    throw new IllegalArgumentException("The new username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer.");
+                    }
+                }
+            }
+            case "changeLobbyName" -> {
+                if (params.length != 3) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (params[1] == null) {
+                    throw new IllegalArgumentException("The old lobby name has to be a string");
+                } else if (params[2] == null) {
+                    throw new IllegalArgumentException("The new lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(params[0]);
+                        this.type = type;
+                        this.params = params;
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer.");
+                    }
+                }
+            }
             default -> throw new IllegalArgumentException("Not a valid message type: " + type);
         }
     }
@@ -407,7 +441,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft" -> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft", "rejectLobby" -> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {
@@ -657,6 +691,40 @@ public class Message {
                         this.params = new String[]{content[1], content[2], content[3]};
                     } catch (NumberFormatException NFException) {
                         throw new IllegalArgumentException("The id and id of new host have to be an integers.");
+                    }
+                }
+            }
+            case "newUsername" -> {
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The old username has to be a string");
+                } else if (content[3] == null) {
+                    throw new IllegalArgumentException("The new username has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2], content[3]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer.");
+                    }
+                }
+            }
+            case "changeLobbyName" -> {
+                if (content.length != 4) {
+                    throw new IllegalArgumentException("Message of type " + type + " needs exactly 3 parameters.");
+                } else if (content[2] == null) {
+                    throw new IllegalArgumentException("The old lobby name has to be a string");
+                } else if (content[3] == null) {
+                    throw new IllegalArgumentException("The new lobby name has to be a string");
+                } else {
+                    try {
+                        Integer.parseInt(content[1]);
+                        this.type = type;
+                        this.params = new String[]{content[1], content[2], content[3]};
+                    } catch (NumberFormatException NFException) {
+                        throw new IllegalArgumentException("The id has to be an integer.");
                     }
                 }
             }

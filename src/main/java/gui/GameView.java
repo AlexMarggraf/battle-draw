@@ -63,8 +63,9 @@ public class GameView {
 
         TextField countdownField = createCountdown(GUIApp.getTime());
         Label themeLabel = createThemeLabel();
+        Button changeUsername = HomeView.createChangeUsername();
 
-        HBox countdownBox = new HBox(10, new Label("Time left:"), countdownField);
+        HBox countdownBox = new HBox(10, new Label("Time left:"), countdownField, changeUsername);
         countdownBox.setAlignment(Pos.CENTER);
 
         clearCanvas();

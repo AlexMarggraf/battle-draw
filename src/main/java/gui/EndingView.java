@@ -29,8 +29,9 @@ public class EndingView {
         HBox hboxScene = createDevButtons();
         Button againBtn = createAgainBtn();
         Button leaveBtn = createLeaveBtn();
+        Button changeUsername = HomeView.createChangeUsername();
 
-        view = new VBox(20, new Label("Ending"), leaveBtn, againBtn);
+        view = new VBox(20, new Label("Ending"), leaveBtn, againBtn, changeUsername);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -45,6 +46,7 @@ public class EndingView {
         Button btn = new Button("Play again?");
         btn.setOnAction(event -> {
             again = true;
+            GUIApp.showLobbyView();
         });
         return btn;
     }

@@ -141,6 +141,14 @@ public class Lobby {
         return leaderboard.get(playerName);
     }
 
+    public void removeFromLeaderboard(String playerName) {
+        leaderboard.remove(playerName);
+    }
+
+    public void addToLeaderboard(String playerName, Double points) {
+        leaderboard.put(playerName, points);
+    }
+
     public void setImageOfPlayer(Integer id, String imageAsString) {
         images.put(id, imageAsString);
     }

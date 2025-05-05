@@ -34,10 +34,11 @@ public class LeaderboardView {
     public LeaderboardView() {
         setReadyFalse();
         Button rdy = createRdyBtn();
+        Button changeUsername = HomeView.createChangeUsername();
         updateLeaderboard();
         vboxLeaderboard.setAlignment(Pos.CENTER);
 
-        view = new VBox(30, new Label("Leaderboard"), vboxLeaderboard);
+        view = new VBox(30, new Label("Leaderboard"), vboxLeaderboard, changeUsername);
         if (GUIApp.getLobbyLeader()) {
             view.getChildren().add(rdy);
         }

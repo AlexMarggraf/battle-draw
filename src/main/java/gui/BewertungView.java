@@ -61,6 +61,7 @@ public class BewertungView {
 
 
         Button nextBtn = createNextBtn();
+        Button changeUsername = HomeView.createChangeUsername();
         HBox voteButtons = createVoteButtonsWithSend();
         voteButtons.setAlignment(Pos.CENTER);
 
@@ -68,7 +69,7 @@ public class BewertungView {
 
         HBox controls = new HBox(10, label);
 
-        VBox view2 = new VBox(10, controls, picturePane);
+        VBox view2 = new VBox(10, controls, changeUsername, picturePane);
         VBox.setVgrow(view2, Priority.ALWAYS);
 
         if (isOwnPicture) {

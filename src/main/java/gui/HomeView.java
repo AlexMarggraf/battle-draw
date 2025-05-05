@@ -38,10 +38,11 @@ public class HomeView {
         Button tutorialButton = createTutorialButton();
         Button lobbyListButton = createListLobby();
         Button lobbyPlayersButton = createListPlayers();
+        Button changeUsernameButton = createChangeUsername();
         Button myHighscoreButton = createMyHighscoreButton();
         ImageView logo = createLogo();
 
-        view = new VBox(20, new Label("Welcome to"), logo, createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, myHighscoreButton, tutorialButton);
+        view = new VBox(20, new Label("Welcome to"), logo, createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, changeUsernameButton, myHighscoreButton, tutorialButton);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -127,6 +128,50 @@ public class HomeView {
         btn.setOnAction(event -> {
             GUIApp.addClickedInput("/games");
         });
+        return btn;
+    }
+
+    /**
+     * Creates and configures the "Change username" button.
+     * When pressed, this button opens a popup dialog for entering a new username
+     * and initiates the process.
+     *
+     * @return the configured Button instance for changing the username
+     */
+    public static Button createChangeUsername() {
+        Button btn = new Button("Change Username");
+
+        btn.setOnAction(event -> {
+            Stage popup = new Stage();
+            popup.initModality(Modality.APPLICATION_MODAL);
+            popup.setTitle("Enter new Username");
+
+            TextField usernameField = new TextField();
+            usernameField.setPromptText("new username");
+
+            Button confirmButton = new Button("Confirm");
+            confirmButton.setOnAction(e -> {
+                String username = usernameField.getText().trim();
+                if (!username.isEmpty()) {
+                    GUIApp.addClickedInput("/nick " + username);
+                    popup.close();
+                } else {
+                    print("Username cannot be empty");
+                }
+            });
+
+            usernameField.setOnAction(confirmButton.getOnAction());
+
+            VBox layout = new VBox(10);
+            layout.getChildren().addAll(usernameField, confirmButton);
+
+            Scene scene = new Scene(layout, 300, 150);
+            scene.getStylesheets().add(GUIApp.class.getResource("/style.css").toExternalForm());
+            popup.setScene(scene);
+
+            popup.showAndWait();
+        });
+
         return btn;
     }
 

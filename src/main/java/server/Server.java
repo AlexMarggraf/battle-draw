@@ -250,14 +250,18 @@ public class Server {
                     Message response = new Message("chatTo", new String[]{0 + "", "Server", DatabaseHelper.getPlayerName(Integer.parseInt(message.getParams()[0])), "Lobby doesn't exist"});
                     for (Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
-                            lobby.addPlayer(message.getID());
-                            response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});
-                            Integer[] players = lobby.getPlayers();
-                            for (int id : players) {
-                                Message responseToLobby = new Message("playerJoined", new String[]{id + "", DatabaseHelper.getPlayerName(message.getID()), message.getID() + ""});
-                                sendMessageQueue.add(responseToLobby.toString());
+                            if (lobbyGameMap.get(lobby).getStatus().equals("ongoing")) {
+                                response = new Message("rejectLobby", new String[]{message.getID() + "", message.getParams()[1]});
+                            } else {
+                                lobby.addPlayer(message.getID());
+                                response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});
+                                Integer[] players = lobby.getPlayers();
+                                for (int id : players) {
+                                    Message responseToLobby = new Message("playerJoined", new String[]{id + "", DatabaseHelper.getPlayerName(message.getID()), message.getID() + ""});
+                                    sendMessageQueue.add(responseToLobby.toString());
+                                }
+                                lobbyGameMap.get(lobby).plusOnePlayer();
                             }
-                            lobbyGameMap.get(lobby).plusOnePlayer();
                         }
                     }
                     sendMessageQueue.add(response.toString());
@@ -411,6 +415,35 @@ public class Server {
                             game.setLobbyName(newLobbyName);
                             for (int id : players) {
                                 Message response = new Message("newHost", new String[]{id + "", newLobbyName, players[0] + ""});
+                                sendMessageQueue.add(response.toString());
+                            }
+                        }
+                    }
+                }
+                case "newUsername" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            Integer[] players = lobby.getPlayers();
+                            String newUsername = DatabaseHelper.getPlayerName(message.getID());
+                            String oldUsername = message.getParams()[2];
+                            Double Points = lobby.getPointsOfAPlayer(oldUsername);
+                            lobby.removeFromLeaderboard(oldUsername);
+                            lobby.addToLeaderboard(newUsername, Points);
+                            for (Integer id : players) {
+                                Message response = new Message("newUsername", new String[]{id + "", oldUsername, newUsername});
+                                sendMessageQueue.add(response.toString());
+                            }
+                        }
+                    }
+                }
+                case "changeLobbyName" -> {
+                    for (Lobby lobby : lobbyList) {
+                        if (lobby.getLobbyName().equals(message.getParams()[1])) {
+                            Integer[] players = lobby.getPlayers();
+                            lobby.setLobbyName(message.getParams()[2]);
+                            lobbyGameMap.get(lobby).setLobbyName(message.getParams()[2]);
+                            for (int id : players) {
+                                Message response = new Message("changeLobbyName", new String[]{id + "", message.getParams()[1], message.getParams()[2]});
                                 sendMessageQueue.add(response.toString());
                             }
                         }

@@ -114,7 +114,7 @@ public class Main {
                 }
                 case "username" -> {
                     username = message.getParams()[1];
-                    print("Change username to:" + username);
+                    print("Change username to: " + username);
                 }
                 case "online" -> {
                     print("Online:");
@@ -183,6 +183,7 @@ public class Main {
                     GUIApp.setTheme(theme);
                     GUIApp.setTime(Integer.parseInt(message.getParams()[3]));
                     game.setMaxNumberOfRounds(Integer.parseInt(message.getParams()[2]));
+                    game.setStatus("ongoing");
                     GUIApp.showGameView();
                 }
                 case "votingStarts" -> {
@@ -196,6 +197,7 @@ public class Main {
                     GUIApp.showLeaderboardView();
                 }
                 case "showEnding" -> {
+                    game.setStatus("ended");
                     GUIApp.showEndingView();
                 }
                 case "startNextRound" -> {
@@ -221,6 +223,26 @@ public class Main {
                     lobbyName = message.getParams()[1];
                     game.setLobbyName(lobbyName);
                     print("The host has left, the lobby has a new name: " + lobbyName);
+                }
+                case "rejectLobby" -> {
+                    print("The lobby is already playing. You can't join ongoing lobbies.");
+                }
+                case "newUsername" -> {
+                    String oldUsername = message.getParams()[1];
+                    String newUsername = message.getParams()[2];
+                    if (!newUsername.equals(username)) {
+                        print(oldUsername + " has changed their username to " + newUsername);
+                    }
+                    Double points = GUIApp.getPoints(oldUsername);
+                    GUIApp.removePlayer(oldUsername);
+                    GUIApp.addPlayer(newUsername, points);
+                    if (!game.getStatus().equals("ongoing")) {
+                        GUIApp.showLobbyView();
+                    }
+                }
+                case "changeLobbyName" -> {
+                    lobbyName =  message.getParams()[2];
+                    game.setLobbyName(lobbyName);
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
@@ -347,9 +369,17 @@ public class Main {
                 }
                 case "/nick" -> {
                     Message message;
+                    Message message2 = null;
+                    Message message3 = null;
                     if (splitInput.length == 2) {
                         String username = splitInput[1];
                         message = new Message("changeUsername", new String[]{serverID + "", username});
+                        if (inLobby) {
+                            message2 = new Message("newUsername", new String[]{serverID + "", lobbyName, this.username});
+                        }
+                        if (GUIApp.getLobbyLeader()) {
+                            message3 = new Message("changeLobbyName", new String[]{serverID + "", lobbyName, "Lobby_von_" + username});
+                        }
                     } else {
                         if (messageType.equals("chatAll")) {
                             message = new Message(messageType, new String[]{serverID + "", username, input});
@@ -358,6 +388,12 @@ public class Main {
                         }
                     }
                     clientMessageQueue.add(message.toString());
+                    if (inLobby) {
+                        clientMessageQueue.add(message2.toString());
+                    }
+                    if (GUIApp.getLobbyLeader()) {
+                        clientMessageQueue.add(message3.toString());
+                    }
                 }
                 case "/listPlayers" -> {
                     Message message;

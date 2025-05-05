@@ -37,6 +37,7 @@ public class LobbyView {
         Button leaderBtn = createLeaderButton();
         Button leaveBtn = createLeaveButton();
         Button listBtn = creatListPlayerButton();
+        Button changeUsername = HomeView.createChangeUsername();
         ComboBox<Integer> roundsBox = createRoundsCombo();
         ComboBox<Integer> timerBox = createTimerCombo();
 
@@ -47,7 +48,7 @@ public class LobbyView {
         timeline.play();
 
 
-        view = new VBox(20, new Label("Lobby"), vboxUsers, leaveBtn, listBtn);
+        view = new VBox(20, new Label("Lobby"), vboxUsers, leaveBtn, listBtn, changeUsername);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
         if (GUIApp.getLobbyLeader()) {
