@@ -252,6 +252,7 @@ public class Server {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             if (lobbyGameMap.get(lobby).getStatus().equals("ongoing")) {
                                 response = new Message("rejectLobby", new String[]{message.getID() + "", message.getParams()[1]});
+                                //response = new Message("chatTo", new String[]{0 + "", "Server", lobby.getLobbyName() + " is already playing. You cannot join ongoing lobbies."});
                             } else {
                                 lobby.addPlayer(message.getID());
                                 response = new Message("lobbyJoined", new String[]{message.getID() + "", lobby.getLobbyName()});

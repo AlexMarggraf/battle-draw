@@ -113,8 +113,16 @@ public class Main {
                     print("(Broadcast) " + message.getParams()[0]);
                 }
                 case "username" -> {
+                    if (inLobby) {
+                        Message response = new Message("newUsername", new String[]{serverID + "", lobbyName, username});
+                        clientMessageQueue.add(response.toString());
+                    }
                     username = message.getParams()[1];
                     print("Change username to: " + username);
+                    if (GUIApp.getLobbyLeader()) {
+                        Message response2 = new Message("changeLobbyName", new String[]{serverID + "", lobbyName, "Lobby_von_" + username});
+                        clientMessageQueue.add(response2.toString());
+                    }
                 }
                 case "online" -> {
                     print("Online:");
@@ -369,17 +377,9 @@ public class Main {
                 }
                 case "/nick" -> {
                     Message message;
-                    Message message2 = null;
-                    Message message3 = null;
                     if (splitInput.length == 2) {
                         String username = splitInput[1];
                         message = new Message("changeUsername", new String[]{serverID + "", username});
-                        if (inLobby) {
-                            message2 = new Message("newUsername", new String[]{serverID + "", lobbyName, this.username});
-                        }
-                        if (GUIApp.getLobbyLeader()) {
-                            message3 = new Message("changeLobbyName", new String[]{serverID + "", lobbyName, "Lobby_von_" + username});
-                        }
                     } else {
                         if (messageType.equals("chatAll")) {
                             message = new Message(messageType, new String[]{serverID + "", username, input});
@@ -388,12 +388,6 @@ public class Main {
                         }
                     }
                     clientMessageQueue.add(message.toString());
-                    if (inLobby) {
-                        clientMessageQueue.add(message2.toString());
-                    }
-                    if (GUIApp.getLobbyLeader()) {
-                        clientMessageQueue.add(message3.toString());
-                    }
                 }
                 case "/listPlayers" -> {
                     Message message;
