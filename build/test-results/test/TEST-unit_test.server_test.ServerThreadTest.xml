@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.server_test.ServerThreadTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2025-05-06T13:59:11" hostname="DRIKSON_COMPI" time="0.009">
+  <properties/>
+  <testcase name="testIdSetterGetter()" classname="unit_test.server_test.ServerThreadTest" time="0.0"/>
+  <testcase name="testHandlePingPongDisconnectsIfNoPong()" classname="unit_test.server_test.ServerThreadTest" time="0.001"/>
+  <testcase name="testSendMessageWritesToWriter()" classname="unit_test.server_test.ServerThreadTest" time="0.001"/>
+  <testcase name="testQueueServerMessageAndGetClientMessage()" classname="unit_test.server_test.ServerThreadTest" time="0.001"/>
+  <testcase name="testConstructorInitializesFields()" classname="unit_test.server_test.ServerThreadTest" time="0.0"/>
+  <testcase name="testHandlePingPongSendsPing()" classname="unit_test.server_test.ServerThreadTest" time="0.0"/>
+  <testcase name="testSetClientUsername()" classname="unit_test.server_test.ServerThreadTest" time="0.001"/>
+  <testcase name="testReceiveMessageProcessesPing()" classname="unit_test.server_test.ServerThreadTest" time="0.002"/>
+  <system-out><![CDATA[Client not reachable
+[05-06 15:59:11.841][INFO ][Test worker] ServerThread - sent message hello
+[05-06 15:59:11.842][INFO ][Test worker] ServerThread - sent message world
+ping 1
+[05-06 15:59:11.846][INFO ][Test worker] ServerThread - received message null
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

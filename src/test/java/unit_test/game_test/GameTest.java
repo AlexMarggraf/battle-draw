@@ -115,20 +115,6 @@ class GameTest {
     }
 
     /**
-     * Tests that the current round number increments with each call to nextRound.
-     */
-    @Test
-    void testNextRoundIncrementsRoundNumber() {
-        /*
-        game.nextRound();
-        assertEquals(1, game.getRoundNumber());
-
-        game.nextRound();
-        /assertEquals(2, game.getRoundNumber());
-        */
-    }
-
-    /**
      * Tests that the default maximum number of rounds is set correctly.
      */
     @Test

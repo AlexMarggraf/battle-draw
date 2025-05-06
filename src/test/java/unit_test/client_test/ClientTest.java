@@ -167,9 +167,6 @@ class ClientTest {
      */
     @Test
     void testReceiveMessageWithNullListener() {
-        assertThrows(NullPointerException.class, () -> {
-            client.receiveMessage(null);
-        }, "Passing null MessageListener should throw NullPointerException");
+        assertThrows(NullPointerException.class, () -> client.receiveMessage(null), "Passing null MessageListener should throw NullPointerException");
     }
-
 }

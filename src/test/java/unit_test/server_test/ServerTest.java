@@ -44,7 +44,7 @@ class ServerTest {
          * @param id the ID for the thread
          */
         public DummyServerThread(int id) {
-            super(id, null); // Socket not required
+            super(id, null);
         }
 
         /**

@@ -63,7 +63,6 @@ class MessageListenerTest {
         Thread thread = new Thread(listener);
         thread.start();
 
-        // Give time for the thread to read input
         Thread.sleep(100);
 
         Queue<String> q = listener.messageQueue;
@@ -71,7 +70,7 @@ class MessageListenerTest {
         assertTrue(q.contains("Second message"), "Queue should contain 'Second message'");
         assertTrue(q.contains("Third message"), "Queue should contain 'Third message'");
 
-        thread.interrupt(); // Stop thread to clean up
+        thread.interrupt();
     }
 
     /**
@@ -93,9 +92,9 @@ class MessageListenerTest {
         Thread thread = new Thread(listener);
         thread.start();
 
-        Thread.sleep(100); // Allow the run() to trigger the exception
+        Thread.sleep(100);
 
         assertEquals("disconnect -1", listener.getMessage(), "IOException should trigger 'disconnect -1' message");
-        thread.interrupt(); // cleanup
+        thread.interrupt();
     }
 }

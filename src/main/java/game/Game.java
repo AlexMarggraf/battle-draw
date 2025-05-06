@@ -18,7 +18,7 @@ public class Game {
 
     /**
      * This method is the constructor and sets status, lobbyName and
-     * values for the gamestate.
+     * values for the game state.
      *
      * @param lobbyName The name of the lobby
      */

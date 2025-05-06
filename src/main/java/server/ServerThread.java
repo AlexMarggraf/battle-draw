@@ -202,10 +202,6 @@ public class ServerThread implements Runnable {
         return clientMessageQueue;
     }
 
-    public PrintWriter getPrintWriter() {
-        return pWriter;
-    }
-
     public void setPrintWriter(PrintWriter writer) {
         this.pWriter = writer;
     }
