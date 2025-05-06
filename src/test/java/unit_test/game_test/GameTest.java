@@ -32,8 +32,6 @@ class GameTest {
         assertEquals("TestLobby", game.getLobbyName());
         assertEquals(0, game.getNumberOfPlayers());
         assertEquals(0, game.getNumberOfRoundsVoted());
-        //assertEquals(0, game.getRoundNumber());
-        //assertEquals(1, game.getMaxNumberOfRounds());
     }
 
     /**
@@ -126,7 +124,7 @@ class GameTest {
         assertEquals(1, game.getRoundNumber());
 
         game.nextRound();
-        /ssertEquals(2, game.getRoundNumber());
+        /assertEquals(2, game.getRoundNumber());
         */
     }
 

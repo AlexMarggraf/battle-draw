@@ -56,6 +56,26 @@ class ClientTest {
     }
 
     /**
+     * Tests that queuing and sending an empty string results in a single newline being sent
+     * through the client's PrintWriter. This verifies that empty messages are not filtered
+     * and are still transmitted properly as a newline.
+     */
+    @Test
+    void testQueueEmptyMessageAndSend() {
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        PrintWriter writer = new PrintWriter(outStream, true);
+        client.setPrintWriter(writer);
+
+        client.queueClientMessage("");
+        assertEquals("", client.getClientMessageQueue().peek(), "Message queue should contain the empty string");
+
+        client.sendMessage();
+
+        String output = outStream.toString();
+        assertEquals(System.lineSeparator(), output, "Empty message should result in just a newline");
+    }
+
+    /**
      * Tests if getting a server message returns null when the queue is empty.
      */
     @Test
@@ -80,7 +100,7 @@ class ClientTest {
         ByteArrayOutputStream outStream = new ByteArrayOutputStream();
         PrintWriter writer = new PrintWriter(outStream, true);
 
-        client.setPrintWriter(writer); // Assume you added this setter
+        client.setPrintWriter(writer);
         client.queueClientMessage("msg1");
         client.queueClientMessage("msg2");
 
@@ -89,29 +109,6 @@ class ClientTest {
         String output = outStream.toString();
         assertTrue(output.contains("msg1"));
         assertTrue(output.contains("msg2"));
-    }
-
-    /**
-     * Tests the receiveMessage method for handling regular server messages.
-     */
-    @Test
-    void testReceiveMessageHandlesRegularMessages() {
-        StubMessageListener stub = new StubMessageListener("hi there", null);
-        client.receiveMessage(stub);
-
-        assertEquals("hi there", client.getServerMessage());
-    }
-
-    /**
-     * Tests if the receiveMessage method rewrites disconnect messages to include the client server ID.
-     */
-    @Test
-    void testReceiveMessageHandlesDisconnectMessage() {
-        client.setServerID(10);
-        StubMessageListener stub = new StubMessageListener("disconnect -1", null);
-        client.receiveMessage(stub);
-
-        assertEquals("disconnect 10", client.getServerMessage());
     }
 
     /**
@@ -139,4 +136,40 @@ class ClientTest {
             return index < messages.length ? messages[index++] : null;
         }
     }
+
+    /**
+     * Tests the receiveMessage method for handling regular server messages.
+     */
+    @Test
+    void testReceiveMessageHandlesRegularMessages() {
+        StubMessageListener stub = new StubMessageListener("hi there", null);
+        client.receiveMessage(stub);
+
+        assertEquals("hi there", client.getServerMessage());
+    }
+
+    /**
+     * Tests if the receiveMessage method rewrites disconnect messages to include the client server ID.
+     */
+    @Test
+    void testReceiveMessageHandlesDisconnectMessage() {
+        client.setServerID(10);
+        StubMessageListener stub = new StubMessageListener("disconnect -1", null);
+        client.receiveMessage(stub);
+
+        assertEquals("disconnect 10", client.getServerMessage());
+    }
+
+    /**
+     * Tests that the {@link Client#receiveMessage(MessageListener)} method throws a
+     * {@link NullPointerException} when passed a null MessageListener.
+     * This verifies that the method does not silently accept invalid input and fails fast.
+     */
+    @Test
+    void testReceiveMessageWithNullListener() {
+        assertThrows(NullPointerException.class, () -> {
+            client.receiveMessage(null);
+        }, "Passing null MessageListener should throw NullPointerException");
+    }
+
 }

@@ -34,6 +34,39 @@ class ServerThreadTest {
     }
 
     /**
+     * A dummy implementation of {@link Socket} used to bypass real networking in tests.
+     */
+    static class DummySocket extends Socket {
+    }
+
+    /**
+     * A stub for {@link MessageListener} that simulates incoming messages using a predefined queue.
+     */
+    static class DummyListener extends MessageListener {
+        private final Queue<String> messages = new java.util.LinkedList<>();
+
+        /**
+         * Constructs the dummy listener with predefined messages.
+         *
+         * @param initialMessages the messages to queue
+         */
+        public DummyListener(String... initialMessages) {
+            super(System.in); // Stream not used
+            messages.addAll(Arrays.asList(initialMessages));
+        }
+
+        /**
+         * Returns the next message in the queue, or null if empty.
+         *
+         * @return a message string or null
+         */
+        @Override
+        public String getMessage() {
+            return messages.poll();
+        }
+    }
+
+    /**
      * Tests that the constructor correctly initializes the thread fields,
      * including message queues and connection status flags.
      */
@@ -141,38 +174,5 @@ class ServerThreadTest {
         String response = serverThread.getServerMessageQueue().poll();
         assertNotNull(response);
         assertTrue(response.startsWith("pong"));
-    }
-
-    /**
-     * A dummy implementation of {@link Socket} used to bypass real networking in tests.
-     */
-    static class DummySocket extends Socket {
-    }
-
-    /**
-     * A stub for {@link MessageListener} that simulates incoming messages using a predefined queue.
-     */
-    static class DummyListener extends MessageListener {
-        private final Queue<String> messages = new java.util.LinkedList<>();
-
-        /**
-         * Constructs the dummy listener with predefined messages.
-         *
-         * @param initialMessages the messages to queue
-         */
-        public DummyListener(String... initialMessages) {
-            super(System.in); // Stream not used
-            messages.addAll(Arrays.asList(initialMessages));
-        }
-
-        /**
-         * Returns the next message in the queue, or null if empty.
-         *
-         * @return a message string or null
-         */
-        @Override
-        public String getMessage() {
-            return messages.poll();
-        }
     }
 }

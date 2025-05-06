@@ -94,24 +94,6 @@ class MainTest {
     }
 
     /**
-     * Tests that messages in the client message queue are passed to the client for sending.
-     */
-    @Test
-    void testSendMessageFlushesToClientQueue() {
-        DummyClient dummy = new DummyClient();
-        main.setClient(dummy);
-
-        main.getClientMessageQueue().add("msg1");
-        main.getClientMessageQueue().add("msg2");
-
-        main.sendMessage();
-
-        assertEquals("msg1", dummy.sentMessages.poll());
-        assertEquals("msg2", dummy.sentMessages.poll());
-        assertTrue(dummy.sentMessages.isEmpty());
-    }
-
-    /**
      * Dummy implementation of {@link client.Client} for testing message sending behavior
      * without requiring real network communication.
      */
@@ -143,5 +125,23 @@ class MainTest {
         public void disconnect() {
             disconnectCalled = true;
         }
+    }
+
+    /**
+     * Tests that messages in the client message queue are passed to the client for sending.
+     */
+    @Test
+    void testSendMessageFlushesToClientQueue() {
+        DummyClient dummy = new DummyClient();
+        main.setClient(dummy);
+
+        main.getClientMessageQueue().add("msg1");
+        main.getClientMessageQueue().add("msg2");
+
+        main.sendMessage();
+
+        assertEquals("msg1", dummy.sentMessages.poll());
+        assertEquals("msg2", dummy.sentMessages.poll());
+        assertTrue(dummy.sentMessages.isEmpty());
     }
 }

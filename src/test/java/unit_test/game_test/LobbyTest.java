@@ -93,6 +93,22 @@ class LobbyTest {
     }
 
     /**
+     * Accesses the private field {@code votesOfARound} via reflection
+     * to verify vote accumulation logic.
+     *
+     * @return the number of accumulated votes in a round
+     */
+    private double getPrivateVotesOfARound() {
+        try {
+            var field = Lobby.class.getDeclaredField("votesOfARound");
+            field.setAccessible(true);
+            return ((Integer) field.get(lobby)).doubleValue();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Tests the accumulation and reset of votes for a single round.
      */
     @Test
@@ -136,23 +152,5 @@ class LobbyTest {
         Integer current = lobby.getPlayerVotingOn();
         lobby.setImageOfPlayer(current, "base64image");
         assertEquals("base64image", lobby.getImageOfPlayer());
-    }
-
-    // ------------------ Helper ------------------
-
-    /**
-     * Accesses the private field {@code votesOfARound} via reflection
-     * to verify vote accumulation logic.
-     *
-     * @return the number of accumulated votes in a round
-     */
-    private double getPrivateVotesOfARound() {
-        try {
-            var field = Lobby.class.getDeclaredField("votesOfARound");
-            field.setAccessible(true);
-            return ((Integer) field.get(lobby)).doubleValue();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 }
