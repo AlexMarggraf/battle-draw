@@ -220,7 +220,12 @@ public class Main {
                     BewertungView.setImage(image);
                 }
                 case "highscore" -> {
-                    print(String.format("Your highscore is %.2f", Double.parseDouble(message.getParams()[1])));
+                    Double myHighscore = Double.parseDouble(message.getParams()[1]);
+                    if (myHighscore < 1) {
+                        print("You have not played a game yet. Let's go!");
+                    } else {
+                        print(String.format("Your highscore is %.2f", myHighscore));
+                    }
                 }
                 case "newHost" -> {
                     if (message.getParams()[0].equals(message.getParams()[2])) {

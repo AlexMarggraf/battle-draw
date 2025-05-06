@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.scene.control.TextArea;
 
 import javafx.scene.image.ImageView;
 
@@ -35,14 +36,13 @@ public class HomeView {
     public HomeView() {
         Button joinButton = createJoinButton();
         Button createLobbyButton = createLobbyButton();
-        Button tutorialButton = createTutorialButton();
         Button lobbyListButton = createListLobby();
         Button lobbyPlayersButton = createListPlayers();
         Button changeUsernameButton = createChangeUsername();
         Button myHighscoreButton = createMyHighscoreButton();
         ImageView logo = createLogo();
 
-        view = new VBox(20, new Label("Welcome to"), logo, createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, changeUsernameButton, myHighscoreButton, tutorialButton);
+        view = new VBox(20, new Label("Welcome to"), logo, createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, changeUsernameButton, myHighscoreButton);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
     }
@@ -105,17 +105,6 @@ public class HomeView {
         return btn;
     }
 
-    /**
-     * Creates and configures the "Tutorial" button.
-     * Currently a placeholder for future tutorial functionality.
-     *
-     * @return the configured Button instance for accessing tutorials
-     */
-    public static Button createTutorialButton() {
-        Button btn = new Button("Tutorial");
-        //todo later
-        return btn;
-    }
 
     /**
      * Creates and configures the "List Lobbys" button.
