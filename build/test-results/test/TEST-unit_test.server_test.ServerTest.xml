@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="unit_test.server_test.ServerTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2025-05-06T09:26:48" hostname="DRIKSON_COMPI" time="0.011">
+  <properties/>
+  <testcase name="testHandleReceiveMessageProcessesChatAll()" classname="unit_test.server_test.ServerTest" time="0.004"/>
+  <testcase name="testHandleSendMessageSendsToCorrectThread()" classname="unit_test.server_test.ServerTest" time="0.002"/>
+  <testcase name="testFillReceiveMessageQueueRetrievesMessages()" classname="unit_test.server_test.ServerTest" time="0.0"/>
+  <testcase name="testSendMessageAddsToCorrectServerThread()" classname="unit_test.server_test.ServerTest" time="0.002"/>
+  <testcase name="testConstructorInitializesFields()" classname="unit_test.server_test.ServerTest" time="0.001"/>
+  <system-out><![CDATA[[05-06 11:26:48.968][INFO ][Test worker] Server - handled and received message chatAll -2 user Hello!
+[05-06 11:26:48.970][INFO ][Test worker] Server - Message sent chatAll 1 Alice Hi!
+[05-06 11:26:48.971][INFO ][Test worker] Server - handled and sent message chatAll 1 Alice Hi!
+[05-06 11:26:48.975][INFO ][Test worker] Server - Message sent test-msg
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
