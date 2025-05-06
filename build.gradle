@@ -1,17 +1,21 @@
+import com.github.spotbugs.snom.Effort
+
 plugins {
     id 'java'
     id 'java-library'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.13'
+    id("com.github.spotbugs") version "6.1.10"
+    id 'jacoco'
 }
+
+group 'ART_FANS'
+mainClassName = 'game.Main'
 
 javafx {
     version = "21"
     modules = ['javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.base', 'javafx.swing']
 }
-
-group 'ART_FANS'
-mainClassName = 'game.Main'
 
 java {
     toolchain {
@@ -19,11 +23,21 @@ java {
     }
 }
 
+spotbugs {
+    toolVersion = '4.9.3'
+    effort = Effort.MAX
+}
+
+jacoco {
+    toolVersion = "0.8.10"
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
+    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
 
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
@@ -37,6 +51,23 @@ dependencies {
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
     testImplementation("org.testfx:testfx-core:4.0.16-alpha")
     testImplementation("org.testfx:testfx-junit5:4.0.16-alpha")
+}
+
+tasks.withType(com.github.spotbugs.snom.SpotBugsTask).configureEach {
+    reports {
+        html.required.set(true)
+        xml.required.set(false)
+    }
+}
+
+jacocoTestReport {
+    dependsOn test
+
+    reports {
+        xml.required.set(true)
+        csv.required.set(false)
+        html.required.set(true)
+    }
 }
 
 test {
@@ -54,19 +85,21 @@ jar {
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    dependsOn 'copyDatabase'
+    //dependsOn 'copyDatabase'
 }
 
 javadoc {
     destinationDir = file("$buildDir/docs/javadoc")
 }
 
+/*
 tasks.register('copyDatabase', Copy) {
     from 'database/Thema.db'
     into "$buildDir/libs/database"
 }
+*/
 
 tasks.register('build-cs108') {
     group = 'build'
-    dependsOn 'jar', 'javadoc', 'copyDatabase'
+    dependsOn 'jar', 'javadoc' //, 'copyDatabase'
 }

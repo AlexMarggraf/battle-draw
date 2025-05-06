@@ -29,7 +29,7 @@ public class Server {
 
     /**
      * This method is the constructor and initializes the message queues and the server list and
-     * it sets the id to 0.
+     * it sets the id to 0. In case the database doesn't exist it will create it.
      */
     public Server() {
         this.receiveMessageQueue = new LinkedList<>();
@@ -39,9 +39,11 @@ public class Server {
         this.lobbyList = new LinkedList<>();
         this.gameList = new LinkedList<>();
         this.lobbyGameMap = new HashMap<>();
+
+        DatabaseHelper.createDB();
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static final Logger LOGGER = LogManager.getLogger(Server.class);
 
     /**
      * This method starts a new server thread.
@@ -369,7 +371,7 @@ public class Server {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobbyGameMap.get(lobby).nextRound();
                             Integer[] players = lobby.getPlayers();
-                            if (lobbyGameMap.get(lobby).getRoundNumber() == lobbyGameMap.get(lobby).getMaxNumberOfRounds()) {
+                            if (lobbyGameMap.get(lobby).getRoundNumber().equals(lobbyGameMap.get(lobby).getMaxNumberOfRounds())) {
                                 lobbyGameMap.get(lobby).setStatus("ended");
                                 for (int id : players) {
                                     Message response = new Message("showEnding", new String[]{id + ""});

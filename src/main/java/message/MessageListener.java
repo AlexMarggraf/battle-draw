@@ -26,7 +26,7 @@ public class MessageListener implements Runnable {
         this.messageQueue = new LinkedList<>();
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static final Logger LOGGER = LogManager.getLogger(MessageListener.class);
 
     /**
      * This method gets and removes the first element from the message queue.
