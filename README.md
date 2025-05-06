@@ -47,11 +47,11 @@ A competitive drawing game where players create artwork based on themes and vote
    ```
 5. Start the server (run this once):
    ```sh
-   java -jar Battle_Draw-v1.jar server <port>
+   java -jar Battle_Draw.jar server <port>
    ```
 6. Start a new player instance for each player:
    ```sh
-   java -jar Battle_Draw-v1.jar client <ip>:<port> [username]
+   java -jar Battle_Draw.jar client <ip>:<port> [username]
    ```
 7. Have fun! 🎨🎮🖌️
 
