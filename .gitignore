@@ -3,7 +3,8 @@
 *.jar
 
 # Ignore build files
-./build/
+build
+build/
 
 # Ignore updates to our database
 Thema.db
