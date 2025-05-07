@@ -22,12 +22,18 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import game.Main;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 public class LoginSignupView {
 
     private final VBox view;
     static String usernameText;
     String passwordText;
     private static String errorText;
+
+    private static final Logger LOGGER = LogManager.getLogger(LoginSignupView.class);
 
     /**
      * Constructs the login/signup view with a labeled input form containing
@@ -72,7 +78,7 @@ public class LoginSignupView {
         if (username != null) {
             field.setText(username);
         } else {
-            field.setText(System.getProperty("user.name") + (int) (Math.random() * 100));
+            field.setText(System.getProperty("user.name") + (int)(Math.random() * 100));
         }
         usernameText = field.getText();
         field.textProperty().addListener((observable, oldValue, newValue) -> usernameText = newValue);
@@ -92,6 +98,7 @@ public class LoginSignupView {
         field.setPromptText("Password");
         field.setMaxWidth(250);
 
+        passwordText = field.getText();
         field.textProperty().addListener((observable, oldValue, newValue) -> passwordText = newValue);
 
         return field;
@@ -133,6 +140,9 @@ public class LoginSignupView {
     public Button createSignUpButton(TextField username, TextField password) {
         Button btn = new Button("Signup?");
         btn.setOnAction(event -> {
+            LOGGER.debug("username: {}, password: {}", usernameText, passwordText);
+            GUIApp.addClickedInput("/setUsername " + usernameText);
+            GUIApp.addClickedInput("/setPassword " + passwordText);
             GUIApp.addClickedInput("/signUp " + usernameText + " " + passwordText);
 
             username.clear();

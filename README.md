@@ -51,7 +51,7 @@ A competitive drawing game where players create artwork based on themes and vote
    ```
 6. Start a new player instance for each player:
    ```sh
-   java -jar Battle_Draw.jar client <ip>:<port> [username]
+   java -jar Battle_Drawcd.jar client <ip>:<port> [username]
    ```
 7. Have fun! 🎨🎮🖌️
 

@@ -375,6 +375,7 @@ public class Main {
                             message = new Message("signUp", new String[]{serverID + "", username, password});
                             clientMessageQueue.add(message.toString());
                         } else {
+                            LOGGER.info("Main.username {} Gui.username {} Main.password {} Gui.password {}", username, splitInput[1], password, splitInput[2]);
                             LoginSignupView.setErrorText("Whitespaces or an empty Username or Password are not allowed!");
                             GUIApp.showLoginSignupView();
                         }

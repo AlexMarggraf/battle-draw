@@ -48,7 +48,7 @@ public class ServerThread implements Runnable {
         this.lastPing = 0;
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static final Logger LOGGER = LogManager.getLogger(ServerThread.class);
 
     /**
      * This method provides identification to other objects.
@@ -111,6 +111,7 @@ public class ServerThread implements Runnable {
         String clientMessage = msgListener.getMessage();
 
         while (clientMessage != null) {
+            LOGGER.info("received message {}", clientMessage);
 
             if (clientMessage.equals("disconnect -1")) {
                 disconnect = true;
@@ -139,7 +140,6 @@ public class ServerThread implements Runnable {
                 }
                 clientMessage = msgListener.getMessage();
             }
-            LOGGER.info("received message {}", clientMessage);
         }
     }
 
