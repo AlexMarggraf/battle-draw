@@ -53,7 +53,9 @@ public class LobbyView {
         view.setPadding(new javafx.geometry.Insets(50));
         if (GUIApp.getLobbyLeader()) {
             view.getChildren().add(leaderBtn);
+            view.getChildren().add(new Label("Rounds:"));
             view.getChildren().add(roundsBox);
+            view.getChildren().add(new Label("Timer:"));
             view.getChildren().add(timerBox);
         }
     }
@@ -139,7 +141,7 @@ public class LobbyView {
      */
     private ComboBox<Integer> createTimerCombo() {
         ComboBox<Integer> combo = new ComboBox<>();
-        combo.getItems().addAll(10, 30, 45, 60, 90);
+        combo.getItems().addAll(10, 30, 45, 60, 90, 120, 180, 300);
         combo.setValue(45);
         timer = 45;
         combo.setOnAction(e -> timer = combo.getValue());

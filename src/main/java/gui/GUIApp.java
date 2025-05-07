@@ -72,7 +72,7 @@ public class GUIApp extends Application {
         initializeRootLayout();
 
         primaryStage.setTitle("Battle Draw");
-        Scene scene = new Scene(rootLayout, 1600, 900);
+        Scene scene = new Scene(rootLayout, 1280, 720);
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
         primaryStage.setScene(scene);
