@@ -4,12 +4,21 @@ import game.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles database operations for player management and theme word retrieval.
@@ -365,17 +374,39 @@ public class DatabaseHelper {
                             + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
                             + "thema TEXT NOT NULL);";
 
-                    //String createTableSqliteSequence = "CREATE TABLE IF NOT EXISTS sqlite_sequence(name,seq);";
+                    String insertThemes = "INSERT INTO THEMA (thema) VALUES (?)";
+
 
                     try (Statement stmt = conn.createStatement()) {
                         stmt.execute(createTablePlayers);
                         stmt.execute(createTableThema);
-                        //stmt.execute(createTableSqliteSequence);
                         LOGGER.info("Tables created");
+
+                        try {
+                            InputStream is = DatabaseHelper.class.getClassLoader().getResourceAsStream("themes.txt");
+
+                            String themes = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
+                                    .lines()
+                                    .collect(Collectors.joining("\n"));
+
+                            String[] themesArray = Arrays.stream(themes.split(",")).map(String::trim).toArray(String[]::new);
+
+                            PreparedStatement pstmt = conn.prepareStatement(insertThemes);
+
+                            for (String theme : themesArray) {
+                                pstmt.setString(1, theme);
+                                pstmt.addBatch();
+                            }
+
+                            pstmt.executeBatch();
+                        } catch (SQLException e) {
+                            LOGGER.error("Couldn't read themes.txt");
+                            e.printStackTrace();
+                        }
                     }
                 }
             } catch (SQLException e) {
-                LOGGER.error("Database creation failed: " + e.getMessage());
+                LOGGER.error("Database creation failed: {}", e.getMessage());
             }
         } else {
             LOGGER.info("Database already exists");
