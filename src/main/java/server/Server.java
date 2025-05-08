@@ -283,7 +283,6 @@ public class Server {
                                 Game game = lobbyGameMap.get(lobby);
                                 lobbyGameMap.remove(lobby);
                                 lobbyList.remove(lobby);
-                                gameList.remove(game);
                             }
                         }
                     }

@@ -1,8 +1,9 @@
 /**
- * not finished and not used for now
+ * UI view for user login and signup, including input fields, action buttons, and a tutorial popup.
  *
- * @author Simon Zeugin
+ * @author Simon Zeugin and Noah Nellen
  */
+
 package gui;
 
 import javafx.geometry.Insets;
@@ -22,7 +23,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import game.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -41,15 +41,17 @@ public class LoginSignupView {
      */
 
     public LoginSignupView() {
-
         TextField username = createUsernameField();
         PasswordField password = createPasswordField();
         Text textPrompted = new Text(errorText);
         textPrompted.setFill(Color.RED);
 
         Button loginBtn = createLoginButton(username, password);
+        GUIApp.addClickSound(loginBtn);
         Button signupBtn = createSignUpButton(username, password);
+        GUIApp.addClickSound(signupBtn);
         Button tutorialBtn = createTutorialButton();
+        GUIApp.addClickSound(tutorialBtn);
 
 
         VBox inputBox = new VBox(10, username, password);
@@ -61,7 +63,6 @@ public class LoginSignupView {
         view = new VBox(20, new Label("Please Login or Signup"), textPrompted, inputBox, buttonBox);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new Insets(50));
-
     }
 
     /**
@@ -112,7 +113,6 @@ public class LoginSignupView {
      * @param password the TextField containing the password
      * @return the configured login Button
      */
-
 
     public Button createLoginButton(TextField username, TextField password) {
         Button btn = new Button("Login?");
@@ -201,25 +201,27 @@ public class LoginSignupView {
                     + "Now all that is left is to wish you luck playing our game. We wish you well!"
             );
 
+            manualText.getStyleClass().add("tutorial-text-area");
             Button closeButton = new Button("Close");
-            closeButton.setMaxWidth(Double.MAX_VALUE); // stretch button
-            closeButton.setOnAction(e -> popup.close());
+            closeButton.getStyleClass().add("tutorial-close-button");
+            closeButton.setMaxWidth(Double.MAX_VALUE);
+            closeButton.setOnAction(e -> {
+                popup.close();
+                GUIApp.playClickSound();
+            });
 
             VBox layout = new VBox();
             layout.setPadding(new Insets(10));
             layout.setSpacing(10);
-            VBox.setVgrow(manualText, Priority.ALWAYS); // let textarea grow
+            layout.getStyleClass().add("tutorial-popup");
+            VBox.setVgrow(manualText, Priority.ALWAYS);
             layout.getChildren().addAll(manualText, closeButton);
 
-            Scene scene = new Scene(layout, 600, 500); // bigger size
+            Scene scene = new Scene(layout, 700, 500);
             popup.setScene(scene);
             popup.showAndWait();
         });
         return btn;
-    }
-
-    public static String getUsernameText() {
-        return usernameText;
     }
 
     public Parent getView() {

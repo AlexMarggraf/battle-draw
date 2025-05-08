@@ -23,7 +23,6 @@ import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import jdk.jfr.MemoryAddress;
 import message.Message;
 import message.MessageListener;
 import org.apache.logging.log4j.LogManager;
@@ -216,8 +215,8 @@ public class Main {
                 }
                 case "image" -> {
                     BufferedImage image = decodeImage(message.getParams()[2]);
-                    BewertungView.setIsOwnPicture(username, message.getParams()[1]);
-                    BewertungView.setImage(image);
+                    ReviewView.setIsOwnPicture(username, message.getParams()[1]);
+                    ReviewView.setImage(image);
                 }
                 case "highscore" -> {
                     Double myHighscore = Double.parseDouble(message.getParams()[1]);
@@ -535,7 +534,7 @@ public class Main {
                     Message message;
                     if (splitInput.length == 1) {
                         if (inLobby) {
-                            message = new Message("sendVote", new String[]{serverID + "", lobbyName, BewertungView.getVote() + ""});
+                            message = new Message("sendVote", new String[]{serverID + "", lobbyName, ReviewView.getVote() + ""});
                             clientMessageQueue.add(message.toString());
                             Message message2 = new Message("readyToVote", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message2.toString());

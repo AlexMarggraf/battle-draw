@@ -8,6 +8,7 @@
 
 package gui;
 
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -15,13 +16,12 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.scene.control.TextArea;
 
 import javafx.scene.image.ImageView;
-
 
 import static gui.GUIApp.print;
 
@@ -40,11 +40,28 @@ public class HomeView {
         Button lobbyPlayersButton = createListPlayers();
         Button changeUsernameButton = createChangeUsername();
         Button myHighscoreButton = createMyHighscoreButton();
+
+        GUIApp.addClickSound(joinButton);
+        GUIApp.addClickSound(createLobbyButton);
+        GUIApp.addClickSound(lobbyListButton);
+        GUIApp.addClickSound(lobbyPlayersButton);
+        GUIApp.addClickSound(changeUsernameButton);
+        GUIApp.addClickSound(myHighscoreButton);
+
         ImageView logo = createLogo();
 
-        view = new VBox(20, new Label("Welcome to"), logo, createLobbyButton, joinButton, lobbyListButton, lobbyPlayersButton, changeUsernameButton, myHighscoreButton);
+        VBox viewL = new VBox(20, createLobbyButton, joinButton, lobbyListButton);
+        viewL.setAlignment(Pos.CENTER);
+
+        VBox viewR = new VBox(20, lobbyPlayersButton, changeUsernameButton, myHighscoreButton);
+        viewR.setAlignment(Pos.CENTER);
+
+        HBox buttons = new HBox(50, viewL, viewR);
+        buttons.setAlignment(Pos.CENTER);
+
+        view = new VBox(30, new Label("Welcome to"), logo, buttons);
         view.setAlignment(Pos.CENTER);
-        view.setPadding(new javafx.geometry.Insets(50));
+        view.setPadding(new Insets(50));
     }
 
     /**
@@ -81,6 +98,7 @@ public class HomeView {
 
             Button joinButton = new Button("Join");
             joinButton.setOnAction(e -> {
+                GUIApp.playClickSound();
                 String username = usernameField.getText().trim();
                 if (!username.isEmpty()) {
                     GUIApp.addClickedInput("/joinLobby Lobby_von_" + username);
@@ -140,6 +158,7 @@ public class HomeView {
 
             Button confirmButton = new Button("Confirm");
             confirmButton.setOnAction(e -> {
+                GUIApp.playClickSound();
                 String username = usernameField.getText().trim();
                 if (!username.isEmpty()) {
                     GUIApp.addClickedInput("/nick " + username);
@@ -166,6 +185,8 @@ public class HomeView {
 
     /**
      * Creates and configures the "My Highscore" Button
+     *
+     * @return the "My Highscore" Button
      */
     public static Button createMyHighscoreButton() {
         Button btn = new Button("My Highscore");
@@ -175,10 +196,8 @@ public class HomeView {
         return btn;
     }
 
-
     /**
      * Creates and configures the "List Online Players" button.
-     * When pressed, this button will list all online players (functionality pending).
      *
      * @return the configured Button instance for listing online players
      */
@@ -189,6 +208,11 @@ public class HomeView {
         });
         return btn;
     }
+    /**
+     * Creates and configures the Logo ImageView
+     *
+     * @return ImageView containing the Logo
+     */
 
     public ImageView createLogo() {
         Image image = new Image("/logo.png");
@@ -198,7 +222,6 @@ public class HomeView {
         imageView.setPreserveRatio(true);
         return imageView;
     }
-
 
     public Parent getView() {
         return view;

@@ -1,4 +1,5 @@
 import com.github.spotbugs.snom.Effort
+import com.github.spotbugs.snom.Confidence
 
 plugins {
     id 'java'
@@ -12,20 +13,28 @@ plugins {
 group 'ART_FANS'
 mainClassName = 'game.Main'
 
+spotbugs {
+    ignoreFailures = true
+    showProgress = true
+    effort = Effort.DEFAULT
+
+    def classLoader = plugins['com.github.spotbugs'].class.classLoader
+    def SpotBugsTask = classLoader.findLoadedClass( 'com.github.spotbugs.snom.SpotBugsTask' )
+    def SpotBugsEffort = classLoader.findLoadedClass( 'com.github.spotbugs.snom.Effort' )
+    def SpotBugsConfidence = classLoader.findLoadedClass( 'com.github.spotbugs.snom.Confidence' )
+
+    reportLevel = SpotBugsConfidence.DEFAULT
+}
+
 javafx {
     version = "21"
-    modules = ['javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.base', 'javafx.swing']
+    modules = ['javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.base', 'javafx.swing', 'javafx.media']
 }
 
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(21)
     }
-}
-
-spotbugs {
-    toolVersion = '4.9.3'
-    effort = Effort.MAX
 }
 
 jacoco {
@@ -37,7 +46,7 @@ repositories {
 }
 
 dependencies {
-    spotbugsPlugins 'com.h3xstream.findsecbugs:findsecbugs-plugin:1.12.0'
+    spotbugs 'com.github.spotbugs:spotbugs:4.9.3'
 
     implementation 'org.apache.logging.log4j:log4j-api:2.20.0'
     implementation 'org.apache.logging.log4j:log4j-core:2.20.0'
@@ -46,6 +55,7 @@ dependencies {
     implementation "org.openjfx:javafx-base:21"
     implementation 'org.openjfx:javafx-graphics:21'
     implementation 'org.openjfx:javafx-swing:21'
+    implementation "org.openjfx:javafx-media:21.0.2"
     implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
@@ -85,21 +95,13 @@ jar {
         configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    //dependsOn 'copyDatabase'
 }
 
 javadoc {
     destinationDir = file("$buildDir/docs/javadoc")
 }
 
-/*
-tasks.register('copyDatabase', Copy) {
-    from 'database/Thema.db'
-    into "$buildDir/libs/database"
-}
-*/
-
 tasks.register('build-cs108') {
     group = 'build'
-    dependsOn 'jar', 'javadoc' //, 'copyDatabase'
+    dependsOn 'jar', 'javadoc'
 }

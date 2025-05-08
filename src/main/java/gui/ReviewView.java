@@ -25,13 +25,13 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 
-public class BewertungView {
+public class ReviewView {
 
     private final VBox view;
     private static final ImageView imageView = new ImageView();
     private static int vote = 1;
     private static boolean next = false;
-    private static boolean isOwnPicture;
+    private static boolean isOwnPicture = true;
 
     /**
      * Constructs a new BewertungView with rating components.
@@ -39,7 +39,7 @@ public class BewertungView {
      *
      * @throws IOException if there's an error loading image resources
      */
-    public BewertungView() throws IOException {
+    public ReviewView() throws IOException {
         resetVote();
         setNextFalse();
 
@@ -59,9 +59,12 @@ public class BewertungView {
         picturePane.widthProperty().addListener(sizeListener);
         picturePane.heightProperty().addListener(sizeListener);
 
-
-        Button nextBtn = createNextBtn();
         Button changeUsername = HomeView.createChangeUsername();
+        Button nextBtn = createNextBtn();
+
+        GUIApp.addClickSound(nextBtn);
+        GUIApp.addClickSound(changeUsername);
+
         HBox voteButtons = createVoteButtonsWithSend();
         voteButtons.setAlignment(Pos.CENTER);
 
@@ -136,6 +139,7 @@ public class BewertungView {
             Button voteBtn = new Button(String.valueOf(i));
             voteBtn.getStyleClass().add("star-button");
 
+
             int index = i - 1;
             starButtons[index] = voteBtn;
 
@@ -148,7 +152,7 @@ public class BewertungView {
                 }
                 voteBtn.getStyleClass().add("selected-star");
             });
-
+            GUIApp.addClickSound(voteBtn);
             voteButtons.getChildren().add(voteBtn);
         }
 
@@ -158,6 +162,7 @@ public class BewertungView {
         imageView.setFitHeight(60);
 
         Button sendVoteBtn = new Button();
+        GUIApp.addClickSound(sendVoteBtn);
         sendVoteBtn.setGraphic(imageView);
         sendVoteBtn.getStyleClass().add("send-button");
 
@@ -165,6 +170,7 @@ public class BewertungView {
         Tooltip.install(sendVoteBtn, tooltip);
 
         sendVoteBtn.setOnAction(e -> {
+            GUIApp.playClickSound();
             GUIApp.addClickedInput("/sendVote");
             sendVoteBtn.setDisable(true);
 
@@ -188,10 +194,6 @@ public class BewertungView {
 
     public static void setNextFalse() {
         next = false;
-    }
-
-    public static Boolean getNextIndicator() {
-        return next;
     }
 
     public Parent getView() {

@@ -33,16 +33,24 @@ public class LobbyView {
      */
     public LobbyView() {
         this.vboxUsers = new VBox(10);
-        Button readyBtn = createReadyButton();
+
         Button leaderBtn = createLeaderButton();
         Button leaveBtn = createLeaveButton();
         Button listBtn = creatListPlayerButton();
         Button changeUsername = HomeView.createChangeUsername();
+
+        GUIApp.addClickSound(leaderBtn);
+        GUIApp.addClickSound(leaveBtn);
+        GUIApp.addClickSound(listBtn);
+        GUIApp.addClickSound(changeUsername);
+
         ComboBox<Integer> roundsBox = createRoundsCombo();
         ComboBox<Integer> timerBox = createTimerCombo();
 
         Timeline timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), e -> createLobbyListing())
+                new KeyFrame(Duration.seconds(1), e -> {
+                    createLobbyListing();
+                })
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -51,9 +59,12 @@ public class LobbyView {
         view = new VBox(20, new Label("Lobby"), vboxUsers, leaveBtn, listBtn, changeUsername);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
+
         if (GUIApp.getLobbyLeader()) {
             view.getChildren().add(leaderBtn);
+            view.getChildren().add(new Label("Rounds:"));
             view.getChildren().add(roundsBox);
+            view.getChildren().add(new Label("Timer:"));
             view.getChildren().add(timerBox);
         }
     }
@@ -73,20 +84,6 @@ public class LobbyView {
     }
 
     /**
-     * Creates and configures the ready button that players use to indicate their readiness.
-     * When pressed, sets the ready status to true.
-     *
-     * @return the configured Button instance for indicating readiness
-     */
-    public Button createReadyButton() {
-        Button btn = new Button("Ready?");
-        btn.setOnAction(event -> {
-            ready = true;
-        });
-        return btn;
-    }
-
-    /**
      * Creates and configures the Force start button that the lobby leader can use.
      * When pressed, the game starts.
      *
@@ -101,7 +98,6 @@ public class LobbyView {
         });
         return btn;
     }
-
 
     /**
      * Creates and configures the "Leave Lobby" button.
@@ -139,13 +135,18 @@ public class LobbyView {
      */
     private ComboBox<Integer> createTimerCombo() {
         ComboBox<Integer> combo = new ComboBox<>();
-        combo.getItems().addAll(10, 30, 45, 60, 90);
+        combo.getItems().addAll(15, 30, 45, 60, 90, 120, 180, 300);
         combo.setValue(45);
         timer = 45;
         combo.setOnAction(e -> timer = combo.getValue());
         return combo;
     }
 
+    /**
+     * Creates a ListPlayer Button that calls /listPlayers
+     *
+     * @return the configured ListPlayer Button
+     */
     public Button creatListPlayerButton() {
         Button btn = new Button("List Players");
         btn.setOnAction(event -> {
@@ -156,10 +157,6 @@ public class LobbyView {
 
     public static void setReadyFalse() {
         ready = false;
-    }
-
-    public static boolean getReadyLobby() {
-        return ready;
     }
 
     public Parent getView() {
