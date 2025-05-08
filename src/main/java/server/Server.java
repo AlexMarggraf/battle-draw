@@ -524,4 +524,16 @@ public class Server {
     public ArrayList<ServerThread> getServerThreadList() {
         return serverThreadList;
     }
+
+    public Queue<String> getSendMessageQueue() {
+        return sendMessageQueue;
+    }
+
+    public Queue<String> getReceiveMessageQueue() {
+        return receiveMessageQueue;
+    }
+
+    public LinkedList<Lobby> getLobbyList() {
+        return lobbyList;
+    }
 }

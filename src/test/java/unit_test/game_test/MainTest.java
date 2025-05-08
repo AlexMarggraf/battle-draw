@@ -5,9 +5,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.util.Base64;
 import javax.imageio.ImageIO;
+import java.util.LinkedList;
 import java.util.Queue;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,6 +34,58 @@ class MainTest {
     @BeforeEach
     void setUp() {
         main = new Main();
+        DummyClient dummyClient = new DummyClient();
+        main.setClient(dummyClient);
+    }
+
+    /**
+     * Dummy implementation of {@link client.Client} for testing message sending behavior
+     * without requiring real network communication.
+     */
+    static class DummyClient extends client.Client {
+        Queue<String> sentMessages = new LinkedList<>();
+        public boolean disconnectCalled = false;
+        public int receivedServerID = -1;
+        private final Queue<String> fakeMessages = new LinkedList<>();
+
+        /**
+         * Constructs a dummy client with no actual network target.
+         */
+        public DummyClient() {
+            super("localhost", 1234);
+        }
+
+        /**
+         * Captures the message instead of sending it.
+         *
+         * @param msg the message to queue
+         */
+        @Override
+        public void queueClientMessage(String msg) {
+            sentMessages.add(msg);
+        }
+
+        @Override
+        public void setServerID(int id) {
+            this.receivedServerID = id;
+        }
+
+        public void addServerMessage(String msg) {
+            fakeMessages.add(msg);
+        }
+
+        @Override
+        public String getServerMessage() {
+            return fakeMessages.poll(); // returns null when empty
+        }
+
+        /**
+         * Flags that disconnect was called.
+         */
+        @Override
+        public void disconnect() {
+            disconnectCalled = true;
+        }
     }
 
     /**
@@ -90,41 +145,44 @@ class MainTest {
         main.getServerMessageQueue().add("pong 0");
         main.handleServerMessage();
 
-        assertTrue(main.getSendPing());
+        assertTrue(main.getReceivedPong());
     }
 
-    /**
-     * Dummy implementation of {@link client.Client} for testing message sending behavior
-     * without requiring real network communication.
-     */
-    static class DummyClient extends client.Client {
-        Queue<String> sentMessages = new java.util.LinkedList<>();
-        public boolean disconnectCalled = false;
+    @Test
+    void testHandleServerMessage_setsServerID() {
+        main.getServerMessageQueue().add("id 42");
+        main.handleServerMessage();
 
-        /**
-         * Constructs a dummy client with no actual network target.
-         */
-        public DummyClient() {
-            super("localhost", 1234);
-        }
+        assertEquals(42, main.getServerID());
 
-        /**
-         * Captures the message instead of sending it.
-         *
-         * @param msg the message to queue
-         */
-        @Override
-        public void queueClientMessage(String msg) {
-            sentMessages.add(msg);
-        }
+        DummyClient dummyClient = (DummyClient) main.getClient();
+        assertEquals(42, dummyClient.receivedServerID);
+    }
 
-        /**
-         * Flags that disconnect was called.
-         */
-        @Override
-        public void disconnect() {
-            disconnectCalled = true;
-        }
+    @Test
+    void testHandleServerMessage_sendsPongResponse() {
+        main.getServerMessageQueue().add("ping 1");
+        main.handleServerMessage();
+
+        String response = main.getClientMessageQueue().poll();
+        assertEquals("pong 1", response);
+    }
+
+    @Test
+    void testReceiveMessage_addsAllMessagesToQueue() {
+        DummyClient dummyClient = new DummyClient();
+
+        dummyClient.addServerMessage("msg1");
+        dummyClient.addServerMessage("msg2");
+
+        setPrivateField(main, "client", dummyClient);
+
+        main.receiveMessage();
+
+        Queue<String> serverQueue = main.getServerMessageQueue();
+        assertEquals("msg1", serverQueue.poll());
+        assertEquals("msg2", serverQueue.poll());
+        assertTrue(serverQueue.isEmpty());
     }
 
     /**
@@ -143,5 +201,49 @@ class MainTest {
         assertEquals("msg1", dummy.sentMessages.poll());
         assertEquals("msg2", dummy.sentMessages.poll());
         assertTrue(dummy.sentMessages.isEmpty());
+    }
+
+    @Test
+    void testSendImage_addsEncodedImageFromFileToQueue() throws Exception {
+        DummyClient dummyClient = new DummyClient();
+
+        setPrivateField(main, "client", dummyClient);
+        setPrivateField(main, "serverID", 123);
+        setPrivateField(main, "lobbyName", "TestLobby");
+
+        String imagePath = "src/main/resources/test-image.png";
+        BufferedImage image = ImageIO.read(new File(imagePath));
+        assertNotNull(image, "Image file should be loaded");
+
+        main.sendImage(image);
+
+        Queue<String> clientQueue = main.getClientMessageQueue();
+        assertFalse(clientQueue.isEmpty());
+        String queuedMessage = clientQueue.poll();
+
+        assertTrue(queuedMessage.startsWith("image 123 TestLobby "));
+
+        String[] parts = queuedMessage.split(" ", 4);
+        assertEquals("image", parts[0]);
+        assertEquals("123", parts[1]);
+        assertEquals("TestLobby", parts[2]);
+
+        byte[] imageBytes = Base64.getDecoder().decode(parts[3]);
+        BufferedImage decodedImage = ImageIO.read(new ByteArrayInputStream(imageBytes));
+        assertNotNull(decodedImage, "Decoded image should not be null");
+        assertEquals(image.getWidth(), decodedImage.getWidth());
+        assertEquals(image.getHeight(), decodedImage.getHeight());
+    }
+
+
+
+    private void setPrivateField(Object target, String fieldName, Object value) {
+        try {
+            var field = target.getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(target, value);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 }
