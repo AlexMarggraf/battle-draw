@@ -97,8 +97,8 @@ public class GUIApp extends Application {
         VBox chatPanel = createChatPanel();
         chatPanel.setPrefWidth(300);
         rootLayout.setRight(chatPanel);
-        HBox devButtons = createDevButtons();
-        rootLayout.setTop(devButtons);
+//        HBox devButtons = createDevButtons();
+//        rootLayout.setTop(devButtons);
     }
 
     /**
