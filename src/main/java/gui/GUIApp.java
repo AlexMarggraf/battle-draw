@@ -12,6 +12,8 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -23,6 +25,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
@@ -30,10 +34,8 @@ import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.Queue;
+import java.net.URL;
+import java.util.*;
 
 
 public class GUIApp extends Application {
@@ -69,10 +71,11 @@ public class GUIApp extends Application {
 
 
         primaryStage.setResizable(true);
+        primaryStage.setMaximized(true);
         initializeRootLayout();
 
         primaryStage.setTitle("Battle Draw");
-        Scene scene = new Scene(rootLayout, 1280, 720);
+        Scene scene = new Scene(rootLayout, 1280, 960 );
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
         primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/icon.png")));
         primaryStage.setScene(scene);
@@ -92,9 +95,10 @@ public class GUIApp extends Application {
         rootLayout = new BorderPane();
 
         VBox chatPanel = createChatPanel();
+        chatPanel.setPrefWidth(300);
         rootLayout.setRight(chatPanel);
-//        HBox devButtons = createDevButtons();
-//        rootLayout.setTop(devButtons);
+        HBox devButtons = createDevButtons();
+        rootLayout.setTop(devButtons);
     }
 
     /**
@@ -115,7 +119,7 @@ public class GUIApp extends Application {
         VBox.setVgrow(chatArea, Priority.ALWAYS);
 
         VBox vbox = new VBox(10);
-        vbox.setPrefSize(300, 400);
+        vbox.setPrefSize(250, 300);
         vbox.getChildren().addAll(chatArea, messageField);
         vbox.setPadding(new Insets(10));
         return vbox;
@@ -167,6 +171,46 @@ public class GUIApp extends Application {
         return new HBox(10, new Label("DevButtons: "), loSiButton, homeButton, lobbyBtn, gameButton, bewertungButton, boardBtn, endingBtn);
     }
 
+    /**
+     * Adds a click sound to the given button when it is pressed.
+     *
+     * @param button the button to attach the sound to
+     */
+
+    public static void addClickSound(Button button) {
+        URL soundUrl = GUIApp.class.getResource("/buttonClick.mp3");
+        if (soundUrl == null) {
+            System.err.println("Sound file not found!");
+            return;
+        }
+
+        EventHandler<ActionEvent> originalHandler = button.getOnAction();
+
+        button.setOnAction(e -> {
+            Media sound = new Media(soundUrl.toString());
+            MediaPlayer player = new MediaPlayer(sound);
+            player.play();
+
+            if (originalHandler != null) {
+                originalHandler.handle(e);
+            }
+        });
+    }
+    /**
+     * Plays a short click sound using MediaPlayer.
+     */
+    public static void playClickSound() {
+        URL soundUrl = GUIApp.class.getResource("/buttonClick.mp3");
+        if (soundUrl == null) {
+            System.err.println("Sound file not found!");
+            return;
+        }
+
+        Media sound = new Media(soundUrl.toString());
+        MediaPlayer player = new MediaPlayer(sound);
+        player.play();
+    }
+
     //HomeView Methoden
     public static void showHomeView() {
         Platform.runLater(() ->
@@ -194,30 +238,18 @@ public class GUIApp extends Application {
 
     // BewertungView Methoden
     public static void showBewertungView() {
-        BewertungView.resetVote();
+        ReviewView.resetVote();
         Platform.runLater(() -> {
             try {
-                rootLayout.setCenter(new BewertungView().getView());
+                rootLayout.setCenter(new ReviewView().getView());
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
     }
 
-    public static void setBewertungImage(BufferedImage image) {
-        BewertungView.setImage(image);
-    }
-
-    public static int getBewertungVote() {
-        return BewertungView.getVote();
-    }
-
     public static void setLobbyLeader(Boolean bool) {
         lobbyLeader = bool;
-    }
-
-    public static Boolean getNextIndicatorBewertung() {
-        return BewertungView.getNextIndicator();
     }
 
     //LeaderboardView Methoden
@@ -229,18 +261,6 @@ public class GUIApp extends Application {
         );
     }
 
-    public static boolean getReadyLeaderboard() {
-        return LeaderboardView.getReady();
-    }
-
-    public static void updateLeaderboard(Map<String, Integer> leaderboardData) {
-        LeaderboardView.updateLeaderboard();
-    }
-
-    public static void setReadyFalseLeaderboard() {
-        LeaderboardView.setReadyFalse();
-    }
-
     //EndingView Methoden
 
     public static void showEndingView() {
@@ -248,10 +268,6 @@ public class GUIApp extends Application {
         Platform.runLater(() ->
                 rootLayout.setCenter(new EndingView().getView())
         );
-    }
-
-    public static boolean getAgainEnding() {
-        return EndingView.getAgainEnding();
     }
 
     //LoginSignUpView Methoden
@@ -309,10 +325,6 @@ public class GUIApp extends Application {
         chatArea.appendText(text + "\n");
     }
 
-    public static void setSetLobbyLeader(Boolean bool) {
-        lobbyLeader = bool;
-    }
-
     public static Boolean getLobbyLeader() {
         return lobbyLeader;
     }
@@ -358,24 +370,8 @@ public class GUIApp extends Application {
         players.clear();
     }
 
-    public void setReadyFalseLobby() {
-        LobbyView.setReadyFalse();
-    }
-
-    public boolean getReadyLobby() {
-        return LobbyView.getReadyLobby();
-    }
-
     public String getUserInput() {
         return userInputQueue.poll();
-    }
-
-    public String getClientMessageQueue() {
-        return clientMessageQueue.poll();
-    }
-
-    public static void addUserInputQueue(String input) {
-        userInputQueue.add(input);
     }
 
     public void queuePrintMessage(String message) {

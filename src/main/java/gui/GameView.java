@@ -15,26 +15,28 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.WritableImage;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.StrokeLineCap;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.awt.image.BufferedImage;
 import java.util.Locale;
-import java.util.Optional;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
 
 
 public class GameView {
-
     private final VBox view;
     private static Canvas canvas;
     private static final int canvasHeight = 600;
@@ -45,7 +47,6 @@ public class GameView {
     private double lastY;
     private final GraphicsContext gc;
     private static boolean isTimeUp = false;
-
     private static final Logger LOGGER = LogManager.getLogger(Main.class);
 
     /**
@@ -56,7 +57,6 @@ public class GameView {
         isTimeUp = false;
 
         canvas = new Canvas(canvasWidth, canvasHeight);
-
         canvas.getStyleClass().add("canvas");
 
         gc = canvas.getGraphicsContext2D();
@@ -64,8 +64,10 @@ public class GameView {
         TextField countdownField = createCountdown(GUIApp.getTime());
         Label themeLabel = createThemeLabel();
         Button changeUsername = HomeView.createChangeUsername();
+        GUIApp.addClickSound(changeUsername);
 
-        HBox countdownBox = new HBox(10, new Label("Time left:"), countdownField, changeUsername);
+
+        HBox countdownBox = new HBox(10, new Label("Time left:"), countdownField);
         countdownBox.setAlignment(Pos.CENTER);
 
         clearCanvas();
@@ -75,7 +77,7 @@ public class GameView {
         ComboBox<Integer> widthCombo = createWidthCombo();
         Button clearBtn = createClearButton();
 
-        HBox controls = new HBox(10, colorPicker, widthCombo, clearBtn);
+        HBox controls = new HBox(10, colorPicker, widthCombo, clearBtn, changeUsername);
         controls.setAlignment(Pos.CENTER);
 
         view = new VBox(20, controls, countdownBox, themeLabel, canvas);
@@ -187,45 +189,55 @@ public class GameView {
     }
 
     /**
-     * Creates a clear button with confirmation dialog.
+     * Creates a clear button with confirmation popup.
      * Clears the canvas after user confirmation, unless time has expired.
      *
      * @return the configured Button for clearing the canvas
      */
     private Button createClearButton() {
         Button button = new Button("Clear");
+
         button.setOnAction(e -> {
             if (isTimeUp) {
                 return;
             }
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirm Action");
-            alert.setHeaderText("Clear Canvas");
-            alert.setContentText("Are you sure you want to clear the canvas?");
-            alert.getDialogPane().getStyleClass().add("dialog-pane");
+            GUIApp.playClickSound();
+            Stage popup = new Stage();
+            popup.initModality(Modality.APPLICATION_MODAL);
+            popup.setTitle("Confirm Clear");
 
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == ButtonType.OK) {
+            Label label = new Label("Are you sure you want to clear the canvas?");
+            label.setStyle("-fx-font-size: 14px;");
+            Button confirmButton = new Button("Confirm");
+            Button cancelButton = new Button("Cancel");
+
+
+            confirmButton.setOnAction(event -> {
+                GUIApp.playClickSound();
                 clearCanvas();
-            }
+                popup.close();
+            });
+
+            cancelButton.setOnAction(event -> {
+                GUIApp.playClickSound();
+                popup.close();
+            });
+
+            HBox buttonBox = new HBox(20, confirmButton, cancelButton);
+            buttonBox.setAlignment(Pos.CENTER);
+
+            VBox layout = new VBox(15, label, buttonBox);
+            layout.setAlignment(Pos.CENTER);
+            layout.setPadding(new Insets(20));
+
+            Scene scene = new Scene(layout, 400, 150);
+            scene.getStylesheets().add(GUIApp.class.getResource("/style.css").toExternalForm());
+            popup.setScene(scene);
+
+            popup.showAndWait();
         });
+
         return button;
-    }
-
-
-    /**
-     * Creates the "Proceed to Vote" button for players to proceed.
-     *
-     * @return the configured Button for navigation
-     */
-    private Button createNextBtn() {
-        Button btn = new Button("Proceed");
-        btn.setDisable(true);
-        btn.setOnAction(e -> {
-            GUIApp.addClickedInput("/readyToVote");
-            btn.setDisable(true);
-        });
-        return btn;
     }
 
     /**
@@ -239,6 +251,11 @@ public class GameView {
         gc.strokeRect(0, 0, canvas.getWidth(), canvas.getHeight());
     }
 
+    /**
+     * Returns the current canvas content as a BufferedImage.
+     *
+     * @return the canvas as a BufferedImage, or null if the canvas is not initialized or an error occurs
+     */
     public static BufferedImage getCanvasAsBufferedImage() {
         if (canvas == null) {
             System.err.println("Canvas is not initialized!");
@@ -253,8 +270,6 @@ public class GameView {
         Platform.runLater(task);
 
         try {
-            //WritableImage snapshot = canvas.snapshot(null, null);
-            //return SwingFXUtils.fromFXImage(snapshot, null);
             return task.get();
         } catch (InterruptedException | ExecutionException e) {
             e.printStackTrace();
@@ -262,22 +277,9 @@ public class GameView {
         }
     }
 
-
     private Label createThemeLabel() {
         Label label = new Label("Theme: " + GUIApp.getTheme());
         return label;
-    }
-
-    public static int getCanvasHeight() {
-        return canvasHeight;
-    }
-
-    public static int getCanvasWidth() {
-        return canvasWidth;
-    }
-
-    public static void setIsTimeUp(Boolean bool) {
-        isTimeUp = bool;
     }
 
     public Parent getView() {
