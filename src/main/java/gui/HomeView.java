@@ -83,7 +83,7 @@ public class HomeView {
             joinButton.setOnAction(e -> {
                 String username = usernameField.getText().trim();
                 if (!username.isEmpty()) {
-                    GUIApp.addClickedInput("/joinLobby Lobby_von_" + username);
+                    GUIApp.addClickedInput("/joinLobby Lobby_of_" + username);
                     popup.close();
                 } else {
                     print("Username cannot be empty");
@@ -141,11 +141,11 @@ public class HomeView {
             Button confirmButton = new Button("Confirm");
             confirmButton.setOnAction(e -> {
                 String username = usernameField.getText().trim();
-                if (!username.isEmpty()) {
+                if (!username.isEmpty() && !username.contains(" ")) {
                     GUIApp.addClickedInput("/nick " + username);
                     popup.close();
                 } else {
-                    print("Username cannot be empty");
+                    print("Username cannot be empty or contain spaces");
                 }
             });
 
@@ -166,6 +166,8 @@ public class HomeView {
 
     /**
      * Creates and configures the "My Highscore" Button
+     *
+     * @return the configured Button instance to get the highscore
      */
     public static Button createMyHighscoreButton() {
         Button btn = new Button("My Highscore");

@@ -47,6 +47,7 @@ public class EndingView {
         btn.setOnAction(event -> {
             again = true;
             GUIApp.showLobbyView();
+            GUIApp.addClickedInput("/playAgain");
         });
         return btn;
     }

@@ -19,6 +19,8 @@ public class Lobby {
     private Integer votesOfARound;
     private Map<String, Double> leaderboard;
     private Map<Integer, String> images;
+    private ArrayList<Integer> disconnectedPlayers;
+    private Map<Integer, Double> disconnectedPlayersPoints;
 
     /**
      * Constructs a Lobby with the given name.
@@ -32,6 +34,8 @@ public class Lobby {
         this.leaderboard = new HashMap<>();
         this.votesOfARound = 0;
         this.images = new HashMap<>();
+        this.disconnectedPlayers = new ArrayList<>();
+        this.disconnectedPlayersPoints = new HashMap<>();
     }
 
     public boolean isEmpty() {
@@ -149,6 +153,8 @@ public class Lobby {
         leaderboard.put(playerName, points);
     }
 
+    public HashMap<String, Double> getLeaderboard() {return (HashMap<String, Double>) leaderboard;}
+
     public void setImageOfPlayer(Integer id, String imageAsString) {
         images.put(id, imageAsString);
     }
@@ -156,4 +162,18 @@ public class Lobby {
     public String getImageOfPlayer() {
         return images.get(playerVotingOn);
     }
+
+    public void addToDisconnectedPlayers(Integer playerId) {disconnectedPlayers.add(playerId);}
+
+    public void removeDisconnectedPlayers(Integer playerId) {disconnectedPlayers.remove(playerId);}
+
+    public Integer[] getDisconnectedPlayers() {return disconnectedPlayers.toArray(new Integer[0]);}
+
+    public Boolean disconnectedPlayersIsEmpty() {return disconnectedPlayers.isEmpty();}
+
+    public void addDisconnectedPlayersPoints(Integer id, Double points) {disconnectedPlayersPoints.put(id, points);}
+
+    public void removeDisconnectedPlayersPoints(Integer id, Double points) {disconnectedPlayersPoints.remove(id);}
+
+    public HashMap<Integer, Double> getDisconnectedPlayerPoints() {return (HashMap<Integer, Double>) disconnectedPlayersPoints;}
 }

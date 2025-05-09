@@ -133,6 +133,8 @@ public class LoginSignupView {
     public Button createSignUpButton(TextField username, TextField password) {
         Button btn = new Button("Signup?");
         btn.setOnAction(event -> {
+            GUIApp.addClickedInput("/setUsername " + usernameText);
+            GUIApp.addClickedInput("/setPassword " + passwordText);
             GUIApp.addClickedInput("/signUp " + usernameText + " " + passwordText);
 
             username.clear();
@@ -164,15 +166,15 @@ public class LoginSignupView {
                     + "We are pleased that you chose to play our game!\n"
                     + "If you've never played the game you have to create an account first."
                     + "Fill out the username and password, but you cannot use a space in either and click on \"Sign Up?\"."
-                    + "Otherwise just use your username and password from the last time you played the game"
-                    + "Then you get to see our home view. There you have different options. You can:"
+                    + "Otherwise just use your username and password from the last time you played the game."
+                    + "Then you get to see our home view. There you have different options. You can:\n"
                     + "- Create a lobby\n"
                     + "- Join a lobby\n"
                     + "- List all lobbies\n"
                     + "- List all online players\n"
                     + "- Change your username\n"
                     + "- check out your Highscore\n"
-                    + "If you create a lobby you are the Host. There you can set the number of rounds to play our game"
+                    + "If you create a lobby you are the host. There you can set the number of rounds to play our game"
                     + "and the time to draw for a round or leave the lobby."
                     + "On the left side you can see all players which joined your lobby."
                     + "When all the players joined you can click on \"Start\". Then you can start to draw a picture to the theme."
@@ -182,26 +184,27 @@ public class LoginSignupView {
                     + "At the end of a round you see the current leaderboard and you can click on \"Next Round\"."
                     + "After the game ends you have the choice to play again or leave the lobby."
                     + "Now if you want to join a lobby you can first list all lobbies and choose which to join."
-                    + "You can only join a lobby which is open or has ended. You cannot join ongoing lobbies."
-                    + "When you click on \"Join Lobby\" a popup opens and you can enter just the username without \"Lobby_von_\"."
+                    + "You can only join a lobby which is open. You cannot join ongoing or ended lobbies."
+                    + "When you click on \"Join Lobby\" a popup opens and you can enter just the username without \"Lobby_of_\"."
                     + "If you're not the host you can sit back an relax until the game starts."
-                    + "After a game you can return to home and click on \"my Highscore\" and try to beat it."
+                    + "After a game you can return to home by leaving to lobby and click on \"my Highscore\" and try to beat it."
                     + "You can also change your username at any time during a game if you want to experiment."
                     + "But pay attention! Your username is unique. If someone has taken your previous name you cannot switch back."
                     + "Now all that is left is to wish you luck playing our game. We wish you well!"
             );
 
             Button closeButton = new Button("Close");
-            closeButton.setMaxWidth(Double.MAX_VALUE); // stretch button
+            closeButton.setMaxWidth(Double.MAX_VALUE);
             closeButton.setOnAction(e -> popup.close());
 
             VBox layout = new VBox();
             layout.setPadding(new Insets(10));
             layout.setSpacing(10);
-            VBox.setVgrow(manualText, Priority.ALWAYS); // let textarea grow
+            VBox.setVgrow(manualText, Priority.ALWAYS);
             layout.getChildren().addAll(manualText, closeButton);
 
-            Scene scene = new Scene(layout, 600, 500); // bigger size
+            Scene scene = new Scene(layout, 600, 500);
+            scene.getStylesheets().add(GUIApp.class.getResource("/style.css").toExternalForm());
             popup.setScene(scene);
             popup.showAndWait();
         });

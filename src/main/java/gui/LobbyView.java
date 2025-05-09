@@ -94,7 +94,7 @@ public class LobbyView {
      */
 
     public Button createLeaderButton() {
-        Button btn = new Button("Force start");
+        Button btn = new Button("Start");
         btn.setOnAction(event -> {
             ready = true;
             GUIApp.addClickedInput("/startGame");

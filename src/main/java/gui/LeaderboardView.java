@@ -110,7 +110,7 @@ public class LeaderboardView {
      * @return the configured Button instance for indicating readiness
      */
     public static Button createRdyBtn() {
-        Button btn = new Button("Force next round (leader)");
+        Button btn = new Button("Next round");
         btn.setOnAction(event -> {
             ready = true;
             GUIApp.addClickedInput("/nextRound");

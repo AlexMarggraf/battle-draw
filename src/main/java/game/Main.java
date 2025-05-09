@@ -120,7 +120,7 @@ public class Main {
                     username = message.getParams()[1];
                     print("Change username to: " + username);
                     if (GUIApp.getLobbyLeader()) {
-                        Message response2 = new Message("changeLobbyName", new String[]{serverID + "", lobbyName, "Lobby_von_" + username});
+                        Message response2 = new Message("changeLobbyName", new String[]{serverID + "", lobbyName, "Lobby_of_" + username});
                         clientMessageQueue.add(response2.toString());
                     }
                 }
@@ -148,6 +148,7 @@ public class Main {
                             game.plusOnePlayer();
                         }
                     } else {
+                        print("Players in the lobby:");
                         for (int i = 1; i < message.getParams().length; i++) {
                             print(message.getParams()[i]);
                         }
@@ -192,6 +193,7 @@ public class Main {
                     GUIApp.setTime(Integer.parseInt(message.getParams()[3]));
                     game.setMaxNumberOfRounds(Integer.parseInt(message.getParams()[2]));
                     game.setStatus("ongoing");
+                    BewertungView.setVotingHasEndedFalse();
                     GUIApp.showGameView();
                 }
                 case "votingStarts" -> {
@@ -202,7 +204,9 @@ public class Main {
                     GUIApp.addPointsPlayer(message.getParams()[1], Double.parseDouble(message.getParams()[2]));
                 }
                 case "showLeaderboard" -> {
+                    game.setStatus("leaderboard");
                     GUIApp.showLeaderboardView();
+                    BewertungView.setVotingHasEndedTrue();
                 }
                 case "showEnding" -> {
                     game.setStatus("ended");
@@ -218,6 +222,7 @@ public class Main {
                     BufferedImage image = decodeImage(message.getParams()[2]);
                     BewertungView.setIsOwnPicture(username, message.getParams()[1]);
                     BewertungView.setImage(image);
+                    BewertungView.setPictureAuthor(message.getParams()[1]);
                 }
                 case "highscore" -> {
                     Double myHighscore = Double.parseDouble(message.getParams()[1]);
@@ -230,7 +235,11 @@ public class Main {
                 case "newHost" -> {
                     if (message.getParams()[0].equals(message.getParams()[2])) {
                         GUIApp.setLobbyLeader(true);
-                        GUIApp.showLobbyView();
+                        if (game.getStatus().equals("open")) {
+                            GUIApp.showLobbyView();
+                        } else if (game.getStatus().equals("leaderboard")) {
+                            GUIApp.showLeaderboardView();
+                        }
                         print("You are now the Host");
                     }
                     lobbyName = message.getParams()[1];
@@ -256,6 +265,12 @@ public class Main {
                 case "changeLobbyName" -> {
                     lobbyName =  message.getParams()[2];
                     game.setLobbyName(lobbyName);
+                }
+                case "hasDisconnected" -> {
+                    game.minusOnePlayer();
+                    if (GUIApp.getPlayers().containsKey(message.getParams()[1])) {
+                        GUIApp.removePlayer(message.getParams()[1]);
+                    }
                 }
                 default -> print(message.getID() + ": " + message.getParams()[1]);
             }
@@ -536,8 +551,6 @@ public class Main {
                         if (inLobby) {
                             message = new Message("sendVote", new String[]{serverID + "", lobbyName, BewertungView.getVote() + ""});
                             clientMessageQueue.add(message.toString());
-                            Message message2 = new Message("readyToVote", new String[]{serverID + "", lobbyName});
-                            clientMessageQueue.add(message2.toString());
                         } else {
                             print("You're not in a lobby");
                         }
@@ -567,6 +580,21 @@ public class Main {
                             message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
                             //print("You are ready to vote");
+                        } else {
+                            print("You're not in a lobby");
+                        }
+                    } else {
+                        message = new Message("chatAll", new String[]{serverID + "", username, input});
+                        clientMessageQueue.add(message.toString());
+                    }
+                }
+                case "/playAgain" -> {
+                    Message message;
+                    if (splitInput.length == 1) {
+                        if (inLobby) {
+                            game.setStatus("open");
+                            message = new Message("lobbyStatusOpen", new String[]{serverID + "", lobbyName});
+                            clientMessageQueue.add(message.toString());
                         } else {
                             print("You're not in a lobby");
                         }
