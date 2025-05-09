@@ -922,6 +922,14 @@ public class Main {
         return sendPing;
     }
 
+    public Boolean getReceivedPong() {
+        return receivedPong;
+    }
+
+    public Client getClient() {
+        return client;
+    }
+
     public void setReceivedPong(boolean value) {
         this.receivedPong = value;
     }

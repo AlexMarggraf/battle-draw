@@ -280,7 +280,7 @@ class ServerTest {
 
     @Test
     void testHandleReceiveMessage_createAndJoinLobby() {
-        String lobbyName = "Lobby_von_Alice";
+        String lobbyName = "Lobby_of_Alice";
         DatabaseHelper.insertPlayer("Alice", "password1");
         DatabaseHelper.insertPlayer("Bob", "password2");
 
