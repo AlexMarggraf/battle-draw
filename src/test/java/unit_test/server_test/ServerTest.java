@@ -1,6 +1,5 @@
 package unit_test.server_test;
 
-import game.Game;
 import message.Message;
 import game.Lobby;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +10,7 @@ import server.ServerThread;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Queue;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -200,6 +200,134 @@ class ServerTest {
         assertTrue(response.contains("isn't online or doesn't exist"));
     }
 
+    @Test
+    void testHandleReceiveMessage_chatAllMessageAddsToSendQueue() {
+        server.getReceiveMessageQueue().add("chatAll 1 Alice Hello everyone");
+
+        server.handleReceiveMessage();
+
+        String response = server.getSendMessageQueue().poll();
+        assertNotNull(response);
+        assertEquals("chatAll 1 Alice Hello everyone", response);
+    }
+
+    @Test
+    void testHandleReceiveMessage_chatLobbyMessage() {
+        server.getReceiveMessageQueue().add("chatLobby 2 Bob Hello Lobby");
+
+        server.handleReceiveMessage();
+
+        String response = server.getSendMessageQueue().poll();
+        assertNotNull(response);
+        assertEquals("chatLobby 2 Bob Hello Lobby", response);
+    }
+
+    @Test
+    void testHandleReceiveMessage_logInFailure() {
+        Server server = new Server();
+        FakeDatabaseHelper.setupLogin("Alice", "wrongpass", false);
+
+        server.getReceiveMessageQueue().add("logIn 0 Alice wrongpass");
+        server.handleReceiveMessage();
+
+        String response = server.getSendMessageQueue().poll();
+        assertNotNull(response);
+        assertTrue(response.startsWith("rejectLogin"));
+        assertTrue(response.contains("Alice"));
+    }
+
+    @Test
+    void testHandleReceiveMessage_signUp_NewUser() {
+        server.getReceiveMessageQueue().add("signUp 0 User3 password");
+
+        server.handleReceiveMessage();
+
+        String response = server.getSendMessageQueue().poll();
+        assertNotNull(response);
+        assertTrue(response.contains("acceptSignup"));
+        assertTrue(response.contains("User3"));
+    }
+
+    @Test
+    void testHandleReceiveMessage_whoOnline() {
+        DatabaseHelper.insertPlayer("Alice", "password1");
+        DatabaseHelper.insertPlayer("Bob", "password2");
+
+        int clientId1 = DatabaseHelper.getPlayerId("Alice");
+        int clientId2 = DatabaseHelper.getPlayerId("Bob");
+
+        DatabaseHelper.setStatus(clientId1, 1);
+        DatabaseHelper.setStatus(clientId2, 1);
+
+        DummyServerThread client1 = new DummyServerThread(clientId1);
+        DummyServerThread client2 = new DummyServerThread(clientId2);
+        server.getServerThreadList().add(client1);
+        server.getServerThreadList().add(client2);
+
+        server.getReceiveMessageQueue().add("whoOnline 0");
+
+        server.handleReceiveMessage();
+
+        String response = server.getSendMessageQueue().poll();
+        assertNotNull(response);
+        assertTrue(response.startsWith("online 0"));
+        assertTrue(response.contains("Alice"));
+        assertTrue(response.contains("Bob"));
+
+        DatabaseHelper.setStatus(clientId1, 0);
+        DatabaseHelper.setStatus(clientId2, 0);
+    }
+
+    @Test
+    void testHandleReceiveMessage_createAndJoinLobby() {
+        String lobbyName = "Lobby_von_Alice";
+        DatabaseHelper.insertPlayer("Alice", "password1");
+        DatabaseHelper.insertPlayer("Bob", "password2");
+
+        int clientId1 = DatabaseHelper.getPlayerId("Alice");
+        int clientId2 = DatabaseHelper.getPlayerId("Bob");
+
+        DatabaseHelper.setStatus(clientId1, 1);
+        DatabaseHelper.setStatus(clientId2, 1);
+
+        String createMessage = "createLobby " + clientId1;
+        server.getReceiveMessageQueue().add(createMessage);
+        server.handleReceiveMessage();
+
+        String joinMessage = "joinLobby " + clientId2 + " " + lobbyName;
+        server.getReceiveMessageQueue().add(joinMessage);
+        server.handleReceiveMessage();
+
+        Optional<Lobby> createdLobby = server.getLobbyList().stream()
+                .filter(lobby -> lobby.getLobbyName().equals(lobbyName))
+                .findFirst();
+        assertTrue(createdLobby.isPresent(), "Lobby should be created and present in the lobby list");
+
+        String response1 = server.getSendMessageQueue().poll();
+        String response2 = server.getSendMessageQueue().poll();
+        String response3 = server.getSendMessageQueue().poll();
+
+        assertNotNull(response1);
+        assertNotNull(response2);
+        assertNotNull(response3);
+
+        assertTrue(response1.startsWith("lobbyJoined " + clientId1));
+        assertTrue(response1.contains(lobbyName));
+
+        assertTrue(response2.startsWith("playerJoined " + clientId1));
+        assertTrue(response2.contains("Alice"));
+
+        assertTrue(response3.startsWith("playerJoined " + clientId1));
+        assertTrue(response3.contains("Bob"));
+        assertTrue(response3.contains(String.valueOf(clientId2)));
+
+        DatabaseHelper.setStatus(clientId1, 0);
+        DatabaseHelper.setStatus(clientId2, 0);
+    }
+
+
+
+
 
     /**
      * Tests that {@link Server#handleSendMessage()} sends the message to all other threads
@@ -285,58 +413,12 @@ class ServerTest {
         assertEquals("chatTo 1 Alice Bob Hi Bob", recipient.serverQueue.poll());
         assertNull(sender.serverQueue.poll());
     }
-
-    @Test
-    void testHandleReceiveMessage_chatAllMessageAddsToSendQueue() {
-        server.getReceiveMessageQueue().add("chatAll 1 Alice Hello everyone");
-
-        server.handleReceiveMessage();
-
-        String response = server.getSendMessageQueue().poll();
-        assertNotNull(response);
-        assertEquals("chatAll 1 Alice Hello everyone", response);
-    }
-
-    @Test
-    void testHandleReceiveMessage_chatLobbyMessage() {
-        server.getReceiveMessageQueue().add("chatLobby 2 Bob Hello Lobby");
-
-        server.handleReceiveMessage();
-
-        String response = server.getSendMessageQueue().poll();
-        assertNotNull(response);
-        assertEquals("chatLobby 2 Bob Hello Lobby", response);
-    }
-
-    @Test
-    void testHandleReceiveMessage_logInFailure() {
-        Server server = new Server();
-        FakeDatabaseHelper.setupLogin("Alice", "wrongpass", false);
-
-        server.getReceiveMessageQueue().add("logIn 0 Alice wrongpass");
-        server.handleReceiveMessage();
-
-        String response = server.getSendMessageQueue().poll();
-        assertNotNull(response);
-        assertTrue(response.startsWith("rejectLogin"));
-        assertTrue(response.contains("Alice"));
-    }
-
-    @Test
-    void testHandleReceiveMessage_signUp_NewUser() {
-        server.getReceiveMessageQueue().add("signUp 0 User3 password");
-
-        server.handleReceiveMessage();
-
-        String response = server.getSendMessageQueue().poll();
-        assertNotNull(response);
-        assertTrue(response.contains("acceptSignup"));
-        assertTrue(response.contains("User3"));
-    }
 }
 
 class FakeDatabaseHelper {
     private static Map<String, String> users = new HashMap<>();
+    private static Map<Integer, String> playerNames = new HashMap<>();
+    private static Map<Integer, Boolean> playerStatus = new HashMap<>();
 
     static void setupLogin(String username, String password, boolean success) {
         if (success) {
@@ -344,6 +426,22 @@ class FakeDatabaseHelper {
         } else {
             users.put(username, "invalid");
         }
+    }
+
+    static void setPlayerName(int id, String name) {
+        playerNames.put(id, name);
+    }
+
+    static void setStatus(int id, boolean status) {
+        playerStatus.put(id, status);
+    }
+
+    static String getPlayerName(int id) {
+        return playerNames.getOrDefault(id, "Unknown");
+    }
+
+    static boolean getStatus(int id) {
+        return playerStatus.getOrDefault(id, false);
     }
 }
 

@@ -85,8 +85,12 @@ class MessageTest {
                 arguments("startVoting", new String[]{"27", "Lobby_von_Noah"}, "startVoting 27 Lobby_von_Noah"),
                 arguments("readyToVote", new String[]{"27", "Lobby_von_Alex"}, "readyToVote 27 Lobby_von_Alex"),
                 arguments("nextRound", new String[]{"42", "Lobby_von_Alex"}, "nextRound 42 Lobby_von_Alex"),
-                arguments("whatID", new String[]{}, "whatID")
-        );
+                arguments("whatID", new String[]{}, "whatID"),
+                arguments("highscore", new String[]{"42", "4.33"}, "highscore 42 4.33"),
+                arguments("newHost", new String[]{"35", "Lobby_von_Drikson", "37"}, "newHost 35 Lobby_von_Drikson 37"),
+                arguments("newUsername", new String[]{"37", "Drikson", "Dizzy"}, "newUsername 37 Drikson Dizzy"),
+                arguments("changeLobbyName", new String[]{"37", "Lobby_von_Alex", "Lobby_von_Noah"}, "changeLobbyName 37 Lobby_von_Alex Lobby_von_Noah")
+                );
     }
 
     // ------------------- SECOND CONSTRUCTOR TESTS: Message(String fullMessage) -------------------
@@ -157,7 +161,96 @@ class MessageTest {
                 arguments("startDrawing 45 Lobby_von_Noah 3 45", "startDrawing", new String[]{"45", "Lobby_von_Noah", "3", "45"}, "startDrawing 45 Lobby_von_Noah 3 45"),
                 arguments("startVoting 27 Lobby_von_Noah", "startVoting", new String[]{"27", "Lobby_von_Noah"}, "startVoting 27 Lobby_von_Noah"),
                 arguments("readyToVote 27 Lobby_von_Alex", "readyToVote", new String[]{"27", "Lobby_von_Alex"}, "readyToVote 27 Lobby_von_Alex"),
-                arguments("nextRound 42 Lobby_von_Alex", "nextRound", new String[]{"42", "Lobby_von_Alex"}, "nextRound 42 Lobby_von_Alex")
+                arguments("nextRound 42 Lobby_von_Alex", "nextRound", new String[]{"42", "Lobby_von_Alex"}, "nextRound 42 Lobby_von_Alex"),
+                arguments("highscore 42 4.33", "highscore", new String[]{"42", "4.33"}, "highscore 42 4.33"),
+                arguments("newHost 35 Lobby_von_Drikson 37", "newHost", new String[]{"35", "Lobby_von_Drikson", "37"}, "newHost 35 Lobby_von_Drikson 37"),
+                arguments("newUsername 37 Drikson Dizzy", "newUsername", new String[]{"37", "Drikson", "Dizzy"}, "newUsername 37 Drikson Dizzy"),
+                arguments("changeLobbyName 37 Lobby_von_Alex Lobby_von_Noah", "changeLobbyName", new String[]{"37", "Lobby_von_Alex", "Lobby_von_Noah"}, "changeLobbyName 37 Lobby_von_Alex Lobby_von_Noah")
+                );
+    }
+
+    @ParameterizedTest(name = "Test exception for invalid input: {0}")
+    @MethodSource("invalidMessageInputs")
+    @DisplayName("Message constructor – invalid and edge case input handling")
+    void testMessageExceptions(String type, String[] params, String expectedMessage) {
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
+            new Message(type, params);
+        });
+        assertEquals(expectedMessage, exception.getMessage());
+    }
+
+
+    static Stream<org.junit.jupiter.params.provider.Arguments> invalidMessageInputs() {
+        return Stream.of(
+                arguments("chatTo", new String[]{"37", null, "Noah", "Hallo"}, "The sender username has to be a string"),
+                arguments("chatTo", new String[]{"37", "Alex", null, "Hallo"}, "The recipient username has to be a string"),
+                arguments("chatTo", new String[]{"notAnInt", "Alex", "Noah", "Hallo"}, "The id has to be an integer"),
+                arguments("chatAll", new String[]{"37", null, "Willkommen"}, "The username has to be a string"),
+                arguments("chatAll", new String[]{"notAnInt", "Alex", "Willkommen"}, "The id has to be an integer"),
+                arguments("signUp", new String[]{"37", null, "password"}, "The username has to be a string"),
+                arguments("signUp", new String[]{"37", "Alex", null}, "The password has to be a string"),
+                arguments("signUp", new String[]{"notAnInt", "Alex", "password"}, "The id has to be an integer"),
+                arguments("changeUsername", new String[]{"37", null}, "The username has to be a string"),
+                arguments("changeUsername", new String[]{"notAnInt", "Alex"}, "The id has to be an integer"),
+                arguments("ping", new String[]{"notAnInt"}, "The id has to be an integer"),
+                arguments("joinLobby", new String[]{"37", null}, "The lobby name has to be a string"),
+                arguments("joinLobby", new String[]{"notAnInt", "LobbyName"}, "The id has to be an integer"),
+                arguments("whatID", new String[]{"42"}, "Message of type whatID doesn't need parameters."),
+                arguments("broadcast", new String[]{null}, "The message cannot be null"),
+                arguments("online", new String[]{"37"}, "Message of type online needs at least 2 parameters."),
+                arguments("online", new String[]{"notAnInt", "Alex"}, "The id has to be an integer"),
+                arguments("games", new String[]{}, "Message of type games needs at least 1 parameter."),
+                arguments("playerJoined", new String[]{"37", "Alex"}, "Message of type playerJoined needs exactly 3 parameters."),
+                arguments("playerJoined", new String[]{"37", "Alex", null}, "The username of the new player has to be a string"),
+                arguments("playerJoined", new String[]{"notAnInt", "Alex", "31"}, "The id and id of the new player have to be integers"),
+                arguments("image", new String[]{"37", null, "base64image"}, "The lobby name has to be a string"),
+                arguments("image", new String[]{"37", "Lobby", null}, "The image has to be a string"),
+                arguments("startDrawing", new String[]{"37", null, "3", "45"}, "The lobby name has to be a string"),
+                arguments("startDrawing", new String[]{"notAnInt", "Lobby", "3", "45"}, "The id, number of rounds and time have to be integers"),
+                arguments("drawingStarts", new String[]{"37", null, "3", "45"}, "The theme has to be a string"),
+                arguments("drawingStarts", new String[]{"notAnInt", "Theme", "3", "45"}, "The id, number of rounds and time have to be integers"),
+                arguments("votingStarts", new String[]{"37", "notAnInt"}, "The id and number of voted rounds have to be integers"),
+                arguments("sendVote", new String[]{"37", null, "3"}, "The lobby name has to be a string"),
+                arguments("sendVote", new String[]{"notAnInt", "Lobby", "3"}, "The id and vote have to be integers"),
+                arguments("updatePoints", new String[]{"37", null, "3.0"}, "The username has to be a string"),
+                arguments("updatePoints", new String[]{"37", "Alex", "notADouble"}, "The id has to be an integer and points a double"),
+                arguments("highscore", new String[]{"42"}, "Message of type highscore needs exactly 2 parameters."),
+                arguments("highscore", new String[]{"42", "notADouble"}, "The id has to be an integer and the highscore a double."),
+                arguments("newHost", new String[]{"35", "Lobby_von_Drikson"}, "Message of type newHost needs exactly 3 parameters."),
+                arguments("newHost", new String[]{"35", null, "37"}, "The lobby name has to be a string"),
+                arguments("newHost", new String[]{"35", "Lobby_von_Drikson", "notAnInt"}, "The id and id of new host have to be an integers."),
+                arguments("newUsername", new String[]{"37", "Drikson"}, "Message of type newUsername needs exactly 3 parameters."),
+                arguments("newUsername", new String[]{"37", null, "Dizzy"}, "The old username has to be a string"),
+                arguments("newUsername", new String[]{"37", "Drikson", null}, "The new username has to be a string"),
+                arguments("newUsername", new String[]{"notAnInt", "Drikson", "Dizzy"}, "The id has to be an integer."),
+                arguments("changeLobbyName", new String[]{"37", "Lobby_von_Alex"}, "Message of type changeLobbyName needs exactly 3 parameters."),
+                arguments("changeLobbyName", new String[]{"37", null, "Lobby_von_Noah"}, "The old lobby name has to be a string"),
+                arguments("changeLobbyName", new String[]{"37", "Lobby_von_Alex", null}, "The new lobby name has to be a string"),
+                arguments("changeLobbyName", new String[]{"notAnInt", "Lobby_von_Alex", "Lobby_von_Noah"}, "The id has to be an integer."),
+
+                // Empty strings and whitespace
+                arguments("chatTo", new String[]{"", "Alex", "Noah", "Hallo"}, "The id has to be an integer"),
+
+                // Malformed numbers
+                arguments("updatePoints", new String[]{"37", "Alex", "3.0abc"}, "The id has to be an integer and points a double"),
+                arguments("updatePoints", new String[]{"37", "Alex", "4..56"}, "The id has to be an integer and points a double"),
+                arguments("highscore", new String[]{"notAnInt", "4.33"}, "The id has to be an integer and the highscore a double."),
+
+
+                // Improperly formatted numbers
+                arguments("drawingStarts", new String[]{"37", "Theme", "3x", "45"}, "The id, number of rounds and time have to be integers"),
+                arguments("sendVote", new String[]{"37", "Lobby", "3a"}, "The id and vote have to be integers"),
+
+                // Null inside a valid parameter list
+                arguments("startDrawing", new String[]{"37", null, "3", "45"}, "The lobby name has to be a string"),
+                arguments("changeLobbyName", new String[]{"37", "Lobby_von_Alex", null}, "The new lobby name has to be a string"),
+
+                // Non-numeric strings where integers are expected
+                arguments("votingStarts", new String[]{"37", "three"}, "The id and number of voted rounds have to be integers")
         );
     }
+
+
+
+
 }
