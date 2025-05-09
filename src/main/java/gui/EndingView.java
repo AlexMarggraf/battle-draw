@@ -10,10 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-
-import static gui.GUIApp.createDevButtons;
 
 
 public class EndingView {
@@ -26,10 +23,13 @@ public class EndingView {
      * Initializes the UI components including action buttons for replay or exit.
      */
     public EndingView() {
-        HBox hboxScene = createDevButtons();
         Button againBtn = createAgainBtn();
         Button leaveBtn = createLeaveBtn();
         Button changeUsername = HomeView.createChangeUsername();
+
+        GUIApp.addClickSound(againBtn);
+        GUIApp.addClickSound(leaveBtn);
+        GUIApp.addClickSound(changeUsername);
 
         view = new VBox(20, new Label("Ending"), leaveBtn, againBtn, changeUsername);
         view.setAlignment(Pos.CENTER);
@@ -65,10 +65,6 @@ public class EndingView {
             GUIApp.showHomeView();
         });
         return btn;
-    }
-
-    public static boolean getAgainEnding() {
-        return again;
     }
 
     public static void setAgainEnding(boolean bool) {

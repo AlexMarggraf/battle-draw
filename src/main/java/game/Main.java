@@ -23,7 +23,6 @@ import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import jdk.jfr.MemoryAddress;
 import message.Message;
 import message.MessageListener;
 import org.apache.logging.log4j.LogManager;
@@ -193,11 +192,11 @@ public class Main {
                     GUIApp.setTime(Integer.parseInt(message.getParams()[3]));
                     game.setMaxNumberOfRounds(Integer.parseInt(message.getParams()[2]));
                     game.setStatus("ongoing");
-                    BewertungView.setVotingHasEndedFalse();
+                    ReviewView.setVotingHasEndedFalse();
                     GUIApp.showGameView();
                 }
                 case "votingStarts" -> {
-                    GUIApp.showBewertungView();
+                    GUIApp.showReviewView();
                     game.plusOneVotedRound();
                 }
                 case "updatePoints" -> {
@@ -206,7 +205,7 @@ public class Main {
                 case "showLeaderboard" -> {
                     game.setStatus("leaderboard");
                     GUIApp.showLeaderboardView();
-                    BewertungView.setVotingHasEndedTrue();
+                    ReviewView.setVotingHasEndedTrue();
                 }
                 case "showEnding" -> {
                     game.setStatus("ended");
@@ -220,14 +219,16 @@ public class Main {
                 }
                 case "image" -> {
                     BufferedImage image = decodeImage(message.getParams()[2]);
-                    BewertungView.setIsOwnPicture(username, message.getParams()[1]);
-                    BewertungView.setImage(image);
-                    BewertungView.setPictureAuthor(message.getParams()[1]);
+                    ReviewView.setIsOwnPicture(username, message.getParams()[1]);
+                    ReviewView.setPictureAuthor(message.getParams()[1]);
+                    ReviewView.setImage(image);
                 }
                 case "highscore" -> {
                     Double myHighscore = Double.parseDouble(message.getParams()[1]);
-                    if (myHighscore < 1) {
+                    if (myHighscore < 0) {
                         print("You have not played a game yet. Let's go!");
+                    } else if (myHighscore == 0) {
+                        print("You played a game alone. You have to play with other players to get a highscore");
                     } else {
                         print(String.format("Your highscore is %.2f", myHighscore));
                     }
@@ -549,7 +550,7 @@ public class Main {
                     Message message;
                     if (splitInput.length == 1) {
                         if (inLobby) {
-                            message = new Message("sendVote", new String[]{serverID + "", lobbyName, BewertungView.getVote() + ""});
+                            message = new Message("sendVote", new String[]{serverID + "", lobbyName, ReviewView.getVote() + ""});
                             clientMessageQueue.add(message.toString());
                         } else {
                             print("You're not in a lobby");

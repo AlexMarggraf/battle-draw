@@ -1,8 +1,24 @@
 package server;
 
+import game.Main;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Handles database operations for player management and theme word retrieval.
@@ -10,6 +26,7 @@ import java.util.List;
  */
 public class DatabaseHelper {
     private static String dbPath = "jdbc:sqlite:database/Thema.db";
+    private static final Logger LOGGER = LogManager.getLogger(DatabaseHelper.class);
 
     private static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(dbPath);
@@ -326,4 +343,73 @@ public class DatabaseHelper {
         return null;
     }
 
+    /**
+     * This method checks whether the database file exist and will create a new one if not.
+     */
+    public static void createDB() {
+        File dbFile = new File("database/Thema.db");
+
+        if (!dbFile.exists()) {
+            String url = "jdbc:sqlite:database/Thema.db";
+
+            File directory = new File("database");
+            boolean createdDir = directory.mkdir();
+
+            if (!createdDir) {
+                LOGGER.error("Couldn't create directory");
+            }
+
+            try (Connection conn = DriverManager.getConnection(url)) {
+                if (conn != null) {
+                    LOGGER.info("Database was created");
+
+                    String createTablePlayers = "CREATE TABLE IF NOT EXISTS Players ("
+                            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + "username TEXT NOT NULL,"
+                            + "password TEXT NOT NULL,"
+                            + "online INTEGER NOT NULL DEFAULT 0,"
+                            + "score INTEGER DEFAULT 0);";
+
+                    String createTableThema = "CREATE TABLE IF NOT EXISTS Thema ("
+                            + "id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                            + "thema TEXT NOT NULL);";
+
+                    String insertThemes = "INSERT INTO THEMA (thema) VALUES (?)";
+
+
+                    try (Statement stmt = conn.createStatement()) {
+                        stmt.execute(createTablePlayers);
+                        stmt.execute(createTableThema);
+                        LOGGER.info("Tables created");
+
+                        try {
+                            InputStream is = DatabaseHelper.class.getClassLoader().getResourceAsStream("themes.txt");
+
+                            String themes = new BufferedReader(new InputStreamReader(is, StandardCharsets.UTF_8))
+                                    .lines()
+                                    .collect(Collectors.joining("\n"));
+
+                            String[] themesArray = Arrays.stream(themes.split(",")).map(String::trim).toArray(String[]::new);
+
+                            PreparedStatement pstmt = conn.prepareStatement(insertThemes);
+
+                            for (String theme : themesArray) {
+                                pstmt.setString(1, theme);
+                                pstmt.addBatch();
+                            }
+
+                            pstmt.executeBatch();
+                        } catch (SQLException e) {
+                            LOGGER.error("Couldn't read themes.txt");
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } catch (SQLException e) {
+                LOGGER.error("Database creation failed: {}", e.getMessage());
+            }
+        } else {
+            LOGGER.info("Database already exists");
+        }
+    }
 }

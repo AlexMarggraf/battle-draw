@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
 
 
 public class LeaderboardView {
-
     private final VBox view;
     private static final VBox vboxLeaderboard = new VBox(10);
     private static boolean ready = false;
@@ -33,9 +32,14 @@ public class LeaderboardView {
      */
     public LeaderboardView() {
         setReadyFalse();
+        updateLeaderboard();
+
         Button rdy = createRdyBtn();
         Button changeUsername = HomeView.createChangeUsername();
-        updateLeaderboard();
+
+        GUIApp.addClickSound(rdy);
+        GUIApp.addClickSound(changeUsername);
+
         vboxLeaderboard.setAlignment(Pos.CENTER);
 
         view = new VBox(30, new Label("Leaderboard"), vboxLeaderboard, changeUsername);
@@ -102,7 +106,6 @@ public class LeaderboardView {
         }
     }
 
-
     /**
      * Creates and configures the ready button for proceeding to the next round.
      * When pressed, sets the ready status to true indicating the player is prepared to continue.
@@ -117,10 +120,6 @@ public class LeaderboardView {
 
         });
         return btn;
-    }
-
-    public static boolean getReady() {
-        return ready;
     }
 
     public static void setReadyFalse() {

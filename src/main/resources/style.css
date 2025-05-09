@@ -140,6 +140,10 @@ Label {
     -fx-background-color: #d78b2b;
 }
 
+.color-picker .label {
+    -fx-font-size: 14px;
+}
+
 .text-field {
     -fx-background-color: white;
     -fx-border-color: #d78b2b;
@@ -174,9 +178,4 @@ Label {
     -fx-border-width: 1;
     -fx-text-fill: black;
 }
-
-
-
-
-
 

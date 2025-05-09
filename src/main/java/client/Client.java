@@ -47,7 +47,7 @@ public class Client implements Runnable {
         serverID = -1;
     }
 
-    private static final Logger LOGGER = LogManager.getLogger(Main.class);
+    private static final Logger LOGGER = LogManager.getLogger(Client.class);
 
     /**
      * This method causes the client to disconnect.
