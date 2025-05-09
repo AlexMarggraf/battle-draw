@@ -74,7 +74,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft", "rejectLobby" -> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft", "rejectLobby", "hasDisconnected" -> {
                 if (params.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if(params[1] == null) {
@@ -102,7 +102,7 @@ public class Message {
                     }
                 }
             }
-            case "listLobbyPlayers", "joinLobby", "lobbyJoined", "startVoting", "readyToVote", "nextRound", "changeHost" -> {
+            case "listLobbyPlayers", "joinLobby", "lobbyJoined", "startVoting", "readyToVote", "nextRound", "changeHost", "lobbyStatusOpen" -> {
                 if (params.length != 2) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (params[1] == null) {
@@ -441,7 +441,7 @@ public class Message {
                     }
                 }
             }
-            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft", "rejectLobby" -> {
+            case "changeUsername", "username", "acceptLogin", "rejectLogin", "acceptSignup", "leaveLobby", "lobbyLeft", "rejectLobby", "hasDisconnected" -> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {
@@ -536,7 +536,7 @@ public class Message {
                     }
                 }
             }
-            case "joinLobby", "lobbyJoined", "listLobbyPlayers", "startVoting", "readyToVote", "nextRound", "changeHost" -> {
+            case "joinLobby", "lobbyJoined", "listLobbyPlayers", "startVoting", "readyToVote", "nextRound", "changeHost", "lobbyStatusOpen" -> {
                 if (content.length != 3) {
                     throw new IllegalArgumentException("Message of type " + type + " needs exactly 2 parameters.");
                 } else if (content[2] == null) {

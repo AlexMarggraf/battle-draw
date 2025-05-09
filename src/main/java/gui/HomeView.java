@@ -101,7 +101,7 @@ public class HomeView {
                 GUIApp.playClickSound();
                 String username = usernameField.getText().trim();
                 if (!username.isEmpty()) {
-                    GUIApp.addClickedInput("/joinLobby Lobby_von_" + username);
+                    GUIApp.addClickedInput("/joinLobby Lobby_of_" + username);
                     popup.close();
                 } else {
                     print("Username cannot be empty");
@@ -158,7 +158,6 @@ public class HomeView {
 
             Button confirmButton = new Button("Confirm");
             confirmButton.setOnAction(e -> {
-                GUIApp.playClickSound();
                 String username = usernameField.getText().trim();
                 if (!username.isEmpty()) {
                     GUIApp.addClickedInput("/nick " + username);

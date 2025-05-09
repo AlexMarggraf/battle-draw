@@ -161,7 +161,7 @@ public class GUIApp extends Application {
      */
     static HBox createDevButtons() {
         Button gameButton = GUIApp.createGameButton();
-        Button bewertungButton = GUIApp.createBewertungButton();
+        Button bewertungButton = GUIApp.createReviewButton();
         Button homeButton = GUIApp.createHomeButton();
         Button loSiButton = GUIApp.createLoSiButton();
         Button lobbyBtn = GUIApp.createLobbyButton();
@@ -237,7 +237,7 @@ public class GUIApp extends Application {
     }
 
     // BewertungView Methoden
-    public static void showBewertungView() {
+    public static void showReviewView() {
         ReviewView.resetVote();
         Platform.runLater(() -> {
             try {
@@ -297,9 +297,9 @@ public class GUIApp extends Application {
         return button;
     }
 
-    static Button createBewertungButton() {
+    static Button createReviewButton() {
         Button button = new Button("Bewertung");
-        button.setOnAction(e -> GUIApp.showBewertungView());
+        button.setOnAction(e -> GUIApp.showReviewView());
         return button;
     }
 
