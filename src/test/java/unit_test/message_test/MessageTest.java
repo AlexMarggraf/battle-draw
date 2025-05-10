@@ -157,7 +157,15 @@ class MessageTest {
                 arguments("startDrawing 45 Lobby_of_Noah 3 45", "startDrawing", new String[]{"45", "Lobby_of_Noah", "3", "45"}, "startDrawing 45 Lobby_of_Noah 3 45"),
                 arguments("startVoting 27 Lobby_of_Noah", "startVoting", new String[]{"27", "Lobby_of_Noah"}, "startVoting 27 Lobby_of_Noah"),
                 arguments("readyToVote 27 Lobby_of_Alex", "readyToVote", new String[]{"27", "Lobby_of_Alex"}, "readyToVote 27 Lobby_of_Alex"),
-                arguments("nextRound 42 Lobby_of_Alex", "nextRound", new String[]{"42", "Lobby_of_Alex"}, "nextRound 42 Lobby_of_Alex")
+                arguments("nextRound 42 Lobby_of_Alex", "nextRound", new String[]{"42", "Lobby_of_Alex"}, "nextRound 42 Lobby_of_Alex"),
+                arguments("highscore 1 99.5", "highscore", new String[]{"1", "99.5"}, "highscore 1 99.5"),
+                arguments("highscore 42 0.0", "highscore", new String[]{"42", "0.0"}, "highscore 42 0.0"),
+                arguments("newHost 1 LobbyName 3", "newHost", new String[]{"1", "LobbyName", "3"}, "newHost 1 LobbyName 3"),
+                arguments("newHost 100 TestLobby 200", "newHost", new String[]{"100", "TestLobby", "200"}, "newHost 100 TestLobby 200"),
+                arguments("newUsername 1 oldName newName", "newUsername", new String[]{"1", "oldName", "newName"}, "newUsername 1 oldName newName"),
+                arguments("newUsername 42 Alice Bob", "newUsername", new String[]{"42", "Alice", "Bob"}, "newUsername 42 Alice Bob"),
+                arguments("changeLobbyName 1 OldLobby NewLobby", "changeLobbyName", new String[]{"1", "OldLobby", "NewLobby"}, "changeLobbyName 1 OldLobby NewLobby"),
+                arguments("changeLobbyName 42 GameRoom MainRoom", "changeLobbyName", new String[]{"42", "GameRoom", "MainRoom"}, "changeLobbyName 42 GameRoom MainRoom")
         );
     }
 

@@ -175,4 +175,36 @@ class ServerThreadTest {
         assertNotNull(response);
         assertTrue(response.startsWith("pong"));
     }
+
+    @Test
+    void testReceiveMessage_Disconnect() {
+        DummyListener listener = new DummyListener("disconnect -1");
+        serverThread.receiveMessage(listener);
+
+        assertTrue(serverThread.disconnect, "The server thread should set the disconnect flag.");
+
+        String response = serverThread.getClientMessageQueue().poll();
+        assertNotNull(response, "There should be a disconnect message queued.");
+        assertTrue(response.startsWith("disconnect 1"), "The disconnect message should contain the client ID.");
+    }
+
+    @Test
+    void testReceiveMessage_WhatID() {
+        DummyListener listener = new DummyListener("whatID");
+        serverThread.receiveMessage(listener);
+
+        String response = serverThread.getServerMessageQueue().poll();
+        assertNotNull(response, "Expected an ID response message.");
+        assertTrue(response.startsWith("id 1"), "The ID response should contain the correct client ID.");
+    }
+
+    @Test
+    void testReceiveMessage_Pong() {
+        serverThread.receivedPong = false;
+
+        DummyListener listener = new DummyListener("pong 1");
+        serverThread.receiveMessage(listener);
+
+        assertTrue(serverThread.receivedPong, "Receiving a pong message should set the receivedPong flag to true.");
+    }
 }
