@@ -153,12 +153,18 @@ class LobbyTest {
         assertEquals("base64image", lobby.getImageOfPlayer());
     }
 
+    /**
+     * Tests that a player can be added to the leaderboard with a specific score.
+     */
     @Test
     public void testAddToLeaderboard() {
         lobby.addToLeaderboard("Player1", 5.0);
         assertEquals(5.0, lobby.getPointsOfAPlayer("Player1"));
     }
 
+    /**
+     * Tests that points can be correctly added to the leaderboard using a lambda expression.
+     */
     @Test
     public void testAddPointsToLeaderboardLambda() {
         lobby.initialiseLeaderboard();
@@ -168,6 +174,9 @@ class LobbyTest {
         assertTrue(points >= 0.0 && points <= 5.0);
     }
 
+    /**
+     * Tests that a player can be removed from the leaderboard.
+     */
     @Test
     public void testRemoveFromLeaderboard() {
         lobby.addToLeaderboard("Player1", 10.0);
@@ -175,6 +184,9 @@ class LobbyTest {
         assertNull(lobby.getPointsOfAPlayer("Player1"));
     }
 
+    /**
+     * Tests that the lobby name can be updated to a new value.
+     */
     @Test
     public void testSetLobbyName() {
         lobby.setLobbyName("NewLobby");

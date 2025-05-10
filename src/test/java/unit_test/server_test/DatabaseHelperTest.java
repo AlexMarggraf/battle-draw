@@ -3,8 +3,6 @@ package unit_test.server_test;
 import org.junit.jupiter.api.*;
 import server.DatabaseHelper;
 
-import java.io.File;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.List;
 
@@ -187,6 +185,9 @@ public class DatabaseHelperTest {
         assertTrue(list.isEmpty());
     }
 
+    /**
+     * Tests that the highscore of a player can be retrieved and updated in the database.
+     */
     @Test
     void testGetHighscore() {
         int id = DatabaseHelper.getPlayerId("testuser");

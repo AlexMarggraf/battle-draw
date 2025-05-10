@@ -173,13 +173,15 @@ class MessageTest {
     @MethodSource("invalidMessageInputs")
     @DisplayName("Message constructor – invalid and edge case input handling")
     void testMessageExceptions(String type, String[] params, String expectedMessage) {
-        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> {
-            new Message(type, params);
-        });
+        IllegalArgumentException exception = assertThrows(IllegalArgumentException.class, () -> new Message(type, params));
         assertEquals(expectedMessage, exception.getMessage());
     }
 
-
+    /**
+     * Provides a stream of invalid or edge case inputs message strings and their expected components.
+     *
+     * @return a stream of test arguments for full message parsing
+     */
     static Stream<org.junit.jupiter.params.provider.Arguments> invalidMessageInputs() {
         return Stream.of(
                 arguments("chatTo", new String[]{"37", null, "Noah", "Hallo"}, "The sender username has to be a string"),

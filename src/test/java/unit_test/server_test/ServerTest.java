@@ -1,6 +1,5 @@
 package unit_test.server_test;
 
-import game.Game;
 import message.Message;
 import game.Lobby;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,12 +7,6 @@ import org.junit.jupiter.api.Test;
 import server.DatabaseHelper;
 import server.Server;
 import server.ServerThread;
-
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -45,7 +38,6 @@ class ServerTest {
     static class DummyServerThread extends ServerThread {
         public Queue<String> clientQueue = new java.util.LinkedList<>();
         public Queue<String> serverQueue = new java.util.LinkedList<>();
-        private String username;
 
         /**
          * Constructs a dummy server thread with a mock ID.
@@ -54,7 +46,6 @@ class ServerTest {
          */
         public DummyServerThread(int id) {
             super(id, null);
-            this.username = "User" + id;
         }
 
         /**
@@ -69,7 +60,6 @@ class ServerTest {
 
         @Override
         public void setClientUsername(String username) {
-            this.username = username;
         }
 
         /**
@@ -158,6 +148,9 @@ class ServerTest {
         assertEquals(message.toString(), sendQueue.poll());
     }
 
+    /**
+     * Tests that the server correctly handles a "chatAll" message.
+     */
     @Test
     void testHandleReceiveMessage_chatAll() {
         server.getReceiveMessageQueue().add("chatAll 0 User1 Hello everyone");
@@ -169,6 +162,9 @@ class ServerTest {
         assertEquals("chatAll 0 User1 Hello everyone", response);
     }
 
+    /**
+     * Tests that the server correctly handles a "chatLobby" message.
+     */
     @Test
     void testHandleReceiveMessage_chatLobby() {
         server.getReceiveMessageQueue().add("chatLobby 0 User1 Lobby1 Hi Lobby");
@@ -180,6 +176,9 @@ class ServerTest {
         assertEquals("chatLobby 0 User1 Lobby1 Hi Lobby", response);
     }
 
+    /**
+     * Tests that the server handles self-message in a "chatTo" request.
+     */
     @Test
     void testHandleReceiveMessage_chatTo_SelfMessage() {
         server.getReceiveMessageQueue().add("chatTo 0 User1 User1 Hey");
@@ -191,6 +190,9 @@ class ServerTest {
         assertTrue(response.contains("You can't whisper yourself"));
     }
 
+    /**
+     * Tests that the server handles a "chatTo" message when the recipient is not online.
+     */
     @Test
     void testHandleReceiveMessage_chatTo_UserNotOnline() {
         FakeDatabaseHelper.setupLogin("User2", "password", false);
@@ -203,6 +205,9 @@ class ServerTest {
         assertTrue(response.contains("isn't online or doesn't exist"));
     }
 
+    /**
+     * Tests that the server correctly handles a "chatAll" message by adding it to the send queue.
+     */
     @Test
     void testHandleReceiveMessage_chatAllMessageAddsToSendQueue() {
         server.getReceiveMessageQueue().add("chatAll 1 Alice Hello everyone");
@@ -214,6 +219,9 @@ class ServerTest {
         assertEquals("chatAll 1 Alice Hello everyone", response);
     }
 
+    /**
+     * Tests that the server correctly handles a "chatLobby" message by adding it to the send queue.
+     */
     @Test
     void testHandleReceiveMessage_chatLobbyMessage() {
         server.getReceiveMessageQueue().add("chatLobby 2 Bob Hello Lobby");
@@ -225,6 +233,9 @@ class ServerTest {
         assertEquals("chatLobby 2 Bob Hello Lobby", response);
     }
 
+    /**
+     * Tests that the server correctly handles a failed login attempt.
+     */
     @Test
     void testHandleReceiveMessage_logInFailure() {
         Server server = new Server();
@@ -239,6 +250,9 @@ class ServerTest {
         assertTrue(response.contains("Alice"));
     }
 
+    /**
+     * Tests that the server correctly handles a new user sign-up.
+     */
     @Test
     void testHandleReceiveMessage_signUp_NewUser() {
         server.getReceiveMessageQueue().add("signUp 0 User3 password");
@@ -251,6 +265,9 @@ class ServerTest {
         assertTrue(response.contains("User3"));
     }
 
+    /**
+     * Tests that the server correctly handles a "whoOnline" message.
+     */
     @Test
     void testHandleReceiveMessage_whoOnline() {
         DatabaseHelper.insertPlayer("TestUsername1", "password1");
@@ -281,6 +298,9 @@ class ServerTest {
         DatabaseHelper.setStatus(clientId2, 0);
     }
 
+    /**
+     * Tests that the server correctly handles lobby creation, join, and leave operations.
+     */
     @Test
     void testHandleReceiveMessage_createJoinAndLeaveLobby() {
         String lobbyName = "Lobby_of_TestUsername1";
@@ -347,6 +367,9 @@ class ServerTest {
         DatabaseHelper.setStatus(clientId2, 0);
     }
 
+    /**
+     * Tests that the server correctly handles player disconnection.
+     */
     @Test
     void testHandleReceiveMessage_disconnect() {
         String playerName1 = "TestUsername1";
@@ -420,6 +443,9 @@ class ServerTest {
         assertTrue(st1.serverQueue.isEmpty());
     }
 
+    /**
+     * Tests that the server correctly handles sending a "chatAll" message to the correct thread.
+     */
     @Test
     void testHandleSendMessage_chatAll() {
         DummyServerThread sender = new DummyServerThread(1);
@@ -434,6 +460,9 @@ class ServerTest {
         assertNull(sender.serverQueue.poll());
     }
 
+    /**
+     * Tests that the server correctly handles sending a "chatLobby" message to all players in the lobby.
+     */
     @Test
     void testHandleSendMessage_chatLobby() {
         Lobby lobby = new Lobby("Lobby1");
@@ -453,6 +482,9 @@ class ServerTest {
         assertNull(sender.serverQueue.poll());
     }
 
+    /**
+     * Tests that the server correctly handles sending a "broadcast" message to all threads.
+     */
     @Test
     void testHandleSendMessage_broadcast() {
         DummyServerThread client1 = new DummyServerThread(1);
@@ -485,8 +517,20 @@ class ServerTest {
     }
 }
 
+/**
+ * Simulates database interactions for testing login operations.
+ */
 class FakeDatabaseHelper {
+
     private static Map<String, String> users = new HashMap<>();
+
+    /**
+     * Sets up a simulated login with a given username and password.
+     *
+     * @param username the username to set up
+     * @param password the password associated with the username
+     * @param success  whether the login should succeed or fail
+     */
     static void setupLogin(String username, String password, boolean success) {
         if (success) {
             users.put(username, password);

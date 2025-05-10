@@ -114,6 +114,9 @@ class GameTest {
         assertEquals(0, game.getNumberOfRoundsVoted());
     }
 
+    /**
+     * Tests that the next round method correctly increments the round number after resetting.
+     */
     @Test
     public void testNextRound() {
         game.resetRoundNumber();
@@ -121,12 +124,18 @@ class GameTest {
         assertEquals(1, game.getRoundNumber());
     }
 
+    /**
+     * Tests that the timer can be set to a specific value.
+     */
     @Test
     public void testSetTimer() {
         game.setTimer(30);
         assertEquals(30, game.getTimer());
     }
 
+    /**
+     * Tests that the lobby name can be updated to a new value.
+     */
     @Test
     public void testSetLobbyName() {
         game.setLobbyName("NewLobby");
