@@ -1,5 +1,6 @@
 package unit_test.server_test;
 
+import game.Game;
 import message.Message;
 import game.Lobby;
 import org.junit.jupiter.api.BeforeEach;
@@ -8,10 +9,12 @@ import server.DatabaseHelper;
 import server.Server;
 import server.ServerThread;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.Queue;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -250,11 +253,11 @@ class ServerTest {
 
     @Test
     void testHandleReceiveMessage_whoOnline() {
-        DatabaseHelper.insertPlayer("Alice", "password1");
-        DatabaseHelper.insertPlayer("Bob", "password2");
+        DatabaseHelper.insertPlayer("TestUsername1", "password1");
+        DatabaseHelper.insertPlayer("TestUsername2", "password2");
 
-        int clientId1 = DatabaseHelper.getPlayerId("Alice");
-        int clientId2 = DatabaseHelper.getPlayerId("Bob");
+        int clientId1 = DatabaseHelper.getPlayerId("TestUsername1");
+        int clientId2 = DatabaseHelper.getPlayerId("TestUsername2");
 
         DatabaseHelper.setStatus(clientId1, 1);
         DatabaseHelper.setStatus(clientId2, 1);
@@ -271,21 +274,21 @@ class ServerTest {
         String response = server.getSendMessageQueue().poll();
         assertNotNull(response);
         assertTrue(response.startsWith("online 0"));
-        assertTrue(response.contains("Alice"));
-        assertTrue(response.contains("Bob"));
+        assertTrue(response.contains("TestUsername1"));
+        assertTrue(response.contains("TestUsername2"));
 
         DatabaseHelper.setStatus(clientId1, 0);
         DatabaseHelper.setStatus(clientId2, 0);
     }
 
     @Test
-    void testHandleReceiveMessage_createAndJoinLobby() {
-        String lobbyName = "Lobby_of_Alice";
-        DatabaseHelper.insertPlayer("Alice", "password1");
-        DatabaseHelper.insertPlayer("Bob", "password2");
+    void testHandleReceiveMessage_createJoinAndLeaveLobby() {
+        String lobbyName = "Lobby_of_TestUsername1";
+        DatabaseHelper.insertPlayer("TestUsername1", "password1");
+        DatabaseHelper.insertPlayer("TestUsername2", "password2");
 
-        int clientId1 = DatabaseHelper.getPlayerId("Alice");
-        int clientId2 = DatabaseHelper.getPlayerId("Bob");
+        int clientId1 = DatabaseHelper.getPlayerId("TestUsername1");
+        int clientId2 = DatabaseHelper.getPlayerId("TestUsername2");
 
         DatabaseHelper.setStatus(clientId1, 1);
         DatabaseHelper.setStatus(clientId2, 1);
@@ -301,7 +304,7 @@ class ServerTest {
         Optional<Lobby> createdLobby = server.getLobbyList().stream()
                 .filter(lobby -> lobby.getLobbyName().equals(lobbyName))
                 .findFirst();
-        assertTrue(createdLobby.isPresent(), "Lobby should be created and present in the lobby list");
+        assertTrue(createdLobby.isPresent());
 
         String response1 = server.getSendMessageQueue().poll();
         String response2 = server.getSendMessageQueue().poll();
@@ -315,19 +318,86 @@ class ServerTest {
         assertTrue(response1.contains(lobbyName));
 
         assertTrue(response2.startsWith("playerJoined " + clientId1));
-        assertTrue(response2.contains("Alice"));
+        assertTrue(response2.contains("TestUsername1"));
 
         assertTrue(response3.startsWith("playerJoined " + clientId1));
-        assertTrue(response3.contains("Bob"));
+        assertTrue(response3.contains("TestUsername2"));
         assertTrue(response3.contains(String.valueOf(clientId2)));
+
+        String leaveMessage = "leaveLobby " + clientId2 + " " + lobbyName;
+        server.getReceiveMessageQueue().add(leaveMessage);
+        server.handleReceiveMessage();
+
+        String response4 = server.getSendMessageQueue().poll();
+        assertNotNull(response4);
+        assertTrue(response4.startsWith("playerJoined " + clientId2));
+        assertTrue(response4.contains("TestUsername2"));
+        assertTrue(response4.contains(String.valueOf(clientId2)));
+
+        Optional<Lobby> updatedLobby = server.getLobbyList().stream()
+                .filter(lobby -> lobby.getLobbyName().equals(lobbyName))
+                .findFirst();
+        assertTrue(updatedLobby.isPresent());
+
+        Integer[] remainingPlayers = updatedLobby.get().getPlayers();
+        assertFalse(Arrays.asList(remainingPlayers).contains(clientId2));
+        assertTrue(Arrays.asList(remainingPlayers).contains(clientId1));
 
         DatabaseHelper.setStatus(clientId1, 0);
         DatabaseHelper.setStatus(clientId2, 0);
     }
 
+    @Test
+    void testHandleReceiveMessage_disconnect() {
+        String playerName1 = "TestUsername1";
+        String playerName2 = "TestUsername2";
+        String lobbyName = "Lobby_of_TestUsername1";
 
+        DatabaseHelper.insertPlayer(playerName1, "password1");
+        DatabaseHelper.insertPlayer(playerName2, "password2");
+        int clientId1 = DatabaseHelper.getPlayerId(playerName1);
+        int clientId2 = DatabaseHelper.getPlayerId(playerName2);
 
+        DatabaseHelper.setStatus(clientId1, 1);
+        DatabaseHelper.setStatus(clientId2, 1);
 
+        String createLobbyMessage = "createLobby " + clientId1;
+        server.getReceiveMessageQueue().add(createLobbyMessage);
+        server.handleReceiveMessage();
+
+        String joinLobbyMessage = "joinLobby " + clientId2 + " " + lobbyName;
+        server.getReceiveMessageQueue().add(joinLobbyMessage);
+        server.handleReceiveMessage();
+
+        String disconnectMessage = "disconnect " + clientId1;
+        server.getReceiveMessageQueue().add(disconnectMessage);
+        server.handleReceiveMessage();
+
+        List<String> allMessages = new ArrayList<>();
+        String msg;
+        while ((msg = server.getSendMessageQueue().poll()) != null) {
+            System.out.println("Captured message: " + msg);
+            allMessages.add(msg);
+        }
+
+        String expectedMessage = "broadcast User " + playerName1 + " disconnected";
+        boolean messageFound = allMessages.stream().anyMatch(m -> m.contains(expectedMessage));
+
+        assertTrue(messageFound, "A message indicating disconnection should be sent.");
+
+        Optional<Lobby> updatedLobby = server.getLobbyList().stream()
+                .filter(lobby -> lobby.getLobbyName().equals("Lobby_of_TestUsername2"))
+                .findFirst();
+        assertTrue(updatedLobby.isPresent(), "The lobby should still exist after host disconnect.");
+        assertEquals("Lobby_of_TestUsername2", updatedLobby.get().getLobbyName(), "The lobby name should be updated to the new host.");
+
+        Integer[] remainingPlayers = updatedLobby.get().getPlayers();
+        assertTrue(Arrays.asList(remainingPlayers).contains(clientId2), "The remaining player should still be in the lobby.");
+        assertFalse(Arrays.asList(remainingPlayers).contains(clientId1), "The disconnected player should be removed from the lobby.");
+
+        DatabaseHelper.setStatus(clientId1, 0);
+        DatabaseHelper.setStatus(clientId2, 0);
+    }
 
     /**
      * Tests that {@link Server#handleSendMessage()} sends the message to all other threads
@@ -417,9 +487,6 @@ class ServerTest {
 
 class FakeDatabaseHelper {
     private static Map<String, String> users = new HashMap<>();
-    private static Map<Integer, String> playerNames = new HashMap<>();
-    private static Map<Integer, Boolean> playerStatus = new HashMap<>();
-
     static void setupLogin(String username, String password, boolean success) {
         if (success) {
             users.put(username, password);
@@ -427,21 +494,6 @@ class FakeDatabaseHelper {
             users.put(username, "invalid");
         }
     }
-
-    static void setPlayerName(int id, String name) {
-        playerNames.put(id, name);
-    }
-
-    static void setStatus(int id, boolean status) {
-        playerStatus.put(id, status);
-    }
-
-    static String getPlayerName(int id) {
-        return playerNames.getOrDefault(id, "Unknown");
-    }
-
-    static boolean getStatus(int id) {
-        return playerStatus.getOrDefault(id, false);
-    }
 }
+
 
