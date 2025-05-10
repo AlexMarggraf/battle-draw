@@ -158,6 +158,7 @@ public class ReviewView {
             starButtons[index] = voteBtn;
 
             voteBtn.setOnAction(e -> {
+                GUIApp.playClickSound();
                 vote = value;
 
 
@@ -166,7 +167,6 @@ public class ReviewView {
                 }
                 voteBtn.getStyleClass().add("selected-star");
             });
-            GUIApp.addClickSound(voteBtn);
             voteButtons.getChildren().add(voteBtn);
         }
 

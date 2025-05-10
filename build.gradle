@@ -19,9 +19,9 @@ spotbugs {
     effort = Effort.DEFAULT
 
     def classLoader = plugins['com.github.spotbugs'].class.classLoader
-    def SpotBugsTask = classLoader.findLoadedClass( 'com.github.spotbugs.snom.SpotBugsTask' )
-    def SpotBugsEffort = classLoader.findLoadedClass( 'com.github.spotbugs.snom.Effort' )
-    def SpotBugsConfidence = classLoader.findLoadedClass( 'com.github.spotbugs.snom.Confidence' )
+    def SpotBugsTask = classLoader.findLoadedClass('com.github.spotbugs.snom.SpotBugsTask')
+    def SpotBugsEffort = classLoader.findLoadedClass('com.github.spotbugs.snom.Effort')
+    def SpotBugsConfidence = classLoader.findLoadedClass('com.github.spotbugs.snom.Confidence')
 
     reportLevel = SpotBugsConfidence.DEFAULT
 }
@@ -56,6 +56,7 @@ dependencies {
     implementation 'org.openjfx:javafx-graphics:21'
     implementation 'org.openjfx:javafx-swing:21'
     implementation "org.openjfx:javafx-media:21.0.2"
+    implementation 'io.github.typhon0:AnimateFX:1.2.1'
     implementation 'org.xerial:sqlite-jdbc:3.49.1.0'
 
     testImplementation("org.junit.jupiter:junit-jupiter:5.10.0")
