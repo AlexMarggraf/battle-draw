@@ -187,7 +187,7 @@ public class ReviewView {
      */
 
     public TextField createCountdown() {
-        int initialTime = 15;
+        int initialTime = 10;
         TextField countdownField = new TextField(String.valueOf(initialTime));
         countdownField.setEditable(false);
 

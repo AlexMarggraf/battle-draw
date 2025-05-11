@@ -106,7 +106,6 @@ public class Main {
                 case "rejectLogin" -> {
                     LoginSignupView.setErrorText("Username or password is wrong");
                     GUIApp.showLoginSignupView();
-                    //signInLogIn();
                 }
                 case "broadcast" -> {
                     print("(Broadcast) " + message.getParams()[0]);
@@ -168,7 +167,7 @@ public class Main {
                         messageType = "chatAll";
                         GUIApp.clearPlayers();
                         GUIApp.setLobbyLeader(false);
-                        print("You left the Lobby"); //: " + message.getParams()[1]);
+                        print("You left the Lobby");
                     } else {
                         GUIApp.removePlayer(message.getParams()[1]);
                         print(message.getParams()[1] + " has left the lobby");
@@ -543,7 +542,6 @@ public class Main {
                     Message message;
                     if (splitInput.length == 1) {
                         if (inLobby) {
-                            //print("This will start the game");
                             message = new Message("startDrawing", new String[]{serverID + "", lobbyName, LobbyView.getRounds() + "", LobbyView.getTimer() + ""});
                             clientMessageQueue.add(message.toString());
                         } else {
@@ -601,7 +599,6 @@ public class Main {
                         if (inLobby) {
                             message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
-                            //print("You are ready to vote");
                         } else {
                             print("You're not in a lobby");
                         }
@@ -906,7 +903,6 @@ public class Main {
 
             main.setChatGui();
             main.initClient(args2[0], Integer.parseInt(args2[1]));
-            //main.signInLogIn();
 
             MessageListener msgListener = new MessageListener(System.in);
             Thread msgListenerThread = new Thread(msgListener);
