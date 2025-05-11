@@ -1,4 +1,4 @@
-# Netzwerkprotokoll (Stand 05.05.2)
+# Netzwerkprotokoll (Stand 11.05.2025)
 Das folgende Dokument gibt eine Übersicht über jeden schon implementierten Netzwerkbefehl und wird für jeden neuen Befehl aktualisiert. Befehle haben die Struktur:
 
 ```

@@ -444,7 +444,20 @@ public class Server {
                 case "sendVote" -> {
                     for (Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
-                            lobby.addToVotesOfARound(Integer.parseInt(message.getParams()[2]));
+                            if (!message.getParams()[2].equals(10 + "")) {
+                                lobby.addToVotesOfARound(Integer.parseInt(message.getParams()[2]));
+                            } else {
+                                String username = DatabaseHelper.getPlayerName(message.getID());
+                                Double points = lobby.getPointsOfAPlayer(username);
+                                Double newPoints  = points + 1;
+                                if (newPoints >= 5) {
+                                    newPoints = 1.0;
+                                }
+                                lobby.removeFromLeaderboard(username);
+                                lobby.addToLeaderboard(username, newPoints);
+                                Message broadcast = new Message("broadcast User " + username + " has just cheated. Please act appropriate in the next voting round.");
+                                sendMessageQueue.add(broadcast.toString());
+                            }
                         }
                     }
                 }

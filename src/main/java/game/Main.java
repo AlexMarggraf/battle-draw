@@ -136,12 +136,12 @@ public class Main {
                         print(game);
                     }
 
-                    if(message.getParams().length == 1) {
+                    if (message.getParams().length == 1) {
                         print("No active games");
                     }
                 }
                 case "lobbyPlayers" -> {
-                    if(GUIApp.getPlayers().isEmpty()){
+                    if (GUIApp.getPlayers().isEmpty()){
                         for (int i = 1; i < message.getParams().length; i++) {
                             GUIApp.addPlayer(message.getParams()[i], 0.0);
                             game.plusOnePlayer();
@@ -320,6 +320,27 @@ public class Main {
                             message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
                         } else {
                             message = new Message(messageType, new String[]{serverID + "", username, lobbyName, clientMessage});
+                        }
+                    }
+                    clientMessageQueue.add(message.toString());
+                }
+                case "/giveUsThe2Points" -> {
+                    Message message;
+                    if (splitClientMessage.length == 1) {
+                        if (inLobby && game.getStatus().equals("ongoing")) {
+                            message = new Message("sendVote", new String[]{serverID + "", lobbyName, 10 + ""});
+                        } else {
+                            if (messageType.equals("chatAll")) {
+                                message = new Message(messageType, new String[]{serverID + "", username, "I tried to cheat but have no idea how it works."});
+                            } else {
+                                message = new Message(messageType, new String[]{serverID + "", username, lobbyName, "I tried to cheat but have no idea how it works."});
+                            }
+                        }
+                    } else {
+                        if (messageType.equals("chatAll")) {
+                            message = new Message(messageType, new String[]{serverID + "", username, clientMessage});
+                        } else {
+                            message = new Message(messageType, new String[]{serverID + "", username, lobbyName, "I tried to cheat, but couldn't figure out the right command. Please give me 1 star in the next voting round."});
                         }
                     }
                     clientMessageQueue.add(message.toString());
@@ -577,7 +598,7 @@ public class Main {
                 case "/readyToVote" -> {
                     Message message;
                     if (splitInput.length == 1) {
-                        if(inLobby) {
+                        if (inLobby) {
                             message = new Message("readyToVote", new String[]{serverID + "", lobbyName});
                             clientMessageQueue.add(message.toString());
                             //print("You are ready to vote");
