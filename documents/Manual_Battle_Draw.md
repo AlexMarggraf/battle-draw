@@ -1,46 +1,50 @@
+![Battle Draw Logo](logo/logo.png)
+
+
 # Manual Battle Draw
+### How to start a game:
 
-## 🔧 Technische Voraussetzungen
+To start a game, you must do the following things:
 
-Da aktuell noch keine ausführbare Datei vorhanden ist, wird zur Ausführung des Spiels eine Entwicklungsumgebung (IDE) mit Java-Unterstützung benötigt – zum Beispiel **IntelliJ IDEA** oder **Visual Studio Code**.
+- If not yet done, install Java (17 or newer)
+- Start a server
+- Start clients (in the same network as the server)
+- Join lobbies
+### Steps to Run:
 
-Das Spiel verfügt bereits über eine grafische Benutzeroberfläche, weshalb die meisten Befehle durch Buttons ersetzt wurden und bequem per Klick ausführbar sind.
-
-### Schritte zur Ausführung:
-
-1. Öffne ein Terminal oder die Eingabeaufforderung.
-2. Navigiere zum Projektverzeichnis.
-3. Erstelle die JAR-Datei mit Gradle:
+1. Open a terminal or command prompt.
+2. Navigate to the project directory.
+3. Build the JAR file with Gradle:
 
    ```bash
    ./gradlew build
    ```
 
-4. Wechsle in das Verzeichnis `build/libs`:
+4. Change to the `build/libs` directory:
 
    ```bash
    cd build/libs
    ```
 
-5. Starte den Server (einmalig):
+5. Start the server (once):
 
    ```bash
    java -jar Battle_Draw-v1.jar server <port>
    ```
 
-   **Beispiel:**
+   **Example:**
 
    ```bash
    java -jar Battle_Draw-v1.jar server 8989
    ```
 
-6. Starte eine neue Spielerinstanz:
+6. Start a new player instance:
 
    ```bash
    java -jar Battle_Draw-v1.jar client <ip>:<port> [username]
    ```
 
-   **Beispiel:**
+   **Example:**
 
    ```bash
    java -jar Battle_Draw-v1.jar client localhost:8989 Username
@@ -50,55 +54,65 @@ Das Spiel verfügt bereits über eine grafische Benutzeroberfläche, weshalb die
 
 ## 👤 Account
 
-Nachdem du dich erfolgreich mit einem Benutzernamen mit dem Server verbunden hast, erscheint ein Fenster.
+After successfully connecting to the server with a username, a window will appear.
 
-- Der Server fragt, ob du diesen Namen behalten möchtest.
-- Du kannst dich **anmelden** oder ein **neues Konto erstellen**.
-- Falls der Benutzername bereits vergeben ist, wird automatisch eine Zahl angehängt.
+- You can **log in** if you already have an account or **create a new account**.
+- If the username is already taken, a number will be automatically appended.
 
 ---
 
 ## 🏠 Lobby
 
-- Du kannst eine **neue Lobby erstellen** und Host werden – Name: `Lobby_von_Benutzername`.
-- Oder du trittst einer **bestehenden Lobby** bei.
-- Nach dem Betreten kann der Host das Spiel starten.
+- You can **create a new lobby** and become the host. The lobby name will automatically be set as `Lobby_of_Username`. This way, other players can easily identify the host.
+- If you don't want to create a new lobby, you can **join an existing lobby**. Simply click the **"List Lobby's"** button to see all currently open lobbies. Choose one from the list to join the game.
+- Once you're in a lobby, the host has the control to **start the game**. Make sure everyone is ready before proceeding!
+
+### Host Controls:
+- The host can select the **number of rounds** to be played by choosing from a dropdown menu.
+- The host can also set the **time limit per round** using another dropdown menu.
+- After configuring the settings and ensuring all players are ready, the host can click the **"Start"** button to begin the game.
+
+Additionally, you can view the **list of online players** by clicking the **"List Online Players"** button, allowing you to see who’s currently connected.  
+If you wish to change your display name, simply use the **"Change Username"** button.  
+To track your progress and compare with others, check your **highscore** by clicking the **"My Highscore"** button.
 
 ---
 
-## 🎮 Spiel
+## 🎮 Game
 
-- Über dem Zeichenbereich siehst du das **Thema** und die **verbleibende Zeit**.
-- Dir stehen **verschiedene Farben und Pinselgrößen** zur Verfügung.
-- Wenn du fertig bist oder die Zeit abläuft, klicke auf **„Proceed“**.
-- Danach kommt die **Bewertungsseite**:  
-  → Bewerte andere Zeichnungen auf einer Skala von **1 bis 5**.
+- Above the drawing area, you will see the **theme** and the **remaining time** displayed.
+- You have access to **various colors and brush sizes** to create your drawing. You can choose from a predefined color palette or create a **custom color** using the HSB, RGB, or Web format. Additionally, you can adjust **opacity** and **brightness** for finer control over your artwork.
+- The game round ends **automatically when the timer expires**.
+  ![Game_screenshot](representation/game_screenshot.png)
 
-Wenn alle bewertet und auf **„Send Vote“** geklickt haben:
+### Rating Phase:
+- After the drawing phase, the game moves to the **rating page**:  
+  → Here, you rate other players' drawings on a scale from **1 to 5**.
+- It is crucial to **submit your rating within the given time**. If you do not rate a drawing before the timer runs out, the game will **automatically assign a rating of 5** to that drawing.
+- The rating phase ends automatically when the timer expires.
 
-- Wird die nächste Zeichnung angezeigt.
-- Am Ende gewinnt der Spieler mit der **höchsten Gesamtbewertung**.
-- Du kannst dann eine weitere Runde spielen oder zur Startseite zurückkehren.
+### Game Flow:
+- Once the rating phase ends, the next drawing will be displayed.
+- At the end of all rounds, the player with the **highest total rating** wins the game.
+- After the game concludes, you can either **play another round** or **return to the start screen**.
+
 
 ---
 
-## 💬 Wichtige Befehle (Chat-Commands)
+## 💬 Important Commands (Chat Commands)
 
+```
+/whisper [Name] [Message]
+```
+→ Send a private message to a player.  
+Example: `/whisper Alex Hey, nice drawing!`
 
-/whisper [Name] [Nachricht]
-  → Private Nachricht an einen Spieler.
-  Beispiel: /whisper Max Hey, gute Zeichnung!
-
+```
 /online
-  → Zeigt die Anzahl der aktuell online Spieler.
+```
+→ Displays the number of currently online players.
 
+```
 /listPlayers
-  → Listet alle Spieler in deiner Lobby.
-
-/games
-  → Zeigt alle offenen Lobbys an.
-
-/nick [NeuerName]
-  → Ändert deinen Spielernamen.
-  Beispiel: /nick SuperZeichner
-
+```
+→ Lists all players in your lobby.
