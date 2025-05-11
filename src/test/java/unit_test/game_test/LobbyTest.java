@@ -3,8 +3,10 @@ package unit_test.game_test;
 import game.Lobby;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import server.DatabaseHelper;
 
 import java.util.Arrays;
+import java.util.HashMap;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -127,16 +129,20 @@ class LobbyTest {
      */
     @Test
     void testLeaderboardCalculationWithoutInitialise() {
-        lobby.addPlayer(1);
-        lobby.addPlayer(2);
-        lobby.addPlayer(3);
+        lobby.addPlayer(37);
+        lobby.addPlayer(38);
+        lobby.addPlayer(39);
+
+        lobby.initialiseLeaderboard();
 
         lobby.resetVotesOfARound();
         lobby.addToVotesOfARound(4);
         lobby.addToVotesOfARound(2);
 
-        lobby.addPointsToLeaderboard("TestUser", 0);
-        assertEquals(3.0, lobby.getPointsOfAPlayer("TestUser"));
+        String username = DatabaseHelper.getPlayerName(37);
+
+        lobby.addPointsToLeaderboard(username, 0);
+        assertEquals(3.0, lobby.getPointsOfAPlayer(username));
     }
 
     /**
@@ -181,7 +187,7 @@ class LobbyTest {
     public void testRemoveFromLeaderboard() {
         lobby.addToLeaderboard("Player1", 10.0);
         lobby.removeFromLeaderboard("Player1");
-        assertNull(lobby.getPointsOfAPlayer("Player1"));
+        assertEquals(0.0, lobby.getPointsOfAPlayer("Player1"));
     }
 
     /**

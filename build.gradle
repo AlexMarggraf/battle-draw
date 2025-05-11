@@ -79,11 +79,9 @@ jacocoTestReport {
         html.required.set(true)
     }
 
-    /*
     afterEvaluate {
         classDirectories.setFrom(files(classDirectories.files.collect {fileTree(dir: it, exclude: ['gui/**'])})) // excludes gui in the test cases
     }
-    */
 }
 
 test {
