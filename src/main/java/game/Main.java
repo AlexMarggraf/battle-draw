@@ -362,7 +362,6 @@ public class Main {
     /**
      * This method handles all inputs from buttons in the GUI
      */
-
     public void handleGUIInput() {
         String input = guiApp.getClickedInput();
 

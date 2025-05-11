@@ -7,7 +7,6 @@ package server;
  * @author Alexander Maggraf
  */
 
-import game.Main;
 import message.Message;
 import message.MessageListener;
 import org.apache.logging.log4j.LogManager;
@@ -143,6 +142,10 @@ public class ServerThread implements Runnable {
         }
     }
 
+    /**
+     * This method sends a ping every 10 seconds if it has received a pong in the last 10 seconds and if not it assumes
+     * that the connection is lost and disconnects.
+     */
     public void handlePingPong(){
         if((System.currentTimeMillis() - lastPing > 10000)) {
             if(receivedPong) {
