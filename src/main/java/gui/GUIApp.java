@@ -29,6 +29,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import animatefx.animation.FadeIn;
+import javafx.scene.Node;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -73,6 +75,8 @@ public class GUIApp extends Application {
         primaryStage.setResizable(true);
         primaryStage.setMaximized(true);
         initializeRootLayout();
+
+        switchCenterView(new IntroView().getView());
 
         primaryStage.setTitle("Battle Draw");
         Scene scene = new Scene(rootLayout, 1280, 960 );
@@ -196,6 +200,12 @@ public class GUIApp extends Application {
             }
         });
     }
+
+    public static void switchCenterView(Node newView) {
+        rootLayout.setCenter(newView);
+        new FadeIn(newView).setSpeed(1.2).play();
+    }
+
     /**
      * Plays a short click sound using MediaPlayer.
      */
@@ -214,21 +224,21 @@ public class GUIApp extends Application {
     //HomeView Methoden
     public static void showHomeView() {
         Platform.runLater(() ->
-                rootLayout.setCenter(new HomeView().getView())
+                switchCenterView(new HomeView().getView())
         );
     }
 
     public static void showLobbyView() {
         LobbyView.setReadyFalse();
         Platform.runLater(() ->
-                rootLayout.setCenter(new LobbyView().getView())
+                switchCenterView(new LobbyView().getView())
         );
     }
 
     //GameView Methoden
     public static void showGameView() {
         Platform.runLater(() ->
-                rootLayout.setCenter(new GameView().getView())
+                switchCenterView(new GameView().getView())
         );
     }
 
@@ -236,12 +246,12 @@ public class GUIApp extends Application {
         return GameView.getCanvasAsBufferedImage();
     }
 
-    // BewertungView Methoden
+    // ReviewView Methoden
     public static void showReviewView() {
         ReviewView.resetVote();
         Platform.runLater(() -> {
             try {
-                rootLayout.setCenter(new ReviewView().getView());
+                switchCenterView(new ReviewView().getView());
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -257,7 +267,7 @@ public class GUIApp extends Application {
     public static void showLeaderboardView() {
         LeaderboardView.setReadyFalse();
         Platform.runLater(() ->
-                rootLayout.setCenter(new LeaderboardView().getView())
+                switchCenterView(new LeaderboardView().getView())
         );
     }
 
@@ -266,14 +276,14 @@ public class GUIApp extends Application {
     public static void showEndingView() {
         EndingView.setAgainEnding(false);
         Platform.runLater(() ->
-                rootLayout.setCenter(new EndingView().getView())
+                switchCenterView(new EndingView().getView())
         );
     }
 
     //LoginSignUpView Methoden
     public static void showLoginSignupView() {
         Platform.runLater(() ->
-                rootLayout.setCenter(new LoginSignupView().getView())
+                switchCenterView(new LoginSignupView().getView())
         );
     }
 

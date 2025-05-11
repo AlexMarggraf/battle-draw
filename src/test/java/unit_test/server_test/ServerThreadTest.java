@@ -51,7 +51,7 @@ class ServerThreadTest {
          * @param initialMessages the messages to queue
          */
         public DummyListener(String... initialMessages) {
-            super(System.in); // Stream not used
+            super(System.in);
             messages.addAll(Arrays.asList(initialMessages));
         }
 
@@ -145,6 +145,7 @@ class ServerThreadTest {
 
         assertFalse(serverThread.receivedPong);
         String msg = serverThread.getServerMessageQueue().poll();
+        assert msg != null;
         assertTrue(msg.startsWith("ping"));
     }
 
@@ -174,5 +175,46 @@ class ServerThreadTest {
         String response = serverThread.getServerMessageQueue().poll();
         assertNotNull(response);
         assertTrue(response.startsWith("pong"));
+    }
+
+    /**
+     * Tests that receiving a "disconnect" message correctly sets the disconnect flag and queues a disconnect message.
+     */
+    @Test
+    void testReceiveMessage_Disconnect() {
+        DummyListener listener = new DummyListener("disconnect -1");
+        serverThread.receiveMessage(listener);
+
+        assertTrue(serverThread.disconnect, "The server thread should set the disconnect flag.");
+
+        String response = serverThread.getClientMessageQueue().poll();
+        assertNotNull(response, "There should be a disconnect message queued.");
+        assertTrue(response.startsWith("disconnect 1"), "The disconnect message should contain the client ID.");
+    }
+
+    /**
+     * Tests that receiving a "whatID" message correctly queues a response with the client ID.
+     */
+    @Test
+    void testReceiveMessage_WhatID() {
+        DummyListener listener = new DummyListener("whatID");
+        serverThread.receiveMessage(listener);
+
+        String response = serverThread.getServerMessageQueue().poll();
+        assertNotNull(response, "Expected an ID response message.");
+        assertTrue(response.startsWith("id 1"), "The ID response should contain the correct client ID.");
+    }
+
+    /**
+     * Tests that receiving a "pong" message correctly sets the receivedPong flag to true.
+     */
+    @Test
+    void testReceiveMessage_Pong() {
+        serverThread.receivedPong = false;
+
+        DummyListener listener = new DummyListener("pong 1");
+        serverThread.receiveMessage(listener);
+
+        assertTrue(serverThread.receivedPong, "Receiving a pong message should set the receivedPong flag to true.");
     }
 }

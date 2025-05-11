@@ -10,7 +10,6 @@ A competitive drawing game where players create artwork based on themes and vote
 - [Features](#-features)
 - [Installation](#-installation)
 - [How to Play](#-how-to-play)
-- [Important Note](#important-note)
 - [Authors](#-authors)
 
 ## ✨ Features
@@ -54,14 +53,6 @@ A competitive drawing game where players create artwork based on themes and vote
    java -jar Battle_Draw.jar client <ip>:<port> [username]
    ```
 7. Have fun! 🎨🎮🖌️
-
-## ❗Important Note❗
-The database file must be located in the same directory as the JAR file, inside a folder named database. 
-By default, this setup is already configured after running "./gradlew build-cs108".
-
-If you wish to use the JAR file outside of the project directory, simply copy the libs folder to your 
-desired location and rename it to reflect its contents. For example, you can rename the folder to something 
-like Battle Draw to clearly indicate its purpose.
 
 ## 💻 Authors
 * Frédéric Weyssow

@@ -7,6 +7,7 @@
 
 package gui;
 
+import animatefx.animation.*;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.geometry.Pos;
@@ -14,9 +15,11 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 
@@ -26,6 +29,10 @@ public class LobbyView {
     public static boolean ready = false;
     public static int rounds = 3;
     public static int timer = 45;
+    private final ArrayList<String> shownUsers = new ArrayList<>();
+    private final VBox[] playerColumns = {new VBox(10), new VBox(10), new VBox(10)};
+    private final HBox playerBox = new HBox(60, playerColumns);
+
 
     /**
      * Constructs a new LobbyView with player listing and ready functionality.
@@ -47,6 +54,10 @@ public class LobbyView {
         ComboBox<Integer> roundsBox = createRoundsCombo();
         ComboBox<Integer> timerBox = createTimerCombo();
 
+        VBox roundsBoxContainer = new VBox(5, new Label("Rounds:"), roundsBox);
+        VBox timerBoxContainer = new VBox(5, new Label("Timer:"), timerBox);
+        HBox settingsRow = new HBox(40, roundsBoxContainer, timerBoxContainer);
+
         Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(1), e -> {
                     createLobbyListing();
@@ -54,32 +65,55 @@ public class LobbyView {
         );
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
+        playerBox.setAlignment(Pos.CENTER);
 
 
-        view = new VBox(20, new Label("Lobby"), vboxUsers, leaveBtn, listBtn, changeUsername);
+        view = new VBox(25, new Label("Lobby"), playerBox, leaveBtn, listBtn, changeUsername);
         view.setAlignment(Pos.CENTER);
         view.setPadding(new javafx.geometry.Insets(50));
 
         if (GUIApp.getLobbyLeader()) {
             view.getChildren().add(leaderBtn);
-            view.getChildren().add(new Label("Rounds:"));
-            view.getChildren().add(roundsBox);
-            view.getChildren().add(new Label("Timer:"));
-            view.getChildren().add(timerBox);
+            settingsRow.setAlignment(Pos.CENTER);
+
+            view.getChildren().add(settingsRow);
         }
     }
 
     /**
-     * Updates and displays the current list of players in the lobby.
-     * Clears the existing player list and repopulates it with current player data.
+     * Updates the lobby view by adding new players with animation and removing absent ones (only GUI relevant not for the Server).
      */
+
     private void createLobbyListing() {
-        Map<String, Double> players = GUIApp.getPlayers();
-        vboxUsers.getChildren().clear();
-        for (String username : players.keySet()) {
-            Label label = new Label(username);
-            label.getStyleClass().add("leaderboard-bubble");
-            vboxUsers.getChildren().add(label);
+        Map<String, Double> lobbyPlayers = GUIApp.getPlayers();
+
+        shownUsers.removeIf(name -> {
+            if (!lobbyPlayers.containsKey(name)) {
+                for (VBox column : playerColumns) {
+                    column.getChildren().removeIf(node ->
+                            node instanceof Label && ((Label) node).getText().equals(name)
+                    );
+                }
+                return true;
+            }
+            return false;
+        });
+
+        int index = 0;
+        for (String username : lobbyPlayers.keySet()) {
+            if (!shownUsers.contains(username)) {
+                Label label = new Label(username);
+                label.getStyleClass().add("leaderboard-bubble");
+
+                int columnIndex = index / 4;
+                if (columnIndex < playerColumns.length) {
+                    playerColumns[columnIndex].getChildren().add(label);
+                }
+
+                shownUsers.add(username);
+                new BounceIn(label).setSpeed(1.5).play();
+            }
+            index++;
         }
     }
 

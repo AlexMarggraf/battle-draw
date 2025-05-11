@@ -115,10 +115,30 @@ class GameTest {
     }
 
     /**
-     * Tests that the default maximum number of rounds is set correctly.
+     * Tests that the next round method correctly increments the round number after resetting.
      */
     @Test
-    void testMaxNumberOfRoundsDefault() {
-        //assertEquals(1, game.getMaxNumberOfRounds());
+    public void testNextRound() {
+        game.resetRoundNumber();
+        game.nextRound();
+        assertEquals(1, game.getRoundNumber());
+    }
+
+    /**
+     * Tests that the timer can be set to a specific value.
+     */
+    @Test
+    public void testSetTimer() {
+        game.setTimer(30);
+        assertEquals(30, game.getTimer());
+    }
+
+    /**
+     * Tests that the lobby name can be updated to a new value.
+     */
+    @Test
+    public void testSetLobbyName() {
+        game.setLobbyName("NewLobby");
+        assertEquals("NewLobby", game.getLobbyName());
     }
 }

@@ -148,6 +148,9 @@ class MainTest {
         assertTrue(main.getReceivedPong());
     }
 
+    /**
+     * Tests that the server ID is correctly set when receiving an "id" message from the server.
+     */
     @Test
     void testHandleServerMessage_setsServerID() {
         main.getServerMessageQueue().add("id 42");
@@ -159,6 +162,9 @@ class MainTest {
         assertEquals(42, dummyClient.receivedServerID);
     }
 
+    /**
+     * Tests that a "ping" message from the server results in a "pong" response being queued.
+     */
     @Test
     void testHandleServerMessage_sendsPongResponse() {
         main.getServerMessageQueue().add("ping 1");
@@ -168,6 +174,10 @@ class MainTest {
         assertEquals("pong 1", response);
     }
 
+    /**
+     * Tests that messages received from the server are correctly added to the server message queue.
+     * Uses a dummy client to simulate server message reception.
+     */
     @Test
     void testReceiveMessage_addsAllMessagesToQueue() {
         DummyClient dummyClient = new DummyClient();
@@ -203,6 +213,12 @@ class MainTest {
         assertTrue(dummy.sentMessages.isEmpty());
     }
 
+    /**
+     * Tests that sending an image from a file adds the correctly encoded image to the client message queue.
+     * Validates the image format, encoding, and decoding process.
+     *
+     * @throws Exception if the image file cannot be read or encoded
+     */
     @Test
     void testSendImage_addsEncodedImageFromFileToQueue() throws Exception {
         DummyClient dummyClient = new DummyClient();
@@ -236,7 +252,14 @@ class MainTest {
     }
 
 
-
+    /**
+     * Uses reflection to set a private field in the target object.
+     * This method allows direct modification of private fields for testing purposes.
+     *
+     * @param target the object whose field needs to be set
+     * @param fieldName the name of the private field to be modified
+     * @param value the new value to assign to the field
+     */
     private void setPrivateField(Object target, String fieldName, Object value) {
         try {
             var field = target.getClass().getDeclaredField(fieldName);

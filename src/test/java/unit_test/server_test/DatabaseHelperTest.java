@@ -3,10 +3,7 @@ package unit_test.server_test;
 import org.junit.jupiter.api.*;
 import server.DatabaseHelper;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -59,7 +56,8 @@ public class DatabaseHelperTest {
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     username TEXT UNIQUE,
                     password TEXT,
-                    online INTEGER
+                    online INTEGER,
+                    score REAL DEFAULT 0.0
                 )
             """);
 
@@ -185,5 +183,36 @@ public class DatabaseHelperTest {
 
         DatabaseHelper.clearList(list);
         assertTrue(list.isEmpty());
+    }
+
+    /**
+     * Tests that the highscore of a player can be retrieved and updated in the database.
+     */
+    @Test
+    void testGetHighscore() {
+        int id = DatabaseHelper.getPlayerId("testuser");
+
+        try (Connection conn = DriverManager.getConnection("jdbc:sqlite:database/ThemaTest.db");
+             PreparedStatement stmt = conn.prepareStatement("UPDATE Players SET score = ? WHERE id = ?")) {
+
+            stmt.setDouble(1, 42.0);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+
+            Double highscore = DatabaseHelper.getHighscore(id);
+            assertNotNull(highscore);
+            assertEquals(42.0, highscore);
+
+            stmt.setDouble(1, 0.0);
+            stmt.setInt(2, id);
+            stmt.executeUpdate();
+
+            Double resetHighscore = DatabaseHelper.getHighscore(id);
+            assertNotNull(resetHighscore);
+            assertEquals(0.0, resetHighscore);
+
+        } catch (SQLException e) {
+            fail("Database interaction failed: " + e.getMessage());
+        }
     }
 }
