@@ -18,7 +18,7 @@ Label {
     -fx-padding: 10 20;
     -fx-font-size: 16px;
     -fx-font-weight: bold;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 4, 0.2, 1, 1);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.2), 4, 0.2, 1, 1);
 }
 
 .button:hover {
@@ -178,4 +178,9 @@ Label {
     -fx-border-width: 1;
     -fx-text-fill: black;
 }
+
+.intro-root {
+    -fx-background-color: linear-gradient(to bottom, #fffbe6, #ffecd1);
+}
+
 
