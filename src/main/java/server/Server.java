@@ -106,7 +106,7 @@ public class Server {
                     int id = message.getID();
 
                     for (Lobby lobby : lobbyList) {
-                        if (lobby.isEmpty()) {
+                        if (lobby.getPlayers().length == 1) {
                             Game game = lobbyGameMap.get(lobby);
                             lobbyGameMap.remove(lobby);
                             lobbyList.remove(lobby);
