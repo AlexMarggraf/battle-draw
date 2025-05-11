@@ -195,7 +195,7 @@ public class LoginSignupView {
                     + "You can only join a lobby which is open. You cannot join ongoing or ended lobbies. "
                     + "When you click on \"Join Lobby\" a popup opens and you can enter just the username without \"Lobby_of_\". "
                     + "If you're not the host you can sit back an relax until the game starts. "
-                    + "After a game you can return to home by leaving to lobby and click on \"my Highscore\" and try to beat it."
+                    + "After a game you can return to home by leaving to lobby and click on \"my Highscore\" and try to beat it. "
                     + "You can also change your username at any time during a game if you want to experiment. "
                     + "But pay attention! Your username is unique. If someone has taken your previous name you cannot switch back. "
                     + "Now all that is left is to wish you luck playing our game. We wish you well!"

@@ -6,9 +6,14 @@ package game;
 
 import server.DatabaseHelper;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 public class Lobby {
     private String lobbyName;
@@ -21,6 +26,10 @@ public class Lobby {
     private Map<Integer, String> images;
     private ArrayList<Integer> disconnectedPlayers;
     private Map<Integer, Double> disconnectedPlayersPoints;
+    private Boolean needsReadyToVote;
+    private String disconnectedPicture;
+    private ArrayList<Integer> haveBeenVotedOn;
+    private int joinedDuringVote;
 
     /**
      * Constructs a Lobby with the given name.
@@ -36,6 +45,11 @@ public class Lobby {
         this.images = new HashMap<>();
         this.disconnectedPlayers = new ArrayList<>();
         this.disconnectedPlayersPoints = new HashMap<>();
+        this.needsReadyToVote = false;
+        this.disconnectedPicture = loadDisconnectedPictureFile();
+        this.haveBeenVotedOn = new ArrayList<>();
+        this.playersToVoteFor = new ArrayList<>();
+        this.joinedDuringVote = 0;
     }
 
     public boolean isEmpty() {
@@ -85,6 +99,7 @@ public class Lobby {
      */
     public void resetPlayersToVoteFor() {
         playersToVoteFor = new ArrayList<>(players);
+        haveBeenVotedOn.clear();
     }
 
     /**
@@ -94,6 +109,35 @@ public class Lobby {
     public void setPlayerVotingOn() {
         if (!playersToVoteFor.isEmpty()) {
             playerVotingOn = playersToVoteFor.removeLast();
+            haveBeenVotedOn.add(playerVotingOn);
+        }
+    }
+
+    public ArrayList<Integer> getPlayersToVoteFor() {
+        if (playersToVoteFor.isEmpty()) {
+            ArrayList<Integer> temp = new ArrayList<>();
+            temp.add(-20);
+            return temp;
+        } else {
+            return playersToVoteFor;
+        }
+    }
+
+    public ArrayList<Integer> getHaveBeenVotedOn() {
+        if (haveBeenVotedOn.isEmpty()) {
+            ArrayList<Integer> temp = new ArrayList<>();
+            temp.add(-20);
+            return temp;
+        } else {
+            return haveBeenVotedOn;
+        }
+    }
+
+    public void addPlayerToVoteFor(Integer id) {
+        if (playersToVoteFor == null) {
+            playersToVoteFor = new ArrayList<>();
+        } else {
+            playersToVoteFor.add(id);
         }
     }
 
@@ -119,10 +163,22 @@ public class Lobby {
      * @param roundNumber the current round number
      */
     public void addPointsToLeaderboard(String playerName, Integer roundNumber) {
-        Double votesOfRoundAsDouble = votesOfARound.doubleValue();
-        Double meanOfVotes = votesOfRoundAsDouble / (getNumberOfPlayers() - 1);
-        leaderboard.merge(playerName, meanOfVotes, (existingMeans, newMean) ->
-                (existingMeans * roundNumber + newMean) / (roundNumber + 1));
+        Double meanOfVotes = votesOfARound.doubleValue();
+        if (joinedDuringVote != 0) {
+            meanOfVotes += meanOfVotes / (getNumberOfPlayers() - joinedDuringVote - 1);
+            joinedDuringVote = 0;
+        }
+        if (getNumberOfPlayers() > 1) {
+            meanOfVotes = meanOfVotes / (getNumberOfPlayers() - 1);
+        }
+        int id = DatabaseHelper.getPlayerId(playerName);
+        if (leaderboard.containsKey(playerName)) {
+            leaderboard.merge(playerName, meanOfVotes, (existingMeans, newMean) ->
+                    (existingMeans * roundNumber + newMean) / (roundNumber + 1));
+        } else if (disconnectedPlayers.contains(id)) {
+            disconnectedPlayersPoints.merge(id, meanOfVotes, (existingMeans, newMean) ->
+                    (existingMeans * roundNumber + newMean) / (roundNumber + 1));
+        }
     }
 
     /**
@@ -142,7 +198,7 @@ public class Lobby {
     }
 
     public Double getPointsOfAPlayer(String playerName) {
-        return leaderboard.get(playerName);
+        return leaderboard.getOrDefault(playerName, 0.0);
     }
 
     public void removeFromLeaderboard(String playerName) {
@@ -156,12 +212,18 @@ public class Lobby {
     public HashMap<String, Double> getLeaderboard() {return (HashMap<String, Double>) leaderboard;}
 
     public void setImageOfPlayer(Integer id, String imageAsString) {
-        images.put(id, imageAsString);
+        if (!images.containsKey(id)) {
+            images.put(id, imageAsString);
+        }
     }
 
     public String getImageOfPlayer() {
         return images.get(playerVotingOn);
     }
+
+    public int getImagesSize() {return images.size();}
+
+    public void resetImages() {images = new HashMap<>();}
 
     public void addToDisconnectedPlayers(Integer playerId) {disconnectedPlayers.add(playerId);}
 
@@ -173,7 +235,40 @@ public class Lobby {
 
     public void addDisconnectedPlayersPoints(Integer id, Double points) {disconnectedPlayersPoints.put(id, points);}
 
-    public void removeDisconnectedPlayersPoints(Integer id, Double points) {disconnectedPlayersPoints.remove(id);}
+    public void removeDisconnectedPlayersPoints(Integer id) {disconnectedPlayersPoints.remove(id);}
 
     public HashMap<Integer, Double> getDisconnectedPlayerPoints() {return (HashMap<Integer, Double>) disconnectedPlayersPoints;}
+
+    public void needsReadyToVoteTrue() {needsReadyToVote = true;}
+
+    public void needsReadyToVoteFalse() {needsReadyToVote = false;}
+
+    public Boolean getNeedsReadyToVote() {return needsReadyToVote;}
+
+    /**
+     * Loads a picture drawn by the authors and converted to a String.
+     * The picture is used as placeholder if a player disconnected and then reconnected but did not draw a picture.
+     *
+     * @return the loaded picture as a String
+     */
+
+    public String loadDisconnectedPictureFile() {
+        String fileName = "disconnectedPicture.txt";
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream(fileName);
+        if (inputStream == null) {
+            throw new IllegalArgumentException("File not found: " + fileName);
+        }
+
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream))) {
+            return reader.lines().collect(Collectors.joining("\n"));
+        } catch (IOException e) {
+            throw new RuntimeException("Error reading file: " + fileName, e);
+        }
+    }
+
+    public void plusJoinedDuringVote() {joinedDuringVote++;}
+
+    public void resetJoinedDuringVote() {joinedDuringVote = 0;}
+
+    public String getDisconnectedPicture() {return disconnectedPicture;}
 }
