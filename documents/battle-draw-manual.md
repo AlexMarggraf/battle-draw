@@ -6,10 +6,10 @@
 
 To start a game, you must do the following things:
 
-- If not yet done, install Java (17 or newer)
+- If not yet done, install Java (21 or newer)
 - Start a server
 - Start clients (in the same network as the server)
-- Join lobbies
+- Join the same lobby, decide on what settings to use, and start the game.
 ### Steps to Run:
 
 1. Open a terminal or command prompt.
@@ -17,7 +17,7 @@ To start a game, you must do the following things:
 3. Build the JAR file with Gradle:
 
    ```bash
-   ./gradlew build
+   ./gradlew build-cs108
    ```
 
 4. Change to the `build/libs` directory:
@@ -29,25 +29,25 @@ To start a game, you must do the following things:
 5. Start the server (once):
 
    ```bash
-   java -jar Battle_Draw-v1.jar server <port>
+   java -jar Battle_Draw.jar server <port>
    ```
 
    **Example:**
 
    ```bash
-   java -jar Battle_Draw-v1.jar server 8989
+   java -jar Battle_Draw.jar server 8989
    ```
 
 6. Start a new player instance:
 
    ```bash
-   java -jar Battle_Draw-v1.jar client <ip>:<port> [username]
+   java -jar Battle_Draw.jar client <ip>:<port> <username>
    ```
 
    **Example:**
 
    ```bash
-   java -jar Battle_Draw-v1.jar client localhost:8989 Username
+   java -jar Battle_Draw.jar client localhost:8989 JohnDoe
    ```
 
 ---
@@ -57,14 +57,14 @@ To start a game, you must do the following things:
 After successfully connecting to the server with a username, a window will appear.
 
 - You can **log in** if you already have an account or **create a new account**.
-- If the username is already taken, a number will be automatically appended.
+- If the username is already taken, a slightly altered one will be automatically generated for you.
 
 ---
 
 ## 🏠 Lobby
 
 - You can **create a new lobby** and become the host. The lobby name will automatically be set as `Lobby_of_Username`. This way, other players can easily identify the host.
-- If you don't want to create a new lobby, you can **join an existing lobby**. Simply click the **"List Lobby's"** button to see all currently open lobbies. Choose one from the list to join the game.
+- If you don't want to create a new lobby, you can **join an existing lobby**. Simply click the **"List Lobby's"** button to see all currently open lobbies. Choose one from the list to join the game. You can do this by pressing the **"join lobby"** button and entering the username of the lobby you want to join.
 - Once you're in a lobby, the host has the control to **start the game**. Make sure everyone is ready before proceeding!
 
 ### Host Controls:
@@ -83,7 +83,8 @@ To track your progress and compare with others, check your **highscore** by clic
 - Above the drawing area, you will see the **theme** and the **remaining time** displayed.
 - You have access to **various colors and brush sizes** to create your drawing. You can choose from a predefined color palette or create a **custom color** using the HSB, RGB, or Web format. Additionally, you can adjust **opacity** and **brightness** for finer control over your artwork.
 - The game round ends **automatically when the timer expires**.
-  ![Game_screenshot](representation/game_screenshot.png)
+
+  ![Screenshot of the game](representation/representative_screenshot.png)
 
 ### Rating Phase:
 - After the drawing phase, the game moves to the **rating page**:  
@@ -102,17 +103,7 @@ To track your progress and compare with others, check your **highscore** by clic
 ## 💬 Important Commands (Chat Commands)
 
 ```
-/whisper [Name] [Message]
+/whisper <name> <Message>
 ```
 → Send a private message to a player.  
-Example: `/whisper Alex Hey, nice drawing!`
-
-```
-/online
-```
-→ Displays the number of currently online players.
-
-```
-/listPlayers
-```
-→ Lists all players in your lobby.
+Example: `/whisper JohnDoe Hey, nice drawing!`

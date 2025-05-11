@@ -11,7 +11,7 @@ Netzwerkprotokoll:
 https://docs.google.com/document/d/1DA1fUiI6IYtguZ0QZljRL7jUI0_rZ4ODz90b6eZJU1c/edit?tab=t.0
 
 Software-Qualität:
-https://docs.google.com/document/d/1QGgdmmAdrG65okILO6NHklJKvuk6gHUm0DGr7WXpJio/edit?tab=t.0
+https://www.overleaf.com/6433919951xkvkyvygwwrt#d1f52b
 
 QA-Konzept MS3:
 https://docs.google.com/document/d/11jRN1qUtMnI6vN4wcxbIgcroCRjxX0iv8h05PO6Grmw/edit?usp=sharing
