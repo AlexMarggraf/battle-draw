@@ -883,18 +883,6 @@ public class Main {
             }
             GUIApp.setUsername(args2[2]);
 
-            GUIApp.showLoginSignupView();
-            /*
-
-            //bsp code
-            GUIApp.addPlayer("Bob", 60);
-            GUIApp.addPlayer("Andrew", 100);
-            GUIApp.addPlayer("Peter", 44);
-            GUIApp.setTheme("Test");
-
-             */
-
-
             main.setChatGui();
             main.initClient(args2[0], Integer.parseInt(args2[1]));
             //main.signInLogIn();

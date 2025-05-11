@@ -76,6 +76,8 @@ public class GUIApp extends Application {
         primaryStage.setMaximized(true);
         initializeRootLayout();
 
+        switchCenterView(new IntroView().getView());
+
         primaryStage.setTitle("Battle Draw");
         Scene scene = new Scene(rootLayout, 1280, 960 );
         scene.getStylesheets().add(getClass().getResource("/style.css").toExternalForm());
