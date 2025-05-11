@@ -1,19 +1,13 @@
 package server;
 
-import game.Main;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -307,6 +301,12 @@ public class DatabaseHelper {
         System.out.println("List cleared");
     }
 
+    /**
+     * Updates or sets the high score of a player in the database based on their ID.
+     *
+     * @param id    the unique ID of the player
+     * @param score the new high score to set
+     */
     public static void setHighscore(int id, double score) {
         String update = "UPDATE Players SET score = ? WHERE id = ?";
 
@@ -323,6 +323,12 @@ public class DatabaseHelper {
         }
     }
 
+    /**
+     * Retrieves the high score of a player from the database based on their ID.
+     *
+     * @param id the unique ID of the player
+     * @return the player's high score, or {@code null} if not found or on error
+     */
     public static Double getHighscore(int id) {
         String query = "SELECT score FROM Players WHERE id = ?";
 
