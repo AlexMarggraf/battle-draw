@@ -371,7 +371,8 @@ public class Server {
                     for (Lobby lobby : lobbyList) {
                         if (lobby.getLobbyName().equals(message.getParams()[1])) {
                             lobbyGameMap.get(lobby).setStatus("ongoing");
-                            String theme = DatabaseHelper.getRandomWords(1).toString();
+                            //String theme = DatabaseHelper.getRandomWords(1).toString();
+                            String theme = "[Tree]";
                             String numberOfRounds = message.getParams()[2];
                             lobbyGameMap.get(lobby).setMaxNumberOfRounds(Integer.parseInt(numberOfRounds));
                             lobbyGameMap.get(lobby).resetRoundNumber();
@@ -481,6 +482,9 @@ public class Server {
                                 }
                             } else {
                                 String theme = DatabaseHelper.getRandomWords(1).toString();
+                                if (lobbyGameMap.get(lobby).getRoundNumber() == 1) {
+                                    theme = "[House]";
+                                }
                                 Integer maxRounds = lobbyGameMap.get(lobby).getMaxNumberOfRounds();
                                 Integer timer = lobbyGameMap.get(lobby).getTimer();
                                 for (int id : players) {
